@@ -1,14 +1,13 @@
-// Animación del fondo tecnológico
+// Animación del fondo tecnológico - Red Neuronal Azul
 class TechBackground {
     constructor() {
         this.canvas = document.getElementById('techBackground');
         this.ctx = this.canvas.getContext('2d');
         this.particles = [];
-        this.lines = [];
         this.mouse = {
             x: null,
             y: null,
-            radius: 100
+            radius: 120
         };
         
         this.init();
@@ -17,48 +16,38 @@ class TechBackground {
         // Eventos
         window.addEventListener('resize', () => this.resize());
         this.canvas.addEventListener('mousemove', (e) => this.handleMouseMove(e));
+        this.canvas.addEventListener('mouseleave', () => {
+            this.mouse.x = null;
+            this.mouse.y = null;
+        });
     }
     
     init() {
         this.resize();
         this.createParticles();
-        this.createLines();
     }
     
     resize() {
         this.canvas.width = window.innerWidth;
         this.canvas.height = window.innerHeight;
+        this.createParticles(); // Recrear partículas al redimensionar
     }
     
     createParticles() {
-        const particleCount = Math.floor((this.canvas.width * this.canvas.height) / 10000);
+        const particleCount = Math.floor((this.canvas.width * this.canvas.height) / 7000);
         this.particles = [];
         
         for (let i = 0; i < particleCount; i++) {
             this.particles.push({
                 x: Math.random() * this.canvas.width,
                 y: Math.random() * this.canvas.height,
-                size: Math.random() * 2 + 0.5,
-                speedX: (Math.random() - 0.5) * 0.5,
-                speedY: (Math.random() - 0.5) * 0.5,
-                color: `rgba(0, 212, 255, ${Math.random() * 0.5 + 0.1})`
-            });
-        }
-    }
-    
-    createLines() {
-        this.lines = [];
-        const lineCount = 15;
-        
-        for (let i = 0; i < lineCount; i++) {
-            this.lines.push({
-                x: Math.random() * this.canvas.width,
-                y: Math.random() * this.canvas.height,
-                length: Math.random() * 100 + 50,
-                angle: Math.random() * Math.PI * 2,
-                speed: Math.random() * 0.02 + 0.01,
-                width: Math.random() * 1 + 0.5,
-                color: `rgba(138, 43, 226, ${Math.random() * 0.3 + 0.1})`
+                size: Math.random() * 1.5 + 0.3,
+                speedX: (Math.random() - 0.5) * 0.3,
+                speedY: (Math.random() - 0.5) * 0.3,
+                color: `rgba(0, 212, 255, ${Math.random() * 0.4 + 0.1})`,
+                originalX: null,
+                originalY: null,
+                oscillation: Math.random() * Math.PI * 2
             });
         }
     }
@@ -70,35 +59,46 @@ class TechBackground {
     }
     
     drawParticles() {
-        for (let particle of this.particles) {
-            // Actualizar posición
-            particle.x += particle.speedX;
-            particle.y += particle.speedY;
-            
-            // Rebote en los bordes
-            if (particle.x < 0 || particle.x > this.canvas.width) particle.speedX *= -1;
-            if (particle.y < 0 || particle.y > this.canvas.height) particle.speedY *= -1;
-            
-            // Dibujar partícula
-            this.ctx.beginPath();
-            this.ctx.fillStyle = particle.color;
-            this.ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
-            this.ctx.fill();
-            
-            // Conectar partículas cercanas
-            for (let otherParticle of this.particles) {
-                const dx = particle.x - otherParticle.x;
-                const dy = particle.y - otherParticle.y;
+        // Primero dibujar todas las conexiones
+        for (let i = 0; i < this.particles.length; i++) {
+            for (let j = i + 1; j < this.particles.length; j++) {
+                const dx = this.particles[i].x - this.particles[j].x;
+                const dy = this.particles[i].y - this.particles[j].y;
                 const distance = Math.sqrt(dx * dx + dy * dy);
                 
-                if (distance < 100) {
+                // Conectar solo partículas cercanas (efecto red neuronal)
+                if (distance < 150) {
+                    // Mayor opacidad cuando están más cerca
+                    const opacity = 0.15 * (1 - distance/150);
                     this.ctx.beginPath();
-                    this.ctx.strokeStyle = `rgba(0, 212, 255, ${0.1 * (1 - distance/100)})`;
-                    this.ctx.lineWidth = 0.5;
-                    this.ctx.moveTo(particle.x, particle.y);
-                    this.ctx.lineTo(otherParticle.x, otherParticle.y);
+                    this.ctx.strokeStyle = `rgba(0, 212, 255, ${opacity})`;
+                    this.ctx.lineWidth = 0.3;
+                    this.ctx.moveTo(this.particles[i].x, this.particles[i].y);
+                    this.ctx.lineTo(this.particles[j].x, this.particles[j].y);
                     this.ctx.stroke();
                 }
+            }
+        }
+        
+        // Luego dibujar las partículas
+        for (let particle of this.particles) {
+            // Oscilación natural para movimiento orgánico
+            particle.oscillation += 0.02;
+            const oscillationX = Math.sin(particle.oscillation) * 0.3;
+            const oscillationY = Math.cos(particle.oscillation * 0.7) * 0.3;
+            
+            // Actualizar posición
+            particle.x += particle.speedX + oscillationX;
+            particle.y += particle.speedY + oscillationY;
+            
+            // Rebote suave en bordes
+            if (particle.x < 0 || particle.x > this.canvas.width) {
+                particle.speedX *= -0.98;
+                particle.x = Math.max(0, Math.min(this.canvas.width, particle.x));
+            }
+            if (particle.y < 0 || particle.y > this.canvas.height) {
+                particle.speedY *= -0.98;
+                particle.y = Math.max(0, Math.min(this.canvas.height, particle.y));
             }
             
             // Interacción con el ratón
@@ -108,61 +108,57 @@ class TechBackground {
                 const distance = Math.sqrt(dx * dx + dy * dy);
                 
                 if (distance < this.mouse.radius) {
-                    const angle = Math.atan2(dy, dx);
                     const force = (this.mouse.radius - distance) / this.mouse.radius;
+                    const angle = Math.atan2(dy, dx);
                     
-                    particle.x += Math.cos(angle) * force * 2;
-                    particle.y += Math.sin(angle) * force * 2;
-                    
-                    // Dibujar línea al ratón
-                    this.ctx.beginPath();
-                    this.ctx.strokeStyle = `rgba(0, 212, 255, ${0.2 * force})`;
-                    this.ctx.lineWidth = 1 * force;
-                    this.ctx.moveTo(particle.x, particle.y);
-                    this.ctx.lineTo(this.mouse.x, this.mouse.y);
-                    this.ctx.stroke();
+                    particle.x += Math.cos(angle) * force * 3;
+                    particle.y += Math.sin(angle) * force * 3;
                 }
             }
-        }
-    }
-    
-    drawLines() {
-        for (let line of this.lines) {
-            // Actualizar ángulo
-            line.angle += line.speed;
             
-            // Calcular punto final
-            const endX = line.x + Math.cos(line.angle) * line.length;
-            const endY = line.y + Math.sin(line.angle) * line.length;
+            // Dibujar partícula con efecto de brillo
+            const gradient = this.ctx.createRadialGradient(
+                particle.x, particle.y, 0,
+                particle.x, particle.y, particle.size * 2
+            );
+            gradient.addColorStop(0, particle.color);
+            gradient.addColorStop(1, 'rgba(0, 212, 255, 0)');
             
-            // Dibujar línea
             this.ctx.beginPath();
-            this.ctx.strokeStyle = line.color;
-            this.ctx.lineWidth = line.width;
-            this.ctx.moveTo(line.x, line.y);
-            this.ctx.lineTo(endX, endY);
-            this.ctx.stroke();
-            
-            // Dibujar extremos
-            this.ctx.beginPath();
-            this.ctx.fillStyle = line.color;
-            this.ctx.arc(line.x, line.y, line.width * 1.5, 0, Math.PI * 2);
+            this.ctx.fillStyle = gradient;
+            this.ctx.arc(particle.x, particle.y, particle.size * 2, 0, Math.PI * 2);
             this.ctx.fill();
             
+            // Núcleo de la partícula
             this.ctx.beginPath();
-            this.ctx.fillStyle = line.color;
-            this.ctx.arc(endX, endY, line.width * 1.5, 0, Math.PI * 2);
+            this.ctx.fillStyle = particle.color;
+            this.ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+            this.ctx.fill();
+            
+            // Punto brillante
+            this.ctx.beginPath();
+            this.ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
+            this.ctx.arc(
+                particle.x - particle.size * 0.3, 
+                particle.y - particle.size * 0.3, 
+                particle.size * 0.5, 
+                0, 
+                Math.PI * 2
+            );
             this.ctx.fill();
         }
     }
     
     animate() {
-        // Limpiar con un fondo semi-transparente para efecto de rastro
-        this.ctx.fillStyle = 'rgba(10, 10, 26, 0.05)';
+        // Fondo con gradiente sutil
+        const gradient = this.ctx.createLinearGradient(0, 0, 0, this.canvas.height);
+        gradient.addColorStop(0, 'rgba(10, 10, 26, 0.1)');
+        gradient.addColorStop(1, 'rgba(5, 5, 15, 0.2)');
+        
+        this.ctx.fillStyle = gradient;
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
         
-        // Dibujar elementos
-        this.drawLines();
+        // Dibujar partículas y conexiones
         this.drawParticles();
         
         requestAnimationFrame(() => this.animate());
@@ -203,7 +199,7 @@ class ShortsCarousel {
         this.indicators = document.querySelectorAll('.indicator');
         this.shortItems = document.querySelectorAll('.short-item');
         this.currentIndex = 0;
-        this.itemWidth = 320; // Ancho de cada item + gap
+        this.itemWidth = 330; // Ancho de cada item + gap
         
         this.init();
     }
@@ -376,16 +372,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const scrollEffects = new ScrollEffects();
     const hoverEffects = new HoverEffects();
     
-    // Efecto de escritura para el título del hero (opcional)
+    // Efecto de escritura para el título del hero
     const heroTitle = document.querySelector('.hero-title');
     if (heroTitle) {
-        const text = heroTitle.innerHTML;
+        const originalText = heroTitle.innerHTML;
         heroTitle.innerHTML = '';
         
         let i = 0;
         const typeWriter = () => {
-            if (i < text.length) {
-                heroTitle.innerHTML += text.charAt(i);
+            if (i < originalText.length) {
+                heroTitle.innerHTML += originalText.charAt(i);
                 i++;
                 setTimeout(typeWriter, 30);
             }
