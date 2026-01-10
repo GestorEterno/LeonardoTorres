@@ -372,23 +372,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const scrollEffects = new ScrollEffects();
     const hoverEffects = new HoverEffects();
     
-    // Efecto de escritura para el título del hero
+    // Efecto de animación para el título del hero (corregido)
     const heroTitle = document.querySelector('.hero-title');
     if (heroTitle) {
-        const originalText = heroTitle.innerHTML;
-        heroTitle.innerHTML = '';
+        // Ya tenemos animaciones CSS aplicadas, no necesitamos typewriter
+        // El efecto typewriter causaba que se mostraran las etiquetas HTML
+        // Ahora usamos animaciones CSS para un efecto más limpio
+        heroTitle.classList.add('animate-title');
         
-        let i = 0;
-        const typeWriter = () => {
-            if (i < originalText.length) {
-                heroTitle.innerHTML += originalText.charAt(i);
-                i++;
-                setTimeout(typeWriter, 30);
-            }
-        };
-        
-        // Iniciar efecto después de un breve retraso
-        setTimeout(typeWriter, 500);
+        // Añadir efecto de pulso al gradiente
+        const gradientSpans = heroTitle.querySelectorAll('.gradient-text');
+        gradientSpans.forEach((span, index) => {
+            span.style.animationDelay = `${0.3 + (index * 0.2)}s`;
+        });
     }
     
     // Añadir efecto de carga inicial
