@@ -1,156 +1,128 @@
-// Animación del fondo tecnológico - Red Neuronal Azul
+// FONDO DE HOJA DE MATEMÁTICAS - SIMPLE Y LIMPIO
 class TechBackground {
     constructor() {
         this.canvas = document.getElementById('techBackground');
         this.ctx = this.canvas.getContext('2d');
-        this.particles = [];
-        this.mouse = {
-            x: null,
-            y: null,
-            radius: 120
-        };
         
         this.init();
-        this.animate();
-        
-        // Eventos
-        window.addEventListener('resize', () => this.resize());
-        this.canvas.addEventListener('mousemove', (e) => this.handleMouseMove(e));
-        this.canvas.addEventListener('mouseleave', () => {
-            this.mouse.x = null;
-            this.mouse.y = null;
-        });
     }
     
     init() {
         this.resize();
-        this.createParticles();
+        this.drawGrid();
+        
+        window.addEventListener('resize', () => {
+            this.resize();
+            this.drawGrid();
+        });
     }
     
     resize() {
         this.canvas.width = window.innerWidth;
         this.canvas.height = window.innerHeight;
-        this.createParticles();
     }
     
-    createParticles() {
-        const particleCount = Math.floor((this.canvas.width * this.canvas.height) / 7000);
-        this.particles = [];
+    drawGrid() {
+        const ctx = this.ctx;
+        const width = this.canvas.width;
+        const height = this.canvas.height;
         
-        for (let i = 0; i < particleCount; i++) {
-            this.particles.push({
-                x: Math.random() * this.canvas.width,
-                y: Math.random() * this.canvas.height,
-                size: Math.random() * 1.5 + 0.3,
-                speedX: (Math.random() - 0.5) * 0.3,
-                speedY: (Math.random() - 0.5) * 0.3,
-                color: `rgba(0, 212, 255, ${Math.random() * 0.4 + 0.1})`,
-                originalX: null,
-                originalY: null,
-                oscillation: Math.random() * Math.PI * 2
-            });
+        // Limpiar canvas con fondo oscuro
+        ctx.fillStyle = '#0a0a1a';
+        ctx.fillRect(0, 0, width, height);
+        
+        // Dibujar cuadrícula
+        const gridSize = 50; // Tamaño de cuadrícula
+        const lineColor = 'rgba(0, 150, 255, 0.1)';
+        const subLineColor = 'rgba(0, 150, 255, 0.05)';
+        
+        // Líneas horizontales principales
+        ctx.beginPath();
+        ctx.strokeStyle = lineColor;
+        ctx.lineWidth = 1;
+        
+        for (let y = 0; y <= height; y += gridSize) {
+            ctx.moveTo(0, y);
+            ctx.lineTo(width, y);
         }
-    }
-    
-    handleMouseMove(e) {
-        const rect = this.canvas.getBoundingClientRect();
-        this.mouse.x = e.clientX - rect.left;
-        this.mouse.y = e.clientY - rect.top;
-    }
-    
-    drawParticles() {
-        // Dibujar conexiones primero
-        for (let i = 0; i < this.particles.length; i++) {
-            for (let j = i + 1; j < this.particles.length; j++) {
-                const dx = this.particles[i].x - this.particles[j].x;
-                const dy = this.particles[i].y - this.particles[j].y;
-                const distance = Math.sqrt(dx * dx + dy * dy);
-                
-                if (distance < 150) {
-                    const opacity = 0.15 * (1 - distance/150);
-                    this.ctx.beginPath();
-                    this.ctx.strokeStyle = `rgba(0, 212, 255, ${opacity})`;
-                    this.ctx.lineWidth = 0.3;
-                    this.ctx.moveTo(this.particles[i].x, this.particles[i].y);
-                    this.ctx.lineTo(this.particles[j].x, this.particles[j].y);
-                    this.ctx.stroke();
-                }
+        
+        // Líneas verticales principales
+        for (let x = 0; x <= width; x += gridSize) {
+            ctx.moveTo(x, 0);
+            ctx.lineTo(x, height);
+        }
+        
+        ctx.stroke();
+        
+        // Líneas secundarias más tenues (cada 25px)
+        ctx.beginPath();
+        ctx.strokeStyle = subLineColor;
+        ctx.lineWidth = 0.5;
+        
+        for (let y = 0; y <= height; y += gridSize/2) {
+            if (y % gridSize !== 0) { // No dibujar donde ya hay línea principal
+                ctx.moveTo(0, y);
+                ctx.lineTo(width, y);
             }
         }
         
-        // Dibujar partículas
-        for (let particle of this.particles) {
-            particle.oscillation += 0.02;
-            const oscillationX = Math.sin(particle.oscillation) * 0.3;
-            const oscillationY = Math.cos(particle.oscillation * 0.7) * 0.3;
-            
-            particle.x += particle.speedX + oscillationX;
-            particle.y += particle.speedY + oscillationY;
-            
-            if (particle.x < 0 || particle.x > this.canvas.width) {
-                particle.speedX *= -0.98;
-                particle.x = Math.max(0, Math.min(this.canvas.width, particle.x));
+        for (let x = 0; x <= width; x += gridSize/2) {
+            if (x % gridSize !== 0) {
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x, height);
             }
-            if (particle.y < 0 || particle.y > this.canvas.height) {
-                particle.speedY *= -0.98;
-                particle.y = Math.max(0, Math.min(this.canvas.height, particle.y));
-            }
-            
-            if (this.mouse.x && this.mouse.y) {
-                const dx = particle.x - this.mouse.x;
-                const dy = particle.y - this.mouse.y;
-                const distance = Math.sqrt(dx * dx + dy * dy);
-                
-                if (distance < this.mouse.radius) {
-                    const force = (this.mouse.radius - distance) / this.mouse.radius;
-                    const angle = Math.atan2(dy, dx);
-                    
-                    particle.x += Math.cos(angle) * force * 3;
-                    particle.y += Math.sin(angle) * force * 3;
-                }
-            }
-            
-            const gradient = this.ctx.createRadialGradient(
-                particle.x, particle.y, 0,
-                particle.x, particle.y, particle.size * 2
-            );
-            gradient.addColorStop(0, particle.color);
-            gradient.addColorStop(1, 'rgba(0, 212, 255, 0)');
-            
-            this.ctx.beginPath();
-            this.ctx.fillStyle = gradient;
-            this.ctx.arc(particle.x, particle.y, particle.size * 2, 0, Math.PI * 2);
-            this.ctx.fill();
-            
-            this.ctx.beginPath();
-            this.ctx.fillStyle = particle.color;
-            this.ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
-            this.ctx.fill();
-            
-            this.ctx.beginPath();
-            this.ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
-            this.ctx.arc(
-                particle.x - particle.size * 0.3, 
-                particle.y - particle.size * 0.3, 
-                particle.size * 0.5, 
-                0, 
-                Math.PI * 2
-            );
-            this.ctx.fill();
         }
-    }
-    
-    animate() {
-        const gradient = this.ctx.createLinearGradient(0, 0, 0, this.canvas.height);
-        gradient.addColorStop(0, 'rgba(10, 10, 26, 0.1)');
-        gradient.addColorStop(1, 'rgba(5, 5, 15, 0.2)');
         
-        this.ctx.fillStyle = gradient;
-        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+        ctx.stroke();
         
-        this.drawParticles();
+        // Ejes coordenados en el centro (opcional)
+        const centerX = width / 2;
+        const centerY = height / 2;
         
-        requestAnimationFrame(() => this.animate());
+        // Eje X
+        ctx.beginPath();
+        ctx.strokeStyle = 'rgba(0, 212, 255, 0.15)';
+        ctx.lineWidth = 1.5;
+        ctx.moveTo(0, centerY);
+        ctx.lineTo(width, centerY);
+        ctx.stroke();
+        
+        // Eje Y
+        ctx.beginPath();
+        ctx.moveTo(centerX, 0);
+        ctx.lineTo(centerX, height);
+        ctx.stroke();
+        
+        // Marcas en los ejes
+        ctx.fillStyle = 'rgba(0, 212, 255, 0.3)';
+        ctx.font = '10px Arial';
+        
+        // Marcas en eje X
+        for (let x = centerX; x < width; x += gridSize) {
+            if (x !== centerX) {
+                ctx.fillText((x - centerX)/gridSize, x - 5, centerY + 15);
+                // Marcas izquierda
+                const leftX = centerX - (x - centerX);
+                ctx.fillText(-(x - centerX)/gridSize, leftX - 5, centerY + 15);
+            }
+        }
+        
+        // Marcas en eje Y
+        for (let y = centerY; y < height; y += gridSize) {
+            if (y !== centerY) {
+                ctx.fillText(-(y - centerY)/gridSize, centerX + 8, y + 3);
+                // Marcas arriba
+                const upY = centerY - (y - centerY);
+                ctx.fillText((y - centerY)/gridSize, centerX + 8, upY + 3);
+            }
+        }
+        
+        // Origen (0,0)
+        ctx.beginPath();
+        ctx.fillStyle = 'rgba(0, 212, 255, 0.6)';
+        ctx.arc(centerX, centerY, 3, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillText('O', centerX + 5, centerY - 5);
     }
 }
 
