@@ -165,7 +165,7 @@ class TechBackground {
     }
 }
 
-// Menú hamburguesa
+// Menú hamburguesa - AJUSTADO PARA NAVBAR COMPACTO
 class Navigation {
     constructor() {
         this.hamburger = document.querySelector('.hamburger');
@@ -266,7 +266,7 @@ class ShortsCarousel {
     }
 }
 
-// Efectos de scroll suave
+// Efectos de scroll suave - AJUSTADO PARA NAVBAR COMPACTO
 class ScrollEffects {
     constructor() {
         this.navbar = document.querySelector('.navbar');
@@ -280,7 +280,7 @@ class ScrollEffects {
         const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
         
         // Ocultar/mostrar navbar al hacer scroll
-        if (scrollTop > this.lastScrollTop && scrollTop > 100) {
+        if (scrollTop > this.lastScrollTop && scrollTop > 80) {
             this.navbar.style.transform = 'translateY(-100%)';
         } else {
             this.navbar.style.transform = 'translateY(0)';
@@ -300,7 +300,7 @@ class ScrollEffects {
                 const targetElement = document.querySelector(targetId);
                 if (targetElement) {
                     window.scrollTo({
-                        top: targetElement.offsetTop - 80,
+                        top: targetElement.offsetTop - 60, // Ajustado para navbar compacto
                         behavior: 'smooth'
                     });
                 }
@@ -372,12 +372,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const scrollEffects = new ScrollEffects();
     const hoverEffects = new HoverEffects();
     
-    // Efecto de animación para el título del hero (corregido)
+    // Efecto de animación para el título del hero
     const heroTitle = document.querySelector('.hero-title');
     if (heroTitle) {
-        // Ya tenemos animaciones CSS aplicadas, no necesitamos typewriter
-        // El efecto typewriter causaba que se mostraran las etiquetas HTML
-        // Ahora usamos animaciones CSS para un efecto más limpio
         heroTitle.classList.add('animate-title');
         
         // Añadir efecto de pulso al gradiente
