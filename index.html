@@ -237,26 +237,20 @@
                 </div>
             </div>
             
-            <!-- Mensaje de futuros proyectos -->
-            <div class="shorts-message">
-                <i class="fas fa-plus-circle"></i>
-                <p>Más shorts en producción. ¿Tienes un proyecto en mente?</p>
-                <a href="#contacto" class="cta-button small">
-                    <span>CREAR UN SHORT</span>
-                    <i class="fas fa-video"></i>
-                </a>
-            </div>
+            <!-- ELIMINADO: Bloque de "Más shorts en producción" -->
         </div>
     </section>
     
-    <!-- Sección de Reseñas -->
+    <!-- Sección de Reseñas - CARRUSEL -->
     <section class="reviews" id="reseñas">
         <div class="container">
             <h2 class="section-title">RESEÑAS <span class="gradient-text">DE CLIENTES</span></h2>
             <p class="section-subtitle">Lo que dicen los creadores con los que he trabajado</p>
             
-            <div class="reviews-content">
-                <div class="review-card">
+            <!-- Contenedor del carrusel -->
+            <div class="reviews-carousel">
+                <!-- Tarjeta 1 (Existente) -->
+                <div class="review-card active">
                     <div class="review-icon">
                         <i class="fas fa-quote-left"></i>
                     </div>
@@ -268,6 +262,64 @@
                         <p>Canal de Historia de Videojuegos</p>
                     </div>
                 </div>
+                
+                <!-- Tarjeta 2 (Nueva) -->
+                <div class="review-card">
+                    <div class="review-icon">
+                        <i class="fas fa-quote-left"></i>
+                    </div>
+                    <p class="review-text">
+                        "Leonardo transformó completamente nuestro contenido de gaming. Su atención al detalle en efectos visuales y sincronización de audio es impresionante. ¡Totalmente recomendado!"
+                    </p>
+                    <div class="review-author">
+                        <h4>PIXELHERO</h4>
+                        <p>Creador de Contenido Roblox</p>
+                    </div>
+                </div>
+                
+                <!-- Tarjeta 3 (Nueva) -->
+                <div class="review-card">
+                    <div class="review-icon">
+                        <i class="fas fa-quote-left"></i>
+                    </div>
+                    <p class="review-text">
+                        "Trabajamos en varios shorts para TikTok y los resultados superaron expectativas. Entiende perfectamente el formato vertical y sabe cómo mantener la atención del público."
+                    </p>
+                    <div class="review-author">
+                        <h4>ELKAIDRAM</h4>
+                        <p>Streamer & Content Creator</p>
+                    </div>
+                </div>
+                
+                <!-- Tarjeta 4 (Nueva) -->
+                <div class="review-card">
+                    <div class="review-icon">
+                        <i class="fas fa-quote-left"></i>
+                    </div>
+                    <p class="review-text">
+                        "La rapidez de entrega sin sacrificar calidad es increíble. Editó un documental de 30 minutos con efectos complejos en tiempo récord. Profesionalismo total."
+                    </p>
+                    <div class="review-author">
+                        <h4>MORDYTO</h4>
+                        <p>Youtuber Minecraft</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Controles del carrusel -->
+            <div class="carousel-controls">
+                <button class="carousel-btn prev" aria-label="Reseña anterior">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <div class="carousel-dots">
+                    <span class="dot active" data-index="0"></span>
+                    <span class="dot" data-index="1"></span>
+                    <span class="dot" data-index="2"></span>
+                    <span class="dot" data-index="3"></span>
+                </div>
+                <button class="carousel-btn next" aria-label="Siguiente reseña">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
             </div>
         </div>
     </section>
