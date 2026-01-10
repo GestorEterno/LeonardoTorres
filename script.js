@@ -220,7 +220,7 @@ class ScrollEffects {
     }
 }
 
-// Carrusel de reseñas - COMPLETAMENTE REFACTORIZADO
+// Carrusel de reseñas - COMPACTADO
 class ReviewsCarousel {
     constructor() {
         this.cards = document.querySelectorAll('.review-card');
@@ -433,7 +433,6 @@ document.addEventListener('DOMContentLoaded', () => {
     tiktokPlaceholders.forEach(placeholder => {
         const videoId = placeholder.getAttribute('data-video-id');
         placeholder.addEventListener('click', function() {
-            // En producción, esto cargaría el embed real de TikTok
             console.log(`Cargando video de TikTok con ID: ${videoId}`);
             alert(`En producción, este short cargaría el video de TikTok con ID: ${videoId}\n\nActualmente usando placeholders por restricciones de embed.`);
         });
