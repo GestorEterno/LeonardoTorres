@@ -264,6 +264,12 @@ body {
     font-size: 1.1rem;
 }
 
+.cta-button.small {
+    padding: 12px 25px;
+    font-size: 0.9rem;
+    display: inline-flex;
+}
+
 .hero-video {
     position: relative;
     opacity: 0;
@@ -417,139 +423,107 @@ body {
     transform: translateY(-5px);
 }
 
-/* Estilos de la sección de shorts */
+/* ===== ESTILOS REFACTORIZADOS PARA SHORTS ===== */
 .shorts {
     padding: 100px 0;
 }
 
-.shorts-carousel-container {
-    position: relative;
-    overflow: hidden;
-}
-
-.shorts-carousel {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    margin-bottom: 30px;
-}
-
-.carousel-track {
-    display: flex;
-    gap: 20px;
-    transition: transform 0.5s ease;
-    padding: 10px 0;
-    width: calc(100% - 120px);
-    overflow: hidden;
+.shorts-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 40px;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px 0;
 }
 
 .short-item {
-    flex: 0 0 calc(25% - 15px); /* 4 por fila en desktop */
     background: var(--card-bg);
     border-radius: 15px;
     overflow: hidden;
     border: 1px solid var(--card-border);
-    transition: transform 0.3s ease;
-    position: relative;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
     display: flex;
     flex-direction: column;
+    height: 100%;
 }
 
 .short-item:hover {
-    transform: translateY(-5px);
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0, 212, 255, 0.2);
 }
 
-.short-item .video-wrapper.short-video {
-    padding-bottom: 177.78%; /* 9:16 aspect ratio para vertical */
-    background: rgba(0, 0, 0, 0.3);
+/* Aspect ratio CORRECTO para shorts (9:16 = 56.25% padding-bottom) */
+.short-item .short-video {
+    padding-bottom: 177.78%; /* 9:16 aspect ratio (16/9 = 1.7778 = 177.78%) */
+    position: relative;
+    background: #000;
 }
 
-.short-placeholder {
+.short-item iframe {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
+    border: none;
+}
+
+.short-info {
+    padding: 20px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    color: var(--accent-color);
-    font-size: 1.5rem;
-    text-align: center;
-    padding: 20px;
-}
-
-.short-placeholder i {
-    font-size: 3rem;
-    margin-bottom: 15px;
-}
-
-.placeholder-text {
-    font-size: 0.9rem;
-    color: var(--text-muted);
-    margin-top: 10px;
-}
-
-.short-item p {
-    padding: 15px;
-    text-align: center;
-    font-weight: 500;
-    margin-top: auto;
-    font-size: 0.9rem;
-}
-
-.carousel-btn {
-    background: var(--card-bg);
-    border: 1px solid var(--card-border);
-    color: var(--text-color);
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 1.2rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    z-index: 2;
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-}
-
-.carousel-btn:hover {
-    background: var(--accent-color);
-    color: var(--primary-color);
-}
-
-.prev-btn {
-    left: 10px;
-}
-
-.next-btn {
-    right: 10px;
-}
-
-.carousel-indicators {
-    display: flex;
-    justify-content: center;
     gap: 10px;
-    margin-top: 20px;
+    background: rgba(0, 0, 0, 0.3);
+    margin-top: auto;
 }
 
-.indicator {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background: var(--text-muted);
-    cursor: pointer;
-    transition: background 0.3s ease;
+.short-info p {
+    font-size: 0.95rem;
+    color: var(--text-color);
+    margin-bottom: 0;
+    line-height: 1.5;
 }
 
-.indicator.active {
-    background: var(--accent-color);
+.short-stats {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.short-stats span {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.short-stats i {
+    color: var(--accent-color);
+}
+
+/* Mensaje para futuros shorts */
+.shorts-message {
+    text-align: center;
+    margin-top: 60px;
+    padding: 30px;
+    background: rgba(26, 26, 46, 0.5);
+    border-radius: 15px;
+    border: 1px dashed var(--card-border);
+}
+
+.shorts-message i {
+    font-size: 3rem;
+    color: var(--accent-color);
+    margin-bottom: 20px;
+    display: block;
+}
+
+.shorts-message p {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    margin-bottom: 25px;
 }
 
 /* Estilos de la sección de reseñas */
@@ -682,8 +656,9 @@ body {
 
 /* Responsive */
 @media (max-width: 1200px) {
-    .short-item {
-        flex: 0 0 calc(33.333% - 13.33px); /* 3 por fila en tablet grande */
+    .shorts-grid {
+        gap: 30px;
+        max-width: 800px;
     }
 }
 
@@ -703,10 +678,6 @@ body {
     
     .portfolio-grid {
         grid-template-columns: 1fr;
-    }
-    
-    .short-item {
-        flex: 0 0 calc(50% - 10px); /* 2 por fila en tablet */
     }
 }
 
@@ -766,26 +737,14 @@ body {
         grid-template-columns: 1fr;
     }
     
-    .short-item {
-        flex: 0 0 calc(100% - 0px); /* 1 por fila en móvil */
+    .shorts-grid {
+        grid-template-columns: 1fr;
+        max-width: 400px;
+        gap: 40px;
     }
     
-    .carousel-track {
-        width: calc(100% - 80px);
-    }
-    
-    .carousel-btn {
-        width: 40px;
-        height: 40px;
-        font-size: 1rem;
-    }
-    
-    .prev-btn {
-        left: 5px;
-    }
-    
-    .next-btn {
-        right: 5px;
+    .short-item .short-video {
+        padding-bottom: 177.78%; /* Mantener 9:16 en móvil */
     }
     
     .footer-top {
@@ -827,5 +786,13 @@ body {
     
     .review-text {
         font-size: 1rem;
+    }
+    
+    .shorts-message {
+        padding: 20px;
+    }
+    
+    .shorts-message i {
+        font-size: 2.5rem;
     }
 }
