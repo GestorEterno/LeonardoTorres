@@ -181,9 +181,9 @@ body {
 
 .hero-title {
     font-family: var(--font-tech);
-    font-size: 3.5rem;
+    font-size: 2.5rem; /* REDUCIDO de 3.5rem */
     line-height: 1.1;
-    margin-bottom: 25px;
+    margin-bottom: 20px; /* REDUCIDO de 25px */
     opacity: 0;
     transform: translateY(20px);
     animation: fadeInUp 1s ease 0.5s forwards;
@@ -503,75 +503,119 @@ body {
     color: var(--accent-color);
 }
 
-/* Mensaje para futuros shorts */
-.shorts-message {
-    text-align: center;
-    margin-top: 60px;
-    padding: 30px;
-    background: rgba(26, 26, 46, 0.5);
-    border-radius: 15px;
-    border: 1px dashed var(--card-border);
-}
-
-.shorts-message i {
-    font-size: 3rem;
-    color: var(--accent-color);
-    margin-bottom: 20px;
-    display: block;
-}
-
-.shorts-message p {
-    font-size: 1.1rem;
-    color: var(--text-muted);
-    margin-bottom: 25px;
-}
-
-/* Estilos de la sección de reseñas */
+/* ===== ESTILOS PARA CARRUSEL DE RESEÑAS ===== */
 .reviews {
     padding: 100px 0;
     background: rgba(13, 13, 31, 0.5);
 }
 
-.reviews-content {
+.reviews-carousel {
     display: flex;
-    justify-content: center;
+    gap: 25px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    scrollbar-width: none; /* Firefox */
+    padding: 20px 10px;
+    margin-bottom: 30px;
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.reviews-carousel::-webkit-scrollbar {
+    display: none; /* Chrome, Safari */
 }
 
 .review-card {
     background: var(--card-bg);
-    border-radius: 15px;
-    padding: 40px;
-    max-width: 800px;
+    border-radius: 12px; /* REDUCIDO de 15px */
+    padding: 25px; /* REDUCIDO de 40px */
+    min-width: 280px; /* TARJETAS MÁS PEQUEÑAS */
+    flex: 0 0 auto;
     border: 1px solid var(--card-border);
-    position: relative;
-    text-align: center;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* SOMBRA MÁS SUAVE */
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    opacity: 0.7;
+}
+
+.review-card.active {
+    opacity: 1;
+    transform: scale(1.05);
+    box-shadow: 0 8px 25px rgba(0, 212, 255, 0.3);
 }
 
 .review-icon {
-    font-size: 2.5rem;
+    font-size: 1.5rem; /* REDUCIDO de 2.5rem */
     color: var(--accent-color);
-    margin-bottom: 20px;
+    margin-bottom: 15px; /* REDUCIDO de 20px */
 }
 
 .review-text {
-    font-size: 1.2rem;
-    line-height: 1.8;
+    font-size: 0.9rem; /* REDUCIDO de 1.2rem */
+    line-height: 1.6; /* REDUCIDO de 1.8 */
     color: var(--text-color);
-    margin-bottom: 30px;
+    margin-bottom: 20px; /* REDUCIDO de 30px */
     font-style: italic;
 }
 
 .review-author h4 {
     font-family: var(--font-tech);
-    font-size: 1.3rem;
+    font-size: 1rem; /* REDUCIDO de 1.3rem */
     color: var(--accent-color);
-    margin-bottom: 5px;
+    margin-bottom: 3px; /* REDUCIDO de 5px */
 }
 
 .review-author p {
     color: var(--text-muted);
-    font-size: 0.9rem;
+    font-size: 0.75rem; /* REDUCIDO de 0.9rem */
+}
+
+/* Controles del carrusel */
+.carousel-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    margin-top: 20px;
+}
+
+.carousel-btn {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    color: var(--text-color);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.carousel-btn:hover {
+    background: var(--accent-gradient);
+    transform: scale(1.1);
+    border-color: var(--accent-color);
+}
+
+.carousel-dots {
+    display: flex;
+    gap: 10px;
+}
+
+.dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.dot.active {
+    background: var(--accent-color);
+    transform: scale(1.2);
 }
 
 /* Estilos de la sección de contacto */
@@ -669,7 +713,7 @@ body {
     }
     
     .hero-title {
-        font-size: 3rem;
+        font-size: 2.2rem; /* AJUSTADO para responsive */
     }
     
     .features-grid {
@@ -678,6 +722,10 @@ body {
     
     .portfolio-grid {
         grid-template-columns: 1fr;
+    }
+    
+    .reviews-carousel {
+        max-width: 800px;
     }
 }
 
@@ -726,7 +774,7 @@ body {
     }
     
     .hero-title {
-        font-size: 2.5rem;
+        font-size: 1.8rem; /* AJUSTADO para responsive */
     }
     
     .section-title {
@@ -745,6 +793,15 @@ body {
     
     .short-item .short-video {
         padding-bottom: 177.78%; /* Mantener 9:16 en móvil */
+    }
+    
+    .review-card {
+        min-width: 250px;
+        padding: 20px;
+    }
+    
+    .carousel-controls {
+        gap: 20px;
     }
     
     .footer-top {
@@ -769,7 +826,7 @@ body {
     }
     
     .hero-title {
-        font-size: 2rem;
+        font-size: 1.5rem; /* AJUSTADO para responsive */
     }
     
     .hero-description {
@@ -781,18 +838,10 @@ body {
     }
     
     .review-card {
-        padding: 30px 20px;
+        padding: 20px 15px;
     }
     
     .review-text {
-        font-size: 1rem;
-    }
-    
-    .shorts-message {
-        padding: 20px;
-    }
-    
-    .shorts-message i {
-        font-size: 2.5rem;
+        font-size: 0.85rem;
     }
 }
