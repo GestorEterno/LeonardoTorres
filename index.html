@@ -184,155 +184,67 @@
         </div>
     </section>
     
-    <!-- Sección de Shorts -->
+    <!-- Sección de Shorts REFACTORIZADA -->
     <section class="shorts" id="shorts">
         <div class="container">
             <h2 class="section-title">SHORTS <span class="gradient-text">VERTICALES</span></h2>
-            <p class="section-subtitle">Contenido optimizado para redes sociales en formato vertical</p>
+            <p class="section-subtitle">Contenido optimizado para redes sociales en formato vertical (9:16)</p>
             
-            <div class="shorts-carousel-container">
-                <div class="shorts-carousel">
-                    <button class="carousel-btn prev-btn">
-                        <i class="fas fa-chevron-left"></i>
-                    </button>
-                    
-                    <div class="carousel-track">
-                        <div class="short-item">
-                            <div class="video-label">
-                                <span class="video-badge">VALORANT</span>
-                                <h3 class="video-title">Gameplay Short</h3>
-                            </div>
-                            <div class="video-wrapper short-video">
-                                <iframe 
-                                    src="https://drive.google.com/file/d/1VUJdqd4rjyYVq7t7n7mg5vcHMF8bl823/preview" 
-                                    allow="autoplay; encrypted-media; fullscreen"
-                                    title="Valorant Short">
-                                </iframe>
-                            </div>
-                            <p>Gameplay rápido y dinámico</p>
-                        </div>
-                        
-                        <div class="short-item">
-                            <div class="video-label">
-                                <span class="video-badge">ROBLOX</span>
-                                <h3 class="video-title">Vertical Edit</h3>
-                            </div>
-                            <div class="video-wrapper short-video">
-                                <iframe 
-                                    src="https://www.youtube.com/embed/bJP56Z01KJU" 
-                                    allow="autoplay; encrypted-media; fullscreen"
-                                    title="Roblox Short">
-                                </iframe>
-                            </div>
-                            <p>Edición vertical para TikTok/Reels</p>
-                        </div>
-                        
-                        <div class="short-item">
-                            <div class="video-label">
-                                <span class="video-badge">GAMEPLAY</span>
-                                <h3 class="video-title">Action Short</h3>
-                            </div>
-                            <div class="video-wrapper short-video">
-                                <div class="short-placeholder">
-                                    <i class="fas fa-play-circle"></i>
-                                    <span>SHORT #3</span>
-                                    <p class="placeholder-text">Próximamente</p>
-                                </div>
-                            </div>
-                            <p>Short de acción en desarrollo</p>
-                        </div>
-                        
-                        <div class="short-item">
-                            <div class="video-label">
-                                <span class="video-badge">MINECRAFT</span>
-                                <h3 class="video-title">Build Short</h3>
-                            </div>
-                            <div class="video-wrapper short-video">
-                                <div class="short-placeholder">
-                                    <i class="fas fa-play-circle"></i>
-                                    <span>SHORT #4</span>
-                                    <p class="placeholder-text">Próximamente</p>
-                                </div>
-                            </div>
-                            <p>Construcciones rápidas en vertical</p>
-                        </div>
-                        
-                        <div class="short-item">
-                            <div class="video-label">
-                                <span class="video-badge">GAMING</span>
-                                <h3 class="video-title">Montage Short</h3>
-                            </div>
-                            <div class="video-wrapper short-video">
-                                <div class="short-placeholder">
-                                    <i class="fas fa-play-circle"></i>
-                                    <span>SHORT #5</span>
-                                    <p class="placeholder-text">Próximamente</p>
-                                </div>
-                            </div>
-                            <p>Montaje de clips destacados</p>
-                        </div>
-                        
-                        <div class="short-item">
-                            <div class="video-label">
-                                <span class="video-badge">EDICIÓN</span>
-                                <h3 class="video-title">Effects Short</h3>
-                            </div>
-                            <div class="video-wrapper short-video">
-                                <div class="short-placeholder">
-                                    <i class="fas fa-play-circle"></i>
-                                    <span>SHORT #6</span>
-                                    <p class="placeholder-text">Próximamente</p>
-                                </div>
-                            </div>
-                            <p>Efectos visuales impactantes</p>
-                        </div>
-                        
-                        <div class="short-item">
-                            <div class="video-label">
-                                <span class="video-badge">TRANSICIONES</span>
-                                <h3 class="video-title">Transitions Short</h3>
-                            </div>
-                            <div class="video-wrapper short-video">
-                                <div class="short-placeholder">
-                                    <i class="fas fa-play-circle"></i>
-                                    <span>SHORT #7</span>
-                                    <p class="placeholder-text">Próximamente</p>
-                                </div>
-                            </div>
-                            <p>Transiciones creativas en vertical</p>
-                        </div>
-                        
-                        <div class="short-item">
-                            <div class="video-label">
-                                <span class="video-badge">AUDIO</span>
-                                <h3 class="video-title">Sound Design Short</h3>
-                            </div>
-                            <div class="video-wrapper short-video">
-                                <div class="short-placeholder">
-                                    <i class="fas fa-play-circle"></i>
-                                    <span>SHORT #8</span>
-                                    <p class="placeholder-text">Próximamente</p>
-                                </div>
-                            </div>
-                            <p>Diseño de sonido para shorts</p>
+            <!-- Grid simple de 2 columnas -->
+            <div class="shorts-grid">
+                <!-- Short 1: VALORANT -->
+                <div class="short-item">
+                    <div class="video-label">
+                        <span class="video-badge">VALORANT</span>
+                        <h3 class="video-title">Gameplay Short</h3>
+                    </div>
+                    <div class="video-wrapper short-video">
+                        <iframe 
+                            src="https://drive.google.com/file/d/1VUJdqd4rjyYVq7t7n7mg5vcHMF8bl823/preview" 
+                            allow="autoplay; encrypted-media; fullscreen"
+                            title="Valorant Short">
+                        </iframe>
+                    </div>
+                    <div class="short-info">
+                        <p>Gameplay rápido y dinámico en formato vertical</p>
+                        <div class="short-stats">
+                            <span><i class="fas fa-eye"></i> 9:16 Aspect Ratio</span>
+                            <span><i class="fas fa-clock"></i> 60s</span>
                         </div>
                     </div>
-                    
-                    <button class="carousel-btn next-btn">
-                        <i class="fas fa-chevron-right"></i>
-                    </button>
                 </div>
                 
-                <div class="carousel-indicators">
-                    <span class="indicator active"></span>
-                    <span class="indicator"></span>
-                    <span class="indicator"></span>
-                    <span class="indicator"></span>
-                    <span class="indicator"></span>
-                    <span class="indicator"></span>
-                    <span class="indicator"></span>
-                    <span class="indicator"></span>
+                <!-- Short 2: ROBLOX -->
+                <div class="short-item">
+                    <div class="video-label">
+                        <span class="video-badge">ROBLOX</span>
+                        <h3 class="video-title">Vertical Edit</h3>
+                    </div>
+                    <div class="video-wrapper short-video">
+                        <iframe 
+                            src="https://www.youtube.com/embed/bJP56Z01KJU" 
+                            allow="autoplay; encrypted-media; fullscreen"
+                            title="Roblox Short">
+                        </iframe>
+                    </div>
+                    <div class="short-info">
+                        <p>Edición vertical optimizada para TikTok/Reels</p>
+                        <div class="short-stats">
+                            <span><i class="fas fa-eye"></i> 9:16 Aspect Ratio</span>
+                            <span><i class="fas fa-clock"></i> 45s</span>
+                        </div>
+                    </div>
                 </div>
+            </div>
+            
+            <!-- Mensaje de futuros proyectos -->
+            <div class="shorts-message">
+                <i class="fas fa-plus-circle"></i>
+                <p>Más shorts en producción. ¿Tienes un proyecto en mente?</p>
+                <a href="#contacto" class="cta-button small">
+                    <span>CREAR UN SHORT</span>
+                    <i class="fas fa-video"></i>
+                </a>
             </div>
         </div>
     </section>
