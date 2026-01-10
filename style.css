@@ -563,7 +563,7 @@ body {
 
 /* Estilos del pie de página */
 .footer {
-    padding: 60px 0 30px;
+    padding: 20px 0 15px;
     background: rgba(10, 10, 26, 0.9);
     border-top: 1px solid rgba(0, 212, 255, 0.1);
 }
@@ -572,18 +572,18 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 30px;
+    margin-bottom: 15px;
 }
 
 .footer-name h3 {
     font-family: var(--font-tech);
-    font-size: 1.8rem;
-    margin-bottom: 5px;
+    font-size: 1.2rem;
+    margin-bottom: 2px;
 }
 
 .footer-name p {
     color: var(--text-muted);
-    font-size: 0.9rem;
+    font-size: 0.7rem;
     letter-spacing: 1px;
 }
 
@@ -593,8 +593,8 @@ body {
 }
 
 .social-circle {
-    width: 50px;
-    height: 50px;
+    width: 35px;
+    height: 35px;
     border-radius: 50%;
     background: var(--card-bg);
     border: 1px solid var(--card-border);
@@ -602,7 +602,7 @@ body {
     justify-content: center;
     align-items: center;
     color: var(--text-color);
-    font-size: 1.2rem;
+    font-size: 0.9rem;
     text-decoration: none;
     transition: all 0.3s ease;
 }
@@ -616,7 +616,7 @@ body {
 .footer-divider {
     height: 1px;
     background: linear-gradient(90deg, transparent, var(--accent-color), transparent);
-    margin-bottom: 30px;
+    margin-bottom: 15px;
 }
 
 .footer-bottom {
@@ -625,7 +625,7 @@ body {
 
 .copyright {
     color: var(--text-muted);
-    font-size: 0.9rem;
+    font-size: 0.7rem;
 }
 
 /* Responsive */
@@ -712,7 +712,7 @@ body {
     
     .footer-top {
         flex-direction: column;
-        gap: 30px;
+        gap: 15px;
         text-align: center;
     }
 }
