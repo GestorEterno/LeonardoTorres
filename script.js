@@ -190,6 +190,101 @@ class Navigation {
     }
 }
 
+// Carrusel de shorts - MEJORADO PARA MOSTRAR 4 POR VISTA
+class ShortsCarousel {
+    constructor() {
+        this.track = document.querySelector('.carousel-track');
+        this.prevBtn = document.querySelector('.prev-btn');
+        this.nextBtn = document.querySelector('.next-btn');
+        this.indicators = document.querySelectorAll('.indicator');
+        this.shortItems = document.querySelectorAll('.short-item');
+        this.currentIndex = 0;
+        this.totalItems = this.shortItems.length;
+        this.itemsPerView = this.calculateItemsPerView();
+        this.totalSlides = Math.ceil(this.totalItems / this.itemsPerView);
+        
+        this.init();
+        this.updateIndicators();
+    }
+    
+    calculateItemsPerView() {
+        if (window.innerWidth >= 1024) return 4; // Desktop: 4 items
+        if (window.innerWidth >= 768) return 3;  // Tablet: 3 items
+        if (window.innerWidth >= 480) return 2;  // Mobile grande: 2 items
+        return 1; // Mobile pequeño: 1 item
+    }
+    
+    init() {
+        this.prevBtn.addEventListener('click', () => this.prev());
+        this.nextBtn.addEventListener('click', () => this.next());
+        
+        // Indicadores
+        this.indicators.forEach((indicator, index) => {
+            indicator.addEventListener('click', () => this.goToSlide(index));
+        });
+        
+        // Auto deslizamiento
+        this.startAutoSlide();
+        
+        // Pausar auto deslizamiento al interactuar
+        this.track.addEventListener('mouseenter', () => this.stopAutoSlide());
+        this.track.addEventListener('mouseleave', () => this.startAutoSlide());
+        
+        // Actualizar en redimensionamiento
+        window.addEventListener('resize', () => this.handleResize());
+    }
+    
+    handleResize() {
+        const oldItemsPerView = this.itemsPerView;
+        this.itemsPerView = this.calculateItemsPerView();
+        this.totalSlides = Math.ceil(this.totalItems / this.itemsPerView);
+        
+        if (oldItemsPerView !== this.itemsPerView) {
+            this.currentIndex = Math.min(this.currentIndex, this.totalSlides - 1);
+            this.updateCarousel();
+            this.updateIndicators();
+        }
+    }
+    
+    prev() {
+        this.currentIndex = (this.currentIndex - 1 + this.totalSlides) % this.totalSlides;
+        this.updateCarousel();
+        this.updateIndicators();
+    }
+    
+    next() {
+        this.currentIndex = (this.currentIndex + 1) % this.totalSlides;
+        this.updateCarousel();
+        this.updateIndicators();
+    }
+    
+    goToSlide(index) {
+        this.currentIndex = index;
+        this.updateCarousel();
+        this.updateIndicators();
+    }
+    
+    updateCarousel() {
+        const itemWidth = 100 / this.itemsPerView;
+        const translateX = -this.currentIndex * 100;
+        this.track.style.transform = `translateX(${translateX}%)`;
+    }
+    
+    updateIndicators() {
+        this.indicators.forEach((indicator, index) => {
+            indicator.classList.toggle('active', index === this.currentIndex);
+        });
+    }
+    
+    startAutoSlide() {
+        this.autoSlideInterval = setInterval(() => this.next(), 5000);
+    }
+    
+    stopAutoSlide() {
+        clearInterval(this.autoSlideInterval);
+    }
+}
+
 // Efectos de scroll suave - AJUSTADO PARA NAVBAR COMPACTO
 class ScrollEffects {
     constructor() {
@@ -292,6 +387,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Iniciar todas las funcionalidades
     const techBackground = new TechBackground();
     const navigation = new Navigation();
+    const carousel = new ShortsCarousel();
     const scrollEffects = new ScrollEffects();
     const hoverEffects = new HoverEffects();
     
@@ -322,13 +418,18 @@ document.addEventListener('DOMContentLoaded', () => {
         copyright.textContent = copyright.textContent.replace('2023', currentYear);
     }
     
-    // Reproducción automática de video hero
-    const heroVideo = document.querySelector('.hero-video iframe');
-    if (heroVideo) {
-        // Añadir parámetro para permitir autoplay
-        const currentSrc = heroVideo.src;
-        if (currentSrc.includes('drive.google.com')) {
-            heroVideo.src = currentSrc + '?autoplay=1&mute=1';
+    // Optimizar iframes para mejor rendimiento
+    const iframes = document.querySelectorAll('iframe');
+    iframes.forEach(iframe => {
+        // Añadir atributos para mejor rendimiento
+        iframe.setAttribute('loading', 'lazy');
+        
+        // Asegurar que los iframes de Google Drive tengan los parámetros correctos
+        if (iframe.src.includes('drive.google.com')) {
+            // Mantener la URL original, solo añadir parámetros si no existen
+            if (!iframe.src.includes('?')) {
+                iframe.src += '?autoplay=0&mute=1';
+            }
         }
-    }
+    });
 });
