@@ -447,23 +447,14 @@ body {
     padding: 100px 0;
 }
 
-.shorts-carousel {
-    display: flex;
-    align-items: center;
-    position: relative;
-    margin-bottom: 30px;
-}
-
-.carousel-track {
-    display: flex;
-    overflow: hidden;
+.shorts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 30px;
-    padding: 20px 0;
-    scroll-behavior: smooth;
+    margin-top: 50px;
 }
 
 .short-item {
-    flex: 0 0 300px;
     background: var(--card-bg);
     border-radius: 15px;
     overflow: hidden;
@@ -476,85 +467,56 @@ body {
     transform: translateY(-5px);
 }
 
-.short-video {
-    position: relative;
+.short-item .video-wrapper {
     padding-bottom: 177.78%; /* 9:16 aspect ratio para vertical */
-    height: 0;
-    overflow: hidden;
-    background: rgba(0, 0, 0, 0.5);
 }
 
-.short-placeholder {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+/* Estilos de la sección de reseñas */
+.reviews {
+    padding: 100px 0;
+    background: rgba(13, 13, 31, 0.5);
+}
+
+.reviews-content {
     display: flex;
-    flex-direction: column;
     justify-content: center;
-    align-items: center;
-    color: var(--accent-color);
-    font-size: 1.5rem;
 }
 
-.short-placeholder i {
-    font-size: 3rem;
-    margin-bottom: 15px;
-}
-
-.short-item p {
-    padding: 20px;
-    text-align: center;
-    font-weight: 500;
-}
-
-.carousel-btn {
+.review-card {
     background: var(--card-bg);
+    border-radius: 15px;
+    padding: 40px;
+    max-width: 800px;
     border: 1px solid var(--card-border);
-    color: var(--text-color);
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    position: relative;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.review-icon {
+    font-size: 2.5rem;
+    color: var(--accent-color);
+    margin-bottom: 20px;
+}
+
+.review-text {
     font-size: 1.2rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    z-index: 2;
+    line-height: 1.8;
+    color: var(--text-color);
+    margin-bottom: 30px;
+    font-style: italic;
 }
 
-.carousel-btn:hover {
-    background: var(--accent-color);
-    color: var(--primary-color);
+.review-author h4 {
+    font-family: var(--font-tech);
+    font-size: 1.3rem;
+    color: var(--accent-color);
+    margin-bottom: 5px;
 }
 
-.prev-btn {
-    margin-right: 20px;
-}
-
-.next-btn {
-    margin-left: 20px;
-}
-
-.carousel-indicators {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-}
-
-.indicator {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background: var(--text-muted);
-    cursor: pointer;
-    transition: background 0.3s ease;
-}
-
-.indicator.active {
-    background: var(--accent-color);
+.review-author p {
+    color: var(--text-muted);
+    font-size: 0.9rem;
 }
 
 /* Estilos de la sección de contacto */
@@ -655,6 +617,10 @@ body {
     .portfolio-grid {
         grid-template-columns: 1fr;
     }
+    
+    .shorts-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
 
 @media (max-width: 768px) {
@@ -713,12 +679,8 @@ body {
         grid-template-columns: 1fr;
     }
     
-    .carousel-track {
-        gap: 20px;
-    }
-    
-    .short-item {
-        flex: 0 0 250px;
+    .shorts-grid {
+        grid-template-columns: 1fr;
     }
     
     .footer-top {
@@ -754,13 +716,11 @@ body {
         font-size: 1.7rem;
     }
     
-    .short-item {
-        flex: 0 0 200px;
+    .review-card {
+        padding: 30px 20px;
     }
     
-    .carousel-btn {
-        width: 40px;
-        height: 40px;
+    .review-text {
         font-size: 1rem;
     }
 }
