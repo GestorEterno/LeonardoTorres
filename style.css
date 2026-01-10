@@ -318,38 +318,13 @@ body {
     border: none;
 }
 
-.video-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: rgba(0, 0, 0, 0.2);
-    transition: background 0.3s ease;
+/* Hero video específico - sin overlay */
+.hero-video .video-overlay {
+    display: none;
 }
 
-.video-overlay:hover {
-    background: rgba(0, 0, 0, 0.1);
-}
-
-.play-button {
-    width: 70px;
-    height: 70px;
-    background: var(--accent-gradient);
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 1.8rem;
-    cursor: pointer;
-    transition: transform 0.3s ease;
-}
-
-.play-button:hover {
-    transform: scale(1.1);
+.hero-video .play-button {
+    display: none;
 }
 
 /* Estilos de características */
@@ -447,28 +422,134 @@ body {
     padding: 100px 0;
 }
 
-.shorts-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 30px;
-    margin-top: 50px;
+.shorts-carousel-container {
+    position: relative;
+    overflow: hidden;
+}
+
+.shorts-carousel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    margin-bottom: 30px;
+}
+
+.carousel-track {
+    display: flex;
+    gap: 20px;
+    transition: transform 0.5s ease;
+    padding: 10px 0;
+    width: calc(100% - 120px);
+    overflow: hidden;
 }
 
 .short-item {
+    flex: 0 0 calc(25% - 15px); /* 4 por fila en desktop */
     background: var(--card-bg);
     border-radius: 15px;
     overflow: hidden;
     border: 1px solid var(--card-border);
     transition: transform 0.3s ease;
     position: relative;
+    display: flex;
+    flex-direction: column;
 }
 
 .short-item:hover {
     transform: translateY(-5px);
 }
 
-.short-item .video-wrapper {
+.short-item .video-wrapper.short-video {
     padding-bottom: 177.78%; /* 9:16 aspect ratio para vertical */
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.short-placeholder {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: var(--accent-color);
+    font-size: 1.5rem;
+    text-align: center;
+    padding: 20px;
+}
+
+.short-placeholder i {
+    font-size: 3rem;
+    margin-bottom: 15px;
+}
+
+.placeholder-text {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin-top: 10px;
+}
+
+.short-item p {
+    padding: 15px;
+    text-align: center;
+    font-weight: 500;
+    margin-top: auto;
+    font-size: 0.9rem;
+}
+
+.carousel-btn {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    color: var(--text-color);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 2;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.carousel-btn:hover {
+    background: var(--accent-color);
+    color: var(--primary-color);
+}
+
+.prev-btn {
+    left: 10px;
+}
+
+.next-btn {
+    right: 10px;
+}
+
+.carousel-indicators {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--text-muted);
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.indicator.active {
+    background: var(--accent-color);
 }
 
 /* Estilos de la sección de reseñas */
@@ -600,6 +681,12 @@ body {
 }
 
 /* Responsive */
+@media (max-width: 1200px) {
+    .short-item {
+        flex: 0 0 calc(33.333% - 13.33px); /* 3 por fila en tablet grande */
+    }
+}
+
 @media (max-width: 1024px) {
     .hero-content {
         grid-template-columns: 1fr;
@@ -618,8 +705,8 @@ body {
         grid-template-columns: 1fr;
     }
     
-    .shorts-grid {
-        grid-template-columns: repeat(2, 1fr);
+    .short-item {
+        flex: 0 0 calc(50% - 10px); /* 2 por fila en tablet */
     }
 }
 
@@ -679,8 +766,26 @@ body {
         grid-template-columns: 1fr;
     }
     
-    .shorts-grid {
-        grid-template-columns: 1fr;
+    .short-item {
+        flex: 0 0 calc(100% - 0px); /* 1 por fila en móvil */
+    }
+    
+    .carousel-track {
+        width: calc(100% - 80px);
+    }
+    
+    .carousel-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+    }
+    
+    .prev-btn {
+        left: 5px;
+    }
+    
+    .next-btn {
+        right: 5px;
     }
     
     .footer-top {
