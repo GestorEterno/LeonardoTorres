@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=Orbitron:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
     <!-- Fondo animado -->
@@ -184,20 +185,17 @@
         </div>
     </section>
     
-    <!-- Sección de Shorts REFACTORIZADA -->
+    <!-- Sección de Shorts - COMPLETAMENTE REFACTORIZADA -->
     <section class="shorts" id="shorts">
         <div class="container">
             <h2 class="section-title">SHORTS <span class="gradient-text">VERTICALES</span></h2>
-            <p class="section-subtitle">Contenido optimizado para redes sociales en formato vertical (9:16)</p>
+            <p class="section-subtitle">Contenido optimizado para TikTok/Reels/Shorts en formato 9:16</p>
             
-            <!-- Grid simple de 2 columnas -->
+            <!-- Grid simplificado de 4 shorts -->
             <div class="shorts-grid">
-                <!-- Short 1: VALORANT -->
+                <!-- Short 1: TikTok original -->
                 <div class="short-item">
-                    <div class="video-label">
-                        <span class="video-badge">VALORANT</span>
-                        <h3 class="video-title">Gameplay Short</h3>
-                    </div>
+                    <div class="short-badge">TIKTOK</div>
                     <div class="video-wrapper short-video">
                         <iframe 
                             src="https://drive.google.com/file/d/1VUJdqd4rjyYVq7t7n7mg5vcHMF8bl823/preview" 
@@ -205,21 +203,11 @@
                             title="Valorant Short">
                         </iframe>
                     </div>
-                    <div class="short-info">
-                        <p>Gameplay rápido y dinámico en formato vertical</p>
-                        <div class="short-stats">
-                            <span><i class="fas fa-eye"></i> 9:16 Aspect Ratio</span>
-                            <span><i class="fas fa-clock"></i> 60s</span>
-                        </div>
-                    </div>
                 </div>
                 
-                <!-- Short 2: ROBLOX -->
+                <!-- Short 2: TikTok original -->
                 <div class="short-item">
-                    <div class="video-label">
-                        <span class="video-badge">ROBLOX</span>
-                        <h3 class="video-title">Vertical Edit</h3>
-                    </div>
+                    <div class="short-badge">TIKTOK</div>
                     <div class="video-wrapper short-video">
                         <iframe 
                             src="https://www.youtube.com/embed/bJP56Z01KJU" 
@@ -227,99 +215,176 @@
                             title="Roblox Short">
                         </iframe>
                     </div>
-                    <div class="short-info">
-                        <p>Edición vertical optimizada para TikTok/Reels</p>
-                        <div class="short-stats">
-                            <span><i class="fas fa-eye"></i> 9:16 Aspect Ratio</span>
-                            <span><i class="fas fa-clock"></i> 45s</span>
+                </div>
+                
+                <!-- Short 3: Nuevo TikTok (ZMDrcyLqH) -->
+                <div class="short-item">
+                    <div class="short-badge">TIKTOK</div>
+                    <div class="video-wrapper short-video">
+                        <div class="tiktok-embed-placeholder" data-video-id="ZMDrcyLqH">
+                            <div class="placeholder-content">
+                                <i class="fab fa-tiktok"></i>
+                                <p>Short de TikTok - Contenido dinámico</p>
+                                <small>Video ID: ZMDrcyLqH</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Short 4: Nuevo TikTok (ZMDrcH2f2) -->
+                <div class="short-item">
+                    <div class="short-badge">TIKTOK</div>
+                    <div class="video-wrapper short-video">
+                        <div class="tiktok-embed-placeholder" data-video-id="ZMDrcH2f2">
+                            <div class="placeholder-content">
+                                <i class="fab fa-tiktok"></i>
+                                <p>Short de TikTok - Contenido dinámico</p>
+                                <small>Video ID: ZMDrcH2f2</small>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
             
-            <!-- ELIMINADO: Bloque de "Más shorts en producción" -->
+            <div class="shorts-note">
+                <p><i class="fas fa-info-circle"></i> Los videos de TikTok se cargan directamente desde la plataforma para máxima calidad</p>
+            </div>
         </div>
     </section>
     
-    <!-- Sección de Reseñas - CARRUSEL -->
+    <!-- Sección de Reseñas - CARRUSEL COMPLETAMENTE REFACTORIZADO -->
     <section class="reviews" id="reseñas">
         <div class="container">
             <h2 class="section-title">RESEÑAS <span class="gradient-text">DE CLIENTES</span></h2>
             <p class="section-subtitle">Lo que dicen los creadores con los que he trabajado</p>
             
-            <!-- Contenedor del carrusel -->
-            <div class="reviews-carousel">
-                <!-- Tarjeta 1 (Existente) -->
-                <div class="review-card active">
-                    <div class="review-icon">
-                        <i class="fas fa-quote-left"></i>
+            <!-- Contenedor del carrusel REFACTORIZADO -->
+            <div class="reviews-carousel-container">
+                <div class="reviews-carousel-track">
+                    <!-- Tarjeta 1 -->
+                    <div class="review-card active">
+                        <div class="review-quote">
+                            <i class="fas fa-quote-left"></i>
+                        </div>
+                        <div class="review-content">
+                            <p class="review-text">
+                                "Quería decirte que tu nivel de edición es brutal. Has llevado el canal a otro nivel y se nota en cada vídeo. Da gusto trabajar con alguien tan profesional."
+                            </p>
+                            <div class="review-author">
+                                <div class="author-avatar">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                                <div class="author-info">
+                                    <h4>GROSSO MODO</h4>
+                                    <p>Canal de Historia de Videojuegos</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <p class="review-text">
-                        "Quería decirte que tu nivel de edición es brutal. Has llevado el canal a otro nivel y se nota en cada vídeo. Da gusto trabajar con alguien tan profesional."
-                    </p>
-                    <div class="review-author">
-                        <h4>GROSSO MODO</h4>
-                        <p>Canal de Historia de Videojuegos</p>
+                    
+                    <!-- Tarjeta 2 -->
+                    <div class="review-card">
+                        <div class="review-quote">
+                            <i class="fas fa-quote-left"></i>
+                        </div>
+                        <div class="review-content">
+                            <p class="review-text">
+                                "Leonardo transformó completamente nuestro contenido de gaming. Su atención al detalle en efectos visuales y sincronización de audio es impresionante."
+                            </p>
+                            <div class="review-author">
+                                <div class="author-avatar">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                                <div class="author-info">
+                                    <h4>PIXELHERO</h4>
+                                    <p>Creador de Contenido Roblox</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Tarjeta 3 -->
+                    <div class="review-card">
+                        <div class="review-quote">
+                            <i class="fas fa-quote-left"></i>
+                        </div>
+                        <div class="review-content">
+                            <p class="review-text">
+                                "Trabajamos en varios shorts para TikTok y los resultados superaron expectativas. Entiende perfectamente el formato vertical y cómo mantener la atención."
+                            </p>
+                            <div class="review-author">
+                                <div class="author-avatar">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                                <div class="author-info">
+                                    <h4>ELKAIDRAM</h4>
+                                    <p>Streamer & Content Creator</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Tarjeta 4 -->
+                    <div class="review-card">
+                        <div class="review-quote">
+                            <i class="fas fa-quote-left"></i>
+                        </div>
+                        <div class="review-content">
+                            <p class="review-text">
+                                "La rapidez de entrega sin sacrificar calidad es increíble. Editó un documental de 30 minutos con efectos complejos en tiempo récord. Profesionalismo total."
+                            </p>
+                            <div class="review-author">
+                                <div class="author-avatar">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                                <div class="author-info">
+                                    <h4>MORDYTO</h4>
+                                    <p>Youtuber Minecraft</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Tarjeta 5 -->
+                    <div class="review-card">
+                        <div class="review-quote">
+                            <i class="fas fa-quote-left"></i>
+                        </div>
+                        <div class="review-content">
+                            <p class="review-text">
+                                "Colaboramos en múltiples proyectos y cada vez supera las expectativas. Su comprensión de la narrativa visual y el ritmo editorial es excepcional."
+                            </p>
+                            <div class="review-author">
+                                <div class="author-avatar">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                                <div class="author-info">
+                                    <h4>LOCOFER</h4>
+                                    <p>Content Creator & Editor</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 
-                <!-- Tarjeta 2 (Nueva) -->
-                <div class="review-card">
-                    <div class="review-icon">
-                        <i class="fas fa-quote-left"></i>
+                <!-- Controles del carrusel -->
+                <div class="carousel-controls">
+                    <button class="carousel-btn prev" aria-label="Reseña anterior">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    
+                    <div class="carousel-dots">
+                        <span class="dot active" data-index="0"></span>
+                        <span class="dot" data-index="1"></span>
+                        <span class="dot" data-index="2"></span>
+                        <span class="dot" data-index="3"></span>
+                        <span class="dot" data-index="4"></span>
                     </div>
-                    <p class="review-text">
-                        "Leonardo transformó completamente nuestro contenido de gaming. Su atención al detalle en efectos visuales y sincronización de audio es impresionante. ¡Totalmente recomendado!"
-                    </p>
-                    <div class="review-author">
-                        <h4>PIXELHERO</h4>
-                        <p>Creador de Contenido Roblox</p>
-                    </div>
+                    
+                    <button class="carousel-btn next" aria-label="Siguiente reseña">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
                 </div>
-                
-                <!-- Tarjeta 3 (Nueva) -->
-                <div class="review-card">
-                    <div class="review-icon">
-                        <i class="fas fa-quote-left"></i>
-                    </div>
-                    <p class="review-text">
-                        "Trabajamos en varios shorts para TikTok y los resultados superaron expectativas. Entiende perfectamente el formato vertical y sabe cómo mantener la atención del público."
-                    </p>
-                    <div class="review-author">
-                        <h4>ELKAIDRAM</h4>
-                        <p>Streamer & Content Creator</p>
-                    </div>
-                </div>
-                
-                <!-- Tarjeta 4 (Nueva) -->
-                <div class="review-card">
-                    <div class="review-icon">
-                        <i class="fas fa-quote-left"></i>
-                    </div>
-                    <p class="review-text">
-                        "La rapidez de entrega sin sacrificar calidad es increíble. Editó un documental de 30 minutos con efectos complejos en tiempo récord. Profesionalismo total."
-                    </p>
-                    <div class="review-author">
-                        <h4>MORDYTO</h4>
-                        <p>Youtuber Minecraft</p>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Controles del carrusel -->
-            <div class="carousel-controls">
-                <button class="carousel-btn prev" aria-label="Reseña anterior">
-                    <i class="fas fa-chevron-left"></i>
-                </button>
-                <div class="carousel-dots">
-                    <span class="dot active" data-index="0"></span>
-                    <span class="dot" data-index="1"></span>
-                    <span class="dot" data-index="2"></span>
-                    <span class="dot" data-index="3"></span>
-                </div>
-                <button class="carousel-btn next" aria-label="Siguiente reseña">
-                    <i class="fas fa-chevron-right"></i>
-                </button>
             </div>
         </div>
     </section>
