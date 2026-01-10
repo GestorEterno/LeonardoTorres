@@ -190,82 +190,6 @@ class Navigation {
     }
 }
 
-// Carrusel de shorts
-class ShortsCarousel {
-    constructor() {
-        this.track = document.querySelector('.carousel-track');
-        this.prevBtn = document.querySelector('.prev-btn');
-        this.nextBtn = document.querySelector('.next-btn');
-        this.indicators = document.querySelectorAll('.indicator');
-        this.shortItems = document.querySelectorAll('.short-item');
-        this.currentIndex = 0;
-        this.itemWidth = 330; // Ancho de cada item + gap
-        
-        this.init();
-    }
-    
-    init() {
-        this.prevBtn.addEventListener('click', () => this.prev());
-        this.nextBtn.addEventListener('click', () => this.next());
-        
-        // Indicadores
-        this.indicators.forEach((indicator, index) => {
-            indicator.addEventListener('click', () => this.goToSlide(index));
-        });
-        
-        // Auto deslizamiento
-        this.startAutoSlide();
-        
-        // Pausar auto deslizamiento al interactuar
-        this.track.addEventListener('mouseenter', () => this.stopAutoSlide());
-        this.track.addEventListener('mouseleave', () => this.startAutoSlide());
-    }
-    
-    prev() {
-        if (this.currentIndex > 0) {
-            this.currentIndex--;
-        } else {
-            this.currentIndex = this.shortItems.length - 3;
-        }
-        this.updateCarousel();
-    }
-    
-    next() {
-        if (this.currentIndex < this.shortItems.length - 3) {
-            this.currentIndex++;
-        } else {
-            this.currentIndex = 0;
-        }
-        this.updateCarousel();
-    }
-    
-    goToSlide(index) {
-        this.currentIndex = index;
-        if (this.currentIndex > this.shortItems.length - 3) {
-            this.currentIndex = this.shortItems.length - 3;
-        }
-        this.updateCarousel();
-    }
-    
-    updateCarousel() {
-        const translateX = -this.currentIndex * this.itemWidth;
-        this.track.style.transform = `translateX(${translateX}px)`;
-        
-        // Actualizar indicadores
-        this.indicators.forEach((indicator, index) => {
-            indicator.classList.toggle('active', index === this.currentIndex);
-        });
-    }
-    
-    startAutoSlide() {
-        this.autoSlideInterval = setInterval(() => this.next(), 4000);
-    }
-    
-    stopAutoSlide() {
-        clearInterval(this.autoSlideInterval);
-    }
-}
-
 // Efectos de scroll suave - AJUSTADO PARA NAVBAR COMPACTO
 class ScrollEffects {
     constructor() {
@@ -317,7 +241,7 @@ class HoverEffects {
     }
     
     initCardHovers() {
-        const cards = document.querySelectorAll('.feature-card, .portfolio-item, .short-item');
+        const cards = document.querySelectorAll('.feature-card, .portfolio-item, .short-item, .review-card');
         
         cards.forEach(card => {
             card.addEventListener('mouseenter', () => {
@@ -368,7 +292,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Iniciar todas las funcionalidades
     const techBackground = new TechBackground();
     const navigation = new Navigation();
-    const carousel = new ShortsCarousel();
     const scrollEffects = new ScrollEffects();
     const hoverEffects = new HoverEffects();
     
@@ -397,5 +320,15 @@ document.addEventListener('DOMContentLoaded', () => {
     if (copyright) {
         const currentYear = new Date().getFullYear();
         copyright.textContent = copyright.textContent.replace('2023', currentYear);
+    }
+    
+    // Reproducción automática de video hero
+    const heroVideo = document.querySelector('.hero-video iframe');
+    if (heroVideo) {
+        // Añadir parámetro para permitir autoplay
+        const currentSrc = heroVideo.src;
+        if (currentSrc.includes('drive.google.com')) {
+            heroVideo.src = currentSrc + '?autoplay=1&mute=1';
+        }
     }
 });
