@@ -233,6 +233,82 @@ class ScrollEffects {
     }
 }
 
+// Carrusel de reseñas
+class ReviewsCarousel {
+    constructor() {
+        this.carousel = document.querySelector('.reviews-carousel');
+        this.cards = document.querySelectorAll('.review-card');
+        this.dots = document.querySelectorAll('.dot');
+        this.prevBtn = document.querySelector('.carousel-btn.prev');
+        this.nextBtn = document.querySelector('.carousel-btn.next');
+        this.currentIndex = 0;
+        
+        this.init();
+    }
+    
+    init() {
+        // Inicializar eventos
+        this.prevBtn.addEventListener('click', () => this.prev());
+        this.nextBtn.addEventListener('click', () => this.next());
+        
+        // Eventos para los dots
+        this.dots.forEach(dot => {
+            dot.addEventListener('click', (e) => {
+                const index = parseInt(e.target.getAttribute('data-index'));
+                this.goToSlide(index);
+            });
+        });
+        
+        // Auto-avance cada 5 segundos
+        this.autoPlay = setInterval(() => this.next(), 5000);
+        
+        // Pausar auto-play al interactuar
+        this.carousel.addEventListener('mouseenter', () => clearInterval(this.autoPlay));
+        this.carousel.addEventListener('mouseleave', () => {
+            this.autoPlay = setInterval(() => this.next(), 5000);
+        });
+        
+        // Actualizar visualización inicial
+        this.updateDisplay();
+    }
+    
+    updateDisplay() {
+        // Actualizar tarjetas
+        this.cards.forEach((card, index) => {
+            card.classList.toggle('active', index === this.currentIndex);
+        });
+        
+        // Actualizar dots
+        this.dots.forEach((dot, index) => {
+            dot.classList.toggle('active', index === this.currentIndex);
+        });
+        
+        // Scroll suave al elemento activo
+        const activeCard = this.cards[this.currentIndex];
+        if (activeCard) {
+            this.carousel.scrollTo({
+                left: activeCard.offsetLeft - (this.carousel.offsetWidth / 2) + (activeCard.offsetWidth / 2),
+                behavior: 'smooth'
+            });
+        }
+    }
+    
+    prev() {
+        this.currentIndex = this.currentIndex > 0 ? this.currentIndex - 1 : this.cards.length - 1;
+        this.updateDisplay();
+    }
+    
+    next() {
+        this.currentIndex = this.currentIndex < this.cards.length - 1 ? this.currentIndex + 1 : 0;
+        this.updateDisplay();
+    }
+    
+    goToSlide(index) {
+        this.currentIndex = index;
+        this.updateDisplay();
+    }
+}
+
 // Efectos de hover en tarjetas y shorts
 class HoverEffects {
     constructor() {
@@ -321,6 +397,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const techBackground = new TechBackground();
     const navigation = new Navigation();
     const scrollEffects = new ScrollEffects();
+    const reviewsCarousel = new ReviewsCarousel();
     const hoverEffects = new HoverEffects();
     
     // Efecto de animación para el título del hero
