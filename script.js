@@ -220,13 +220,131 @@ class ScrollEffects {
     }
 }
 
+// Carrusel de Canales - NUEVA CLASE
+class ChannelsCarousel {
+    constructor() {
+        this.cards = document.querySelectorAll('.channel-card');
+        this.dots = document.querySelectorAll('.channels .dot');
+        this.prevBtn = document.querySelector('.channels .carousel-btn.prev');
+        this.nextBtn = document.querySelector('.channels .carousel-btn.next');
+        this.currentIndex = 0;
+        this.totalCards = this.cards.length;
+        this.autoPlayInterval = null;
+        this.isTransitioning = false;
+        
+        this.init();
+    }
+    
+    init() {
+        this.prevBtn.addEventListener('click', () => this.prev());
+        this.nextBtn.addEventListener('click', () => this.next());
+        
+        this.dots.forEach(dot => {
+            dot.addEventListener('click', (e) => {
+                const index = parseInt(e.target.getAttribute('data-index'));
+                if (index !== this.currentIndex && !this.isTransitioning) {
+                    this.goToSlide(index);
+                }
+            });
+        });
+        
+        this.startAutoPlay();
+        
+        const carouselTrack = document.querySelector('.channels-carousel-track');
+        carouselTrack.addEventListener('mouseenter', () => this.stopAutoPlay());
+        carouselTrack.addEventListener('mouseleave', () => this.startAutoPlay());
+        
+        this.updateControls();
+    }
+    
+    updateControls() {
+        this.prevBtn.disabled = this.currentIndex === 0;
+        this.nextBtn.disabled = this.currentIndex === this.totalCards - 1;
+        
+        this.dots.forEach((dot, index) => {
+            dot.classList.toggle('active', index === this.currentIndex);
+        });
+        
+        this.cards.forEach((card, index) => {
+            const isActive = index === this.currentIndex;
+            card.classList.toggle('active', isActive);
+            
+            if (isActive) {
+                card.style.zIndex = '2';
+                card.style.opacity = '1';
+                card.style.transform = 'translateX(0) scale(1)';
+                card.style.visibility = 'visible';
+            } else {
+                card.style.zIndex = '1';
+                card.style.opacity = '0';
+                card.style.transform = 'translateX(50px) scale(0.95)';
+                card.style.visibility = 'hidden';
+            }
+        });
+    }
+    
+    prev() {
+        if (this.currentIndex > 0 && !this.isTransitioning) {
+            this.isTransitioning = true;
+            this.currentIndex--;
+            this.updateControls();
+            
+            setTimeout(() => {
+                this.isTransitioning = false;
+            }, 500);
+        }
+    }
+    
+    next() {
+        if (this.currentIndex < this.totalCards - 1 && !this.isTransitioning) {
+            this.isTransitioning = true;
+            this.currentIndex++;
+            this.updateControls();
+            
+            setTimeout(() => {
+                this.isTransitioning = false;
+            }, 500);
+        }
+    }
+    
+    goToSlide(index) {
+        if (index >= 0 && index < this.totalCards && !this.isTransitioning) {
+            this.isTransitioning = true;
+            this.currentIndex = index;
+            this.updateControls();
+            
+            setTimeout(() => {
+                this.isTransitioning = false;
+            }, 500);
+        }
+    }
+    
+    startAutoPlay() {
+        this.stopAutoPlay();
+        this.autoPlayInterval = setInterval(() => {
+            if (this.currentIndex === this.totalCards - 1) {
+                this.goToSlide(0);
+            } else {
+                this.next();
+            }
+        }, 6000);
+    }
+    
+    stopAutoPlay() {
+        if (this.autoPlayInterval) {
+            clearInterval(this.autoPlayInterval);
+            this.autoPlayInterval = null;
+        }
+    }
+}
+
 // Carrusel de reseñas - COMPACTADO
 class ReviewsCarousel {
     constructor() {
         this.cards = document.querySelectorAll('.review-card');
-        this.dots = document.querySelectorAll('.dot');
-        this.prevBtn = document.querySelector('.carousel-btn.prev');
-        this.nextBtn = document.querySelector('.carousel-btn.next');
+        this.dots = document.querySelectorAll('.reviews .dot');
+        this.prevBtn = document.querySelector('.reviews .carousel-btn.prev');
+        this.nextBtn = document.querySelector('.reviews .carousel-btn.next');
         this.currentIndex = 0;
         this.totalCards = this.cards.length;
         this.autoPlayInterval = null;
@@ -346,7 +464,7 @@ class HoverEffects {
     }
     
     initCardHovers() {
-        const cards = document.querySelectorAll('.feature-card, .portfolio-item, .short-item');
+        const cards = document.querySelectorAll('.feature-card, .portfolio-item, .short-item, .channel-card');
         
         cards.forEach(card => {
             card.addEventListener('mouseenter', () => {
@@ -392,6 +510,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const techBackground = new TechBackground();
     const navigation = new Navigation();
     const scrollEffects = new ScrollEffects();
+    const channelsCarousel = new ChannelsCarousel();
     const reviewsCarousel = new ReviewsCarousel();
     const hoverEffects = new HoverEffects();
     
@@ -479,5 +598,43 @@ document.addEventListener('DOMContentLoaded', () => {
     
     sections.forEach(section => {
         observer.observe(section);
+    });
+    
+    // Smooth scroll para enlaces del menú
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            const href = this.getAttribute('href');
+            if (href === '#' || href === '#!') return;
+            
+            e.preventDefault();
+            const target = document.querySelector(href);
+            if (target) {
+                window.scrollTo({
+                    top: target.offsetTop - 80,
+                    behavior: 'smooth'
+                });
+            }
+        });
+    });
+    
+    // Actualizar enlaces de canales en reseñas para que coincidan con los canales
+    const reviewLinks = [
+        'https://www.youtube.com/@GROSSO_MODO/videos',
+        'https://www.youtube.com/@PixelHeroRBX/videos',
+        'https://www.youtube.com/@elkaidram',
+        'https://www.youtube.com/@Mordyto/videos',
+        '#'
+    ];
+    
+    document.querySelectorAll('.review-author .author-avatar').forEach((avatar, index) => {
+        if (index < reviewLinks.length && reviewLinks[index] !== '#') {
+            avatar.setAttribute('href', reviewLinks[index]);
+        }
+    });
+    
+    document.querySelectorAll('.review-author .channel-link').forEach((link, index) => {
+        if (index < reviewLinks.length && reviewLinks[index] !== '#') {
+            link.setAttribute('href', reviewLinks[index]);
+        }
     });
 });
