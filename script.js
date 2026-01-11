@@ -220,7 +220,7 @@ class ScrollEffects {
     }
 }
 
-// Carrusel de reseñas - COMPACTADO
+// Carrusel de reseñas - INFINITO CON TIEMPO DOBLE
 class ReviewsCarousel {
     constructor() {
         this.cards = document.querySelectorAll('.review-card');
@@ -258,13 +258,18 @@ class ReviewsCarousel {
     }
     
     updateControls() {
-        this.prevBtn.disabled = this.currentIndex === 0;
-        this.nextBtn.disabled = this.currentIndex === this.totalCards - 1;
+        // Eliminar deshabilitación de botones (ahora siempre activos)
+        this.prevBtn.style.opacity = '1';
+        this.prevBtn.style.cursor = 'pointer';
+        this.nextBtn.style.opacity = '1';
+        this.nextBtn.style.cursor = 'pointer';
         
+        // Actualizar puntos indicadores
         this.dots.forEach((dot, index) => {
             dot.classList.toggle('active', index === this.currentIndex);
         });
         
+        // Actualizar tarjetas
         this.cards.forEach((card, index) => {
             const isActive = index === this.currentIndex;
             card.classList.toggle('active', isActive);
@@ -284,9 +289,16 @@ class ReviewsCarousel {
     }
     
     prev() {
-        if (this.currentIndex > 0 && !this.isTransitioning) {
+        if (!this.isTransitioning) {
             this.isTransitioning = true;
-            this.currentIndex--;
+            
+            // LÓGICA INFINITA: Si estamos en el primero, vamos al último
+            if (this.currentIndex === 0) {
+                this.currentIndex = this.totalCards - 1;
+            } else {
+                this.currentIndex--;
+            }
+            
             this.updateControls();
             
             setTimeout(() => {
@@ -296,9 +308,16 @@ class ReviewsCarousel {
     }
     
     next() {
-        if (this.currentIndex < this.totalCards - 1 && !this.isTransitioning) {
+        if (!this.isTransitioning) {
             this.isTransitioning = true;
-            this.currentIndex++;
+            
+            // LÓGICA INFINITA: Si estamos en el último, vamos al primero
+            if (this.currentIndex === this.totalCards - 1) {
+                this.currentIndex = 0;
+            } else {
+                this.currentIndex++;
+            }
+            
             this.updateControls();
             
             setTimeout(() => {
@@ -321,13 +340,10 @@ class ReviewsCarousel {
     
     startAutoPlay() {
         this.stopAutoPlay();
+        // TIEMPO MODIFICADO: De 5000ms a 10000ms (el doble)
         this.autoPlayInterval = setInterval(() => {
-            if (this.currentIndex === this.totalCards - 1) {
-                this.goToSlide(0);
-            } else {
-                this.next();
-            }
-        }, 5000);
+            this.next();
+        }, 10000); // 10 segundos en lugar de 5
     }
     
     stopAutoPlay() {
