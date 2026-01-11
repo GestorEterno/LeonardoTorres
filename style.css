@@ -496,12 +496,40 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 2.2rem;
-    color: white;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
     position: relative;
     overflow: hidden;
     transition: transform 0.3s ease;
+    background: linear-gradient(135deg, #2a0e35, #1a0a1f);
+}
+
+/* Estilos para imágenes de avatares */
+.avatar-circle img,
+.review-avatar img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.avatar-circle img:hover,
+.review-avatar img:hover {
+    transform: scale(1.05);
+}
+
+/* Fallback para cuando no se carga la imagen */
+.avatar-circle.fallback-gradient,
+.review-avatar.fallback-gradient {
+    background: var(--accent-gradient) !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.avatar-circle.fallback-gradient i,
+.review-avatar.fallback-gradient i {
+    color: white;
+    font-size: 2rem;
 }
 
 .channel-item:hover .avatar-circle {
@@ -834,11 +862,20 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.2rem;
-    color: white;
     margin-right: 15px;
     flex-shrink: 0;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    background: linear-gradient(135deg, #2a0e35, #1a0a1f);
+    overflow: hidden;
+}
+
+.review-avatar.fallback-gradient {
+    background: var(--accent-gradient) !important;
+}
+
+.review-avatar.fallback-gradient i {
+    color: white;
+    font-size: 1.2rem;
 }
 
 .review-channel-info {
@@ -1181,6 +1218,9 @@ body {
     .review-avatar {
         width: 45px;
         height: 45px;
+    }
+    
+    .review-avatar.fallback-gradient i {
         font-size: 1.1rem;
     }
     
@@ -1213,7 +1253,10 @@ body {
     .avatar-circle {
         width: 80px;
         height: 80px;
-        font-size: 2rem;
+    }
+    
+    .avatar-circle.fallback-gradient i {
+        font-size: 1.8rem;
     }
     
     .stat-number {
