@@ -1,628 +1,1315 @@
-// Animación del fondo tecnológico - Red Neuronal Morado/Rosa
-class TechBackground {
-    constructor() {
-        this.canvas = document.getElementById('techBackground');
-        this.ctx = this.canvas.getContext('2d');
-        this.particles = [];
-        this.mouse = {
-            x: null,
-            y: null,
-            radius: 120
-        };
-        
-        this.init();
-        this.animate();
-        
-        // Eventos
-        window.addEventListener('resize', () => this.resize());
-        this.canvas.addEventListener('mousemove', (e) => this.handleMouseMove(e));
-        this.canvas.addEventListener('mouseleave', () => {
-            this.mouse.x = null;
-            this.mouse.y = null;
-        });
-    }
-    
-    init() {
-        this.resize();
-        this.createParticles();
-    }
-    
-    resize() {
-        this.canvas.width = window.innerWidth;
-        this.canvas.height = window.innerHeight;
-        this.createParticles();
-    }
-    
-    createParticles() {
-        const particleCount = Math.floor((this.canvas.width * this.canvas.height) / 7000);
-        this.particles = [];
-        
-        for (let i = 0; i < particleCount; i++) {
-            this.particles.push({
-                x: Math.random() * this.canvas.width,
-                y: Math.random() * this.canvas.height,
-                size: Math.random() * 1.5 + 0.3,
-                speedX: (Math.random() - 0.5) * 0.3,
-                speedY: (Math.random() - 0.5) * 0.3,
-                color: `rgba(255, 0, 255, ${Math.random() * 0.4 + 0.1})`,
-                originalX: null,
-                originalY: null,
-                oscillation: Math.random() * Math.PI * 2
-            });
-        }
-    }
-    
-    handleMouseMove(e) {
-        const rect = this.canvas.getBoundingClientRect();
-        this.mouse.x = e.clientX - rect.left;
-        this.mouse.y = e.clientY - rect.top;
-    }
-    
-    drawParticles() {
-        // Dibujar conexiones primero
-        for (let i = 0; i < this.particles.length; i++) {
-            for (let j = i + 1; j < this.particles.length; j++) {
-                const dx = this.particles[i].x - this.particles[j].x;
-                const dy = this.particles[i].y - this.particles[j].y;
-                const distance = Math.sqrt(dx * dx + dy * dy);
-                
-                if (distance < 150) {
-                    const opacity = 0.15 * (1 - distance/150);
-                    this.ctx.beginPath();
-                    this.ctx.strokeStyle = `rgba(255, 0, 255, ${opacity})`;
-                    this.ctx.lineWidth = 0.3;
-                    this.ctx.moveTo(this.particles[i].x, this.particles[i].y);
-                    this.ctx.lineTo(this.particles[j].x, this.particles[j].y);
-                    this.ctx.stroke();
-                }
-            }
-        }
-        
-        // Dibujar partículas
-        for (let particle of this.particles) {
-            particle.oscillation += 0.02;
-            const oscillationX = Math.sin(particle.oscillation) * 0.3;
-            const oscillationY = Math.cos(particle.oscillation * 0.7) * 0.3;
-            
-            particle.x += particle.speedX + oscillationX;
-            particle.y += particle.speedY + oscillationY;
-            
-            if (particle.x < 0 || particle.x > this.canvas.width) {
-                particle.speedX *= -0.98;
-                particle.x = Math.max(0, Math.min(this.canvas.width, particle.x));
-            }
-            if (particle.y < 0 || particle.y > this.canvas.height) {
-                particle.speedY *= -0.98;
-                particle.y = Math.max(0, Math.min(this.canvas.height, particle.y));
-            }
-            
-            if (this.mouse.x && this.mouse.y) {
-                const dx = particle.x - this.mouse.x;
-                const dy = particle.y - this.mouse.y;
-                const distance = Math.sqrt(dx * dx + dy * dy);
-                
-                if (distance < this.mouse.radius) {
-                    const force = (this.mouse.radius - distance) / this.mouse.radius;
-                    const angle = Math.atan2(dy, dx);
-                    
-                    particle.x += Math.cos(angle) * force * 3;
-                    particle.y += Math.sin(angle) * force * 3;
-                }
-            }
-            
-            const gradient = this.ctx.createRadialGradient(
-                particle.x, particle.y, 0,
-                particle.x, particle.y, particle.size * 2
-            );
-            gradient.addColorStop(0, particle.color);
-            gradient.addColorStop(1, 'rgba(255, 0, 255, 0)');
-            
-            this.ctx.beginPath();
-            this.ctx.fillStyle = gradient;
-            this.ctx.arc(particle.x, particle.y, particle.size * 2, 0, Math.PI * 2);
-            this.ctx.fill();
-            
-            this.ctx.beginPath();
-            this.ctx.fillStyle = particle.color;
-            this.ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
-            this.ctx.fill();
-            
-            this.ctx.beginPath();
-            this.ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
-            this.ctx.arc(
-                particle.x - particle.size * 0.3, 
-                particle.y - particle.size * 0.3, 
-                particle.size * 0.5, 
-                0, 
-                Math.PI * 2
-            );
-            this.ctx.fill();
-        }
-    }
-    
-    animate() {
-        const gradient = this.ctx.createLinearGradient(0, 0, 0, this.canvas.height);
-        gradient.addColorStop(0, 'rgba(10, 10, 26, 0.1)');
-        gradient.addColorStop(1, 'rgba(26, 10, 31, 0.2)');
-        
-        this.ctx.fillStyle = gradient;
-        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-        
-        this.drawParticles();
-        
-        requestAnimationFrame(() => this.animate());
+/* Reset y estilos base */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary-color: #0a0a1a;
+    --secondary-color: #1a0a1f;
+    --accent-color: #ff00ff;          /* MAGENTA - Color principal */
+    --accent-secondary: #e91e63;      /* ROSA */
+    --accent-tertiary: #9c27b0;       /* MORADO */
+    --accent-gradient: linear-gradient(90deg, var(--accent-color) 0%, var(--accent-secondary) 100%);
+    --accent-gradient-full: linear-gradient(90deg, var(--accent-color) 0%, var(--accent-secondary) 50%, var(--accent-tertiary) 100%);
+    --text-color: #f0f0f0;
+    --text-muted: #a0a0b0;
+    --card-bg: rgba(42, 14, 53, 0.7);
+    --card-border: rgba(255, 0, 255, 0.2);
+    --glow-color: rgba(255, 0, 255, 0.6);
+    --font-main: 'Montserrat', sans-serif;
+    --font-tech: 'Orbitron', monospace;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: var(--font-main);
+    background-color: var(--primary-color);
+    color: var(--text-color);
+    overflow-x: hidden;
+    position: relative;
+}
+
+/* Optimizaciones para el canvas */
+#techBackground {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Mejorar rendimiento de animaciones */
+.feature-card,
+.portfolio-item,
+.short-item,
+.channel-item,
+.review-card {
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    transform: translate3d(0, 0, 0);
+    -webkit-transform: translate3d(0, 0, 0);
+}
+
+/* Estilos del contenedor */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    position: relative;
+    z-index: 1;
+}
+
+/* Estilos del menú de navegación - COMPACTO */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: rgba(10, 10, 26, 0.95);
+    backdrop-filter: blur(10px);
+    padding: 6px 0;
+    z-index: 1000;
+    border-bottom: 1px solid rgba(255, 0, 255, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.logo {
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    padding: 2px 0;
+    line-height: 1;
+}
+
+.logo-text {
+    font-family: var(--font-tech);
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--text-color);
+    letter-spacing: 0.8px;
+    line-height: 1;
+}
+
+.logo-subtitle {
+    font-size: 0.6rem;
+    color: var(--accent-color);
+    letter-spacing: 1.2px;
+    line-height: 1;
+    margin-top: 1px;
+}
+
+.nav-menu {
+    display: flex;
+    list-style: none;
+    align-items: center;
+}
+
+.nav-link {
+    color: var(--text-color);
+    text-decoration: none;
+    font-weight: 500;
+    margin-left: 20px;
+    position: relative;
+    transition: color 0.3s ease;
+    font-size: 0.9rem;
+    padding: 4px 0;
+    display: block;
+}
+
+.nav-link:hover {
+    color: var(--accent-color);
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--accent-gradient);
+    transition: width 0.3s ease;
+}
+
+.nav-link:hover::after {
+    width: 100%;
+}
+
+.hamburger {
+    display: none;
+    cursor: pointer;
+    padding: 4px 0;
+}
+
+.bar {
+    display: block;
+    width: 22px;
+    height: 2.5px;
+    margin: 3px auto;
+    background-color: var(--text-color);
+    transition: all 0.3s ease;
+}
+
+/* Estilos para imágenes de canales */
+.avatar-circle {
+    position: relative;
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease;
+    background: var(--accent-gradient);
+}
+
+.channel-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+}
+
+/* Fallback para cuando no hay imagen */
+.channel-fallback {
+    display: none;
+    font-family: var(--font-tech);
+    font-weight: bold;
+    color: white;
+    font-size: 1.5rem;
+    z-index: 1;
+}
+
+/* Mostrar fallback si la imagen no se carga */
+.avatar-circle:has(.channel-image[src=""]) .channel-fallback,
+.avatar-circle:not(:has(.channel-image)) .channel-fallback {
+    display: block;
+}
+
+/* Estilos para imágenes en reseñas */
+.review-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-right: 15px;
+    flex-shrink: 0;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    position: relative;
+    background: var(--accent-gradient);
+}
+
+.review-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+}
+
+.review-fallback {
+    display: none;
+    font-family: var(--font-tech);
+    font-weight: bold;
+    color: white;
+    font-size: 1rem;
+    z-index: 1;
+}
+
+/* Mostrar fallback si la imagen no se carga */
+.review-avatar:has(.review-image[src=""]) .review-fallback,
+.review-avatar:not(:has(.review-image)) .review-fallback {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+/* Estilos del hero section */
+.hero {
+    padding: 120px 0 100px;
+    position: relative;
+}
+
+.hero-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+}
+
+.hero-title {
+    font-family: var(--font-tech);
+    font-size: 2.5rem;
+    line-height: 1.1;
+    margin-bottom: 20px;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 1s ease 0.5s forwards;
+}
+
+.hero-title .gradient-text {
+    animation: gradientPulse 3s ease-in-out infinite;
+    background-size: 200% 200%;
+}
+
+@keyframes fadeInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
 }
 
-// Menú hamburguesa
-class Navigation {
-    constructor() {
-        this.hamburger = document.querySelector('.hamburger');
-        this.navMenu = document.querySelector('.nav-menu');
-        
-        this.hamburger.addEventListener('click', () => this.toggleMenu());
-        
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('click', () => this.closeMenu());
-        });
+@keyframes gradientPulse {
+    0%, 100% {
+        background-position: 0% 50%;
     }
-    
-    toggleMenu() {
-        this.hamburger.classList.toggle('active');
-        this.navMenu.classList.toggle('active');
-    }
-    
-    closeMenu() {
-        this.hamburger.classList.remove('active');
-        this.navMenu.classList.remove('active');
+    50% {
+        background-position: 100% 50%;
     }
 }
 
-// Efectos de scroll suave
-class ScrollEffects {
-    constructor() {
-        this.navbar = document.querySelector('.navbar');
-        this.lastScrollTop = 0;
-        
-        window.addEventListener('scroll', () => this.handleScroll());
-        this.initSmoothScroll();
-    }
-    
-    handleScroll() {
-        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-        
-        if (scrollTop > this.lastScrollTop && scrollTop > 80) {
-            this.navbar.style.transform = 'translateY(-100%)';
-        } else {
-            this.navbar.style.transform = 'translateY(0)';
-        }
-        
-        this.lastScrollTop = scrollTop;
-    }
-    
-    initSmoothScroll() {
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                
-                const targetId = this.getAttribute('href');
-                if (targetId === '#') return;
-                
-                const targetElement = document.querySelector(targetId);
-                if (targetElement) {
-                    window.scrollTo({
-                        top: targetElement.offsetTop - 60,
-                        behavior: 'smooth'
-                    });
-                }
-            });
-        });
+.gradient-text {
+    background: var(--accent-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    display: inline-block;
+}
+
+.hero-description {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: var(--text-muted);
+    margin-bottom: 40px;
+    max-width: 90%;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 1s ease 0.8s forwards;
+}
+
+.cta-button {
+    display: inline-flex;
+    align-items: center;
+    background: var(--accent-gradient);
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+    padding: 15px 35px;
+    border-radius: 50px;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(255, 0, 255, 0.3);
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 1s ease 1.1s forwards;
+}
+
+.cta-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(255, 0, 255, 0.5);
+}
+
+.cta-button i {
+    margin-left: 10px;
+    transition: transform 0.3s ease;
+}
+
+.cta-button:hover i {
+    transform: translateX(5px);
+}
+
+.cta-button.large {
+    padding: 18px 45px;
+    font-size: 1.1rem;
+}
+
+.hero-video {
+    position: relative;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 1s ease 0.7s forwards;
+}
+
+.video-container {
+    background: var(--card-bg);
+    border-radius: 15px;
+    overflow: hidden;
+    border: 1px solid var(--card-border);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+}
+
+.video-label {
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.video-badge {
+    background: var(--accent-gradient);
+    color: white;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.video-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.video-wrapper {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 aspect ratio */
+    height: 0;
+    overflow: hidden;
+    transition: filter 0.4s ease;
+    will-change: filter;
+}
+
+.video-wrapper:hover {
+    filter: brightness(1.1) contrast(1.05);
+}
+
+.video-wrapper iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    will-change: transform;
+}
+
+.video-wrapper:hover iframe {
+    transform: scale(1.02);
+}
+
+/* Hero video específico - sin overlay */
+.hero-video .video-overlay {
+    display: none;
+}
+
+.hero-video .play-button {
+    display: none;
+}
+
+/* Estilos de características */
+.features {
+    padding: 100px 0;
+}
+
+.section-title {
+    font-family: var(--font-tech);
+    font-size: 2.5rem;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.section-subtitle {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    margin-bottom: 60px;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 30px;
+}
+
+.feature-card {
+    background: var(--card-bg);
+    border-radius: 15px;
+    padding: 30px;
+    text-align: center;
+    border: 1px solid var(--card-border);
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    position: relative;
+    overflow: hidden;
+    will-change: transform, box-shadow;
+}
+
+.feature-card:hover {
+    transform: translateY(-12px);
+    box-shadow: 0 20px 35px rgba(255, 0, 255, 0.25);
+}
+
+.feature-icon {
+    width: 70px;
+    height: 70px;
+    background: var(--accent-gradient);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto 20px;
+    font-size: 1.8rem;
+}
+
+.feature-card h3 {
+    font-size: 1.3rem;
+    margin-bottom: 15px;
+}
+
+.feature-card p {
+    color: var(--text-muted);
+    line-height: 1.6;
+}
+
+/* Estilos del portafolio - 2 COLUMNAS */
+.portfolio {
+    padding: 100px 0;
+}
+
+.portfolio-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 40px;
+}
+
+.portfolio-item {
+    background: var(--card-bg);
+    border-radius: 15px;
+    overflow: hidden;
+    border: 1px solid var(--card-border);
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    position: relative;
+    will-change: transform, box-shadow;
+}
+
+.portfolio-item:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 35px rgba(255, 0, 255, 0.25);
+}
+
+/* ===== NUEVA SECCIÓN: SHORTS ===== */
+.shorts {
+    padding: 100px 0;
+    position: relative;
+}
+
+.shorts::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 70% 30%, rgba(255, 0, 255, 0.05) 0%, transparent 50%);
+    z-index: -1;
+}
+
+.shorts-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 25px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 30px 0;
+}
+
+@media (max-width: 1024px) {
+    .shorts-grid {
+        grid-template-columns: repeat(2, 1fr);
+        max-width: 700px;
     }
 }
 
-// Carrusel de reseñas - INFINITO CON TIEMPO DOBLE
-class ReviewsCarousel {
-    constructor() {
-        this.cards = document.querySelectorAll('.review-card');
-        this.dots = document.querySelectorAll('.reviews .dot');
-        this.prevBtn = document.querySelector('.reviews .carousel-btn.prev');
-        this.nextBtn = document.querySelector('.reviews .carousel-btn.next');
-        this.currentIndex = 0;
-        this.totalCards = this.cards.length;
-        this.autoPlayInterval = null;
-        this.isTransitioning = false;
-        
-        this.init();
-    }
-    
-    init() {
-        this.prevBtn.addEventListener('click', () => this.prev());
-        this.nextBtn.addEventListener('click', () => this.next());
-        
-        this.dots.forEach(dot => {
-            dot.addEventListener('click', (e) => {
-                const index = parseInt(e.target.getAttribute('data-index'));
-                if (index !== this.currentIndex && !this.isTransitioning) {
-                    this.goToSlide(index);
-                }
-            });
-        });
-        
-        this.startAutoPlay();
-        
-        const carouselTrack = document.querySelector('.reviews-carousel-track');
-        carouselTrack.addEventListener('mouseenter', () => this.stopAutoPlay());
-        carouselTrack.addEventListener('mouseleave', () => this.startAutoPlay());
-        
-        this.updateControls();
-    }
-    
-    updateControls() {
-        // Eliminar deshabilitación de botones (ahora siempre activos)
-        this.prevBtn.style.opacity = '1';
-        this.prevBtn.style.cursor = 'pointer';
-        this.nextBtn.style.opacity = '1';
-        this.nextBtn.style.cursor = 'pointer';
-        
-        // Actualizar puntos indicadores
-        this.dots.forEach((dot, index) => {
-            dot.classList.toggle('active', index === this.currentIndex);
-        });
-        
-        // Actualizar tarjetas
-        this.cards.forEach((card, index) => {
-            const isActive = index === this.currentIndex;
-            card.classList.toggle('active', isActive);
-            
-            if (isActive) {
-                card.style.zIndex = '2';
-                card.style.opacity = '1';
-                card.style.transform = 'translateX(0) scale(1)';
-                card.style.visibility = 'visible';
-            } else {
-                card.style.zIndex = '1';
-                card.style.opacity = '0';
-                card.style.transform = 'translateX(50px) scale(0.95)';
-                card.style.visibility = 'hidden';
-            }
-        });
-    }
-    
-    prev() {
-        if (!this.isTransitioning) {
-            this.isTransitioning = true;
-            
-            // LÓGICA INFINITA: Si estamos en el primero, vamos al último
-            if (this.currentIndex === 0) {
-                this.currentIndex = this.totalCards - 1;
-            } else {
-                this.currentIndex--;
-            }
-            
-            this.updateControls();
-            
-            setTimeout(() => {
-                this.isTransitioning = false;
-            }, 500);
-        }
-    }
-    
-    next() {
-        if (!this.isTransitioning) {
-            this.isTransitioning = true;
-            
-            // LÓGICA INFINITA: Si estamos en el último, vamos al primero
-            if (this.currentIndex === this.totalCards - 1) {
-                this.currentIndex = 0;
-            } else {
-                this.currentIndex++;
-            }
-            
-            this.updateControls();
-            
-            setTimeout(() => {
-                this.isTransitioning = false;
-            }, 500);
-        }
-    }
-    
-    goToSlide(index) {
-        if (index >= 0 && index < this.totalCards && !this.isTransitioning) {
-            this.isTransitioning = true;
-            this.currentIndex = index;
-            this.updateControls();
-            
-            setTimeout(() => {
-                this.isTransitioning = false;
-            }, 500);
-        }
-    }
-    
-    startAutoPlay() {
-        this.stopAutoPlay();
-        // TIEMPO MODIFICADO: De 5000ms a 10000ms (el doble)
-        this.autoPlayInterval = setInterval(() => {
-            this.next();
-        }, 10000); // 10 segundos en lugar de 5
-    }
-    
-    stopAutoPlay() {
-        if (this.autoPlayInterval) {
-            clearInterval(this.autoPlayInterval);
-            this.autoPlayInterval = null;
-        }
+@media (max-width: 768px) {
+    .shorts-grid {
+        grid-template-columns: 1fr;
+        max-width: 350px;
     }
 }
 
-// Efectos de hover para canales
-class ChannelsHoverEffects {
-    constructor() {
-        this.initChannelsHover();
+.short-item {
+    background: var(--card-bg);
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--card-border);
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    position: relative;
+    aspect-ratio: 9/16;
+    height: auto;
+    max-height: 650px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    will-change: transform, box-shadow;
+}
+
+.short-item:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 25px 50px rgba(255, 0, 255, 0.25);
+}
+
+.short-badge {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: var(--accent-gradient);
+    color: white;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    z-index: 10;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Contenedor del video - ocupando todo el espacio */
+.short-item .short-video {
+    flex: 1;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    overflow: hidden;
+}
+
+.short-item iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    will-change: transform;
+}
+
+.short-item:hover iframe {
+    transform: scale(1.03);
+}
+
+/* ===== SECCIÓN: GRID DE 5 CANALES VISIBLES ===== */
+.channels {
+    padding: 100px 0;
+    background: rgba(26, 10, 31, 0.7);
+    position: relative;
+    overflow: hidden;
+}
+
+.channels::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 20% 30%, rgba(255, 0, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(156, 39, 176, 0.08) 0%, transparent 50%);
+    z-index: -1;
+}
+
+.channels-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 25px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.channel-item {
+    background: var(--card-bg);
+    border-radius: 15px;
+    padding: 30px 25px;
+    border: 1px solid var(--card-border);
+    text-decoration: none;
+    color: var(--text-color);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    position: relative;
+    overflow: hidden;
+    will-change: transform, box-shadow;
+}
+
+.channel-item:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(255, 0, 255, 0.25);
+    border-color: rgba(255, 0, 255, 0.4);
+}
+
+.channel-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(255, 0, 255, 0.05), transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.channel-item:hover::before {
+    opacity: 1;
+}
+
+.channel-avatar {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.channel-item:hover .avatar-circle {
+    transform: scale(1.1);
+}
+
+.avatar-circle::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(255,255,255,0.1), transparent);
+    z-index: 3;
+}
+
+.online-dot {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    width: 14px;
+    height: 14px;
+    background: #666;
+    border-radius: 50%;
+    border: 3px solid var(--card-bg);
+    transition: all 0.3s ease;
+    z-index: 4;
+}
+
+.online-dot.active {
+    background: #ff00ff;
+    box-shadow: 0 0 10px rgba(255, 0, 255, 0.7);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        box-shadow: 0 0 10px rgba(255, 0, 255, 0.7);
     }
-    
-    initChannelsHover() {
-        const channelItems = document.querySelectorAll('.channel-item');
-        
-        channelItems.forEach(item => {
-            item.addEventListener('mouseenter', () => {
-                // Añadir efecto de brillo al avatar
-                const avatar = item.querySelector('.avatar-circle');
-                if (avatar) {
-                    avatar.style.boxShadow = '0 15px 35px rgba(255, 0, 255, 0.4)';
-                }
-                
-                // Resaltar el punto online
-                const onlineDot = item.querySelector('.online-dot.active');
-                if (onlineDot) {
-                    onlineDot.style.transform = 'scale(1.3)';
-                }
-            });
-            
-            item.addEventListener('mouseleave', () => {
-                // Restaurar efectos
-                const avatar = item.querySelector('.avatar-circle');
-                if (avatar) {
-                    avatar.style.boxShadow = '0 10px 25px rgba(0, 0, 0, 0.3)';
-                }
-                
-                const onlineDot = item.querySelector('.online-dot.active');
-                if (onlineDot) {
-                    onlineDot.style.transform = 'scale(1)';
-                }
-            });
-        });
+    50% {
+        box-shadow: 0 0 20px rgba(255, 0, 255, 0.9);
     }
 }
 
-// Efectos de hover generales
-class HoverEffects {
-    constructor() {
-        this.initCardHovers();
-        this.initVideoHovers();
+.channel-info {
+    text-align: center;
+    width: 100%;
+}
+
+.channel-name {
+    font-family: var(--font-tech);
+    font-size: 1.2rem;
+    color: var(--text-color);
+    margin-bottom: 12px;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+.channel-item:hover .channel-name {
+    color: var(--accent-color);
+}
+
+.channel-subs {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.channel-subs i {
+    color: var(--accent-color);
+    font-size: 0.9rem;
+}
+
+.channel-hover {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 0, 255, 0.9);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    border-radius: 15px;
+    text-align: center;
+    padding: 20px;
+    z-index: 5;
+}
+
+.channel-item:hover .channel-hover {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.channel-hover i {
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+.channel-hover span {
+    font-weight: 600;
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
+}
+
+/* ===== CARRUSEL DE RESEÑAS COMPACTADO ===== */
+.reviews {
+    padding: 80px 0;
+    background: rgba(26, 10, 31, 0.6);
+    position: relative;
+    overflow: hidden;
+}
+
+.reviews::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 30% 50%, rgba(255, 0, 255, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 70% 80%, rgba(156, 39, 176, 0.05) 0%, transparent 50%);
+    z-index: -1;
+}
+
+.reviews-carousel-container {
+    max-width: 800px;
+    margin: 0 auto;
+    position: relative;
+    padding: 0 40px;
+}
+
+.reviews-carousel-track {
+    position: relative;
+    height: 250px;
+    margin-bottom: 30px;
+}
+
+.review-card {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: var(--card-bg);
+    border-radius: 15px;
+    padding: 20px;
+    border: 1px solid var(--card-border);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    opacity: 0;
+    transform: translateX(50px) scale(0.95);
+    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    visibility: hidden;
+    z-index: 1;
+    height: 220px;
+    display: flex;
+    flex-direction: column;
+    will-change: transform, opacity, box-shadow;
+}
+
+.review-card.active {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+    visibility: visible;
+    z-index: 2;
+    box-shadow: 0 15px 40px rgba(255, 0, 255, 0.25);
+}
+
+/* Cabecera de la reseña */
+.review-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(255, 0, 255, 0.2);
+}
+
+.review-channel-info {
+    flex: 1;
+}
+
+.review-channel-name {
+    font-family: var(--font-tech);
+    font-size: 1.1rem;
+    color: var(--accent-color);
+    margin-bottom: 3px;
+    letter-spacing: 0.5px;
+}
+
+.review-channel-link {
+    display: inline-flex;
+    align-items: center;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.review-channel-link:hover {
+    color: var(--accent-color);
+}
+
+.review-channel-link i {
+    margin-right: 5px;
+    font-size: 0.7rem;
+}
+
+/* Texto de la opinión */
+.review-text {
+    flex: 1;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: var(--text-color);
+    font-style: italic;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 5;
+    -webkit-box-orient: vertical;
+    padding: 5px 0;
+}
+
+/* Controles del carrusel mejorados */
+.carousel-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.carousel-btn {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    color: var(--text-color);
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    font-size: 1.1rem;
+    position: relative;
+    z-index: 10;
+    will-change: transform, background, box-shadow;
+}
+
+.carousel-btn:hover:not(:disabled) {
+    background: var(--accent-gradient);
+    transform: scale(1.1);
+    border-color: var(--accent-color);
+    box-shadow: 0 5px 15px rgba(255, 0, 255, 0.4);
+}
+
+.carousel-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.carousel-dots {
+    display: flex;
+    gap: 12px;
+}
+
+.dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    position: relative;
+    will-change: transform, background;
+}
+
+.dot.active {
+    background: var(--accent-color);
+    transform: scale(1.3);
+    box-shadow: 0 0 8px rgba(255, 0, 255, 0.5);
+}
+
+.dot:hover:not(.active) {
+    background: rgba(255, 0, 255, 0.5);
+    transform: scale(1.1);
+}
+
+/* Estilos de la sección de contacto */
+.contact {
+    padding: 100px 0;
+    text-align: center;
+    background: linear-gradient(135deg, rgba(10, 10, 26, 0.9), rgba(26, 10, 31, 0.9));
+    position: relative;
+    overflow: hidden;
+}
+
+.contact::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 20% 80%, rgba(255, 0, 255, 0.08) 0%, transparent 50%);
+    z-index: -1;
+}
+
+.contact-description {
+    font-size: 1.2rem;
+    color: var(--text-muted);
+    max-width: 700px;
+    margin: 0 auto 50px;
+    line-height: 1.6;
+}
+
+/* Estilos del pie de página */
+.footer {
+    padding: 20px 0 15px;
+    background: rgba(10, 10, 26, 0.95);
+    border-top: 1px solid rgba(255, 0, 255, 0.1);
+    position: relative;
+}
+
+.footer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, transparent, rgba(255, 0, 255, 0.02));
+    z-index: -1;
+}
+
+.footer-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.footer-name h3 {
+    font-family: var(--font-tech);
+    font-size: 1.2rem;
+    margin-bottom: 2px;
+    letter-spacing: 0.5px;
+}
+
+.footer-name p {
+    color: var(--text-muted);
+    font-size: 0.7rem;
+    letter-spacing: 1px;
+}
+
+.social-links {
+    display: flex;
+    gap: 15px;
+}
+
+.social-circle {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--text-color);
+    font-size: 0.9rem;
+    text-decoration: none;
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    will-change: transform, background, box-shadow;
+}
+
+.social-circle:hover {
+    background: var(--accent-gradient);
+    transform: translateY(-5px) rotate(5deg);
+    color: white;
+    box-shadow: 0 5px 15px rgba(255, 0, 255, 0.3);
+}
+
+.footer-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent-color), transparent);
+    margin-bottom: 15px;
+}
+
+.footer-bottom {
+    text-align: center;
+}
+
+.copyright {
+    color: var(--text-muted);
+    font-size: 0.7rem;
+    letter-spacing: 0.5px;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+    .features-grid {
+        grid-template-columns: repeat(2, 1fr);
     }
     
-    initCardHovers() {
-        const cards = document.querySelectorAll('.feature-card, .portfolio-item, .short-item');
-        
-        cards.forEach(card => {
-            card.addEventListener('mouseenter', () => {
-                const glow = document.createElement('div');
-                glow.classList.add('card-glow');
-                glow.style.position = 'absolute';
-                glow.style.top = '0';
-                glow.style.left = '0';
-                glow.style.width = '100%';
-                glow.style.height = '100%';
-                glow.style.borderRadius = 'inherit';
-                glow.style.background = 'radial-gradient(circle at center, rgba(255,0,255,0.15) 0%, transparent 70%)';
-                glow.style.pointerEvents = 'none';
-                glow.style.zIndex = '1';
-                card.style.position = 'relative';
-                card.appendChild(glow);
-            });
-            
-            card.addEventListener('mouseleave', () => {
-                const glow = card.querySelector('.card-glow');
-                if (glow) glow.remove();
-            });
-        });
-    }
-    
-    initVideoHovers() {
-        const videos = document.querySelectorAll('.video-wrapper');
-        
-        videos.forEach(video => {
-            video.addEventListener('mouseenter', () => {
-                video.style.filter = 'brightness(1.1) contrast(1.05)';
-            });
-            
-            video.addEventListener('mouseleave', () => {
-                video.style.filter = 'brightness(1) contrast(1)';
-            });
-        });
+    .channels-grid {
+        grid-template-columns: repeat(3, 1fr);
+        max-width: 900px;
     }
 }
 
-// Inicialización cuando el DOM esté cargado
-document.addEventListener('DOMContentLoaded', () => {
-    const techBackground = new TechBackground();
-    const navigation = new Navigation();
-    const scrollEffects = new ScrollEffects();
-    const reviewsCarousel = new ReviewsCarousel();
-    const channelsHoverEffects = new ChannelsHoverEffects();
-    const hoverEffects = new HoverEffects();
-    
-    const heroTitle = document.querySelector('.hero-title');
-    if (heroTitle) {
-        heroTitle.classList.add('animate-title');
-        
-        const gradientSpans = heroTitle.querySelectorAll('.gradient-text');
-        gradientSpans.forEach((span, index) => {
-            span.style.animationDelay = `${0.3 + (index * 0.2)}s`;
-        });
+@media (max-width: 1024px) {
+    .hero-content {
+        grid-template-columns: 1fr;
+        gap: 50px;
     }
     
-    document.body.style.opacity = '0';
-    document.body.style.transition = 'opacity 0.8s ease';
-    
-    setTimeout(() => {
-        document.body.style.opacity = '1';
-    }, 100);
-    
-    const copyright = document.querySelector('.copyright');
-    if (copyright) {
-        const currentYear = new Date().getFullYear();
-        copyright.textContent = copyright.textContent.replace('2023', currentYear);
+    .hero-title {
+        font-size: 2.2rem;
     }
     
-    const iframes = document.querySelectorAll('iframe');
-    iframes.forEach(iframe => {
-        iframe.setAttribute('loading', 'lazy');
-        
-        if (iframe.src.includes('drive.google.com')) {
-            if (!iframe.src.includes('?')) {
-                iframe.src += '?autoplay=0&mute=1';
-            }
-        }
-    });
+    .section-title {
+        font-size: 2rem;
+    }
     
-    // Añadir efecto de carga para iframes
-    const allVideos = document.querySelectorAll('.video-wrapper');
-    allVideos.forEach(video => {
-        video.style.position = 'relative';
-        const loading = document.createElement('div');
-        loading.className = 'video-loading';
-        loading.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-        loading.style.position = 'absolute';
-        loading.style.top = '50%';
-        loading.style.left = '50%';
-        loading.style.transform = 'translate(-50%, -50%)';
-        loading.style.color = 'var(--accent-color)';
-        loading.style.fontSize = '1.5rem';
-        loading.style.zIndex = '5';
-        video.appendChild(loading);
-        
-        const iframe = video.querySelector('iframe');
-        if (iframe) {
-            iframe.addEventListener('load', () => {
-                loading.style.display = 'none';
-            });
-        }
-    });
+    .portfolio-grid {
+        grid-template-columns: 1fr;
+        max-width: 600px;
+        margin: 0 auto;
+    }
     
-    // Efecto de scroll para secciones
-    const sections = document.querySelectorAll('section');
-    const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -100px 0px'
-    };
+    .reviews-carousel-container {
+        max-width: 700px;
+        padding: 0 30px;
+    }
     
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('visible');
-                
-                // Efecto especial para la sección de canales
-                if (entry.target.id === 'canales') {
-                    const channelItems = entry.target.querySelectorAll('.channel-item');
-                    channelItems.forEach((item, index) => {
-                        setTimeout(() => {
-                            item.style.opacity = '0';
-                            item.style.transform = 'translateY(30px)';
-                            item.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-                            
-                            setTimeout(() => {
-                                item.style.opacity = '1';
-                                item.style.transform = 'translateY(0)';
-                            }, 100);
-                        }, index * 100);
-                    });
-                }
-            }
-        });
-    }, observerOptions);
+    .channels-grid {
+        grid-template-columns: repeat(2, 1fr);
+        max-width: 600px;
+    }
+}
+
+@media (max-width: 768px) {
+    .hamburger {
+        display: block;
+    }
     
-    sections.forEach(section => {
-        observer.observe(section);
-    });
+    .hamburger.active .bar:nth-child(2) {
+        opacity: 0;
+    }
     
-    // Smooth scroll para enlaces del menú
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function(e) {
-            const href = this.getAttribute('href');
-            if (href === '#' || href === '#!') return;
-            
-            e.preventDefault();
-            const target = document.querySelector(href);
-            if (target) {
-                window.scrollTo({
-                    top: target.offsetTop - 80,
-                    behavior: 'smooth'
-                });
-            }
-        });
-    });
+    .hamburger.active .bar:nth-child(1) {
+        transform: translateY(6px) rotate(45deg);
+    }
     
-    // Actualizar enlaces de canales en reseñas para que coincidan con los canales
-    const reviewLinks = [
-        'https://www.youtube.com/@GROSSO_MODO/videos',
-        'https://www.youtube.com/@PixelHeroRBX/videos',
-        'https://www.youtube.com/@elkaidram',
-        'https://www.youtube.com/@Mordyto/videos',
-        'https://www.youtube.com/@soyzer'
-    ];
+    .hamburger.active .bar:nth-child(3) {
+        transform: translateY(-6px) rotate(-45deg);
+    }
     
-    document.querySelectorAll('.review-channel-link').forEach((link, index) => {
-        if (index < reviewLinks.length && reviewLinks[index] !== '#') {
-            link.setAttribute('href', reviewLinks[index]);
-        }
-    });
+    .nav-menu {
+        position: fixed;
+        left: -100%;
+        top: 48px;
+        flex-direction: column;
+        background-color: rgba(10, 10, 26, 0.98);
+        width: 100%;
+        text-align: center;
+        transition: 0.3s;
+        padding: 10px 0;
+        border-top: 1px solid rgba(255, 0, 255, 0.1);
+        backdrop-filter: blur(10px);
+    }
     
-    // Rotación automática de canales online (cambia estado cada 5 segundos)
-    const onlineDots = document.querySelectorAll('.online-dot');
-    let currentActiveDot = 0;
+    .nav-menu.active {
+        left: 0;
+    }
     
-    setInterval(() => {
-        onlineDots.forEach(dot => {
-            dot.classList.remove('active');
-            dot.style.background = '#666';
-        });
-        
-        // Activar un punto aleatorio
-        const randomIndex = Math.floor(Math.random() * onlineDots.length);
-        onlineDots[randomIndex].classList.add('active');
-        onlineDots[randomIndex].style.background = '#ff00ff';
-        
-        currentActiveDot = randomIndex;
-    }, 5000);
+    .nav-link {
+        margin: 8px 0;
+        font-size: 1rem;
+        padding: 6px 0;
+    }
     
-    // Manejar carga de imágenes de canales
-    const channelImages = document.querySelectorAll('.channel-image');
-    channelImages.forEach(img => {
-        img.onerror = function() {
-            const fallback = this.parentElement.querySelector('.channel-fallback');
-            if (fallback) {
-                fallback.style.display = 'flex';
-                fallback.style.alignItems = 'center';
-                fallback.style.justifyContent = 'center';
-                fallback.style.width = '100%';
-                fallback.style.height = '100%';
-            }
-        };
-    });
+    .hero {
+        padding: 100px 0 60px;
+    }
     
-    // Manejar carga de imágenes de reseñas
-    const reviewImages = document.querySelectorAll('.review-image');
-    reviewImages.forEach(img => {
-        img.onerror = function() {
-            const fallback = this.parentElement.querySelector('.review-fallback');
-            if (fallback) {
-                fallback.style.display = 'flex';
-                fallback.style.alignItems = 'center';
-                fallback.style.justifyContent = 'center';
-                fallback.style.width = '100%';
-                fallback.style.height = '100%';
-            }
-        };
-    });
-});
+    .hero-title {
+        font-size: 1.8rem;
+    }
+    
+    .section-title {
+        font-size: 2rem;
+    }
+    
+    .features-grid {
+        grid-template-columns: 1fr;
+        max-width: 400px;
+        margin: 0 auto;
+    }
+    
+    .review-card {
+        padding: 18px 15px;
+        height: 240px;
+    }
+    
+    .review-text {
+        font-size: 0.85rem;
+        -webkit-line-clamp: 6;
+    }
+    
+    .review-avatar {
+        width: 45px;
+        height: 45px;
+    }
+    
+    .review-channel-name {
+        font-size: 1rem;
+    }
+    
+    .carousel-btn {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .carousel-controls {
+        margin-top: 25px;
+    }
+    
+    .reviews-carousel-track {
+        height: 260px;
+    }
+    
+    .channels-grid {
+        grid-template-columns: 1fr;
+        max-width: 300px;
+    }
+    
+    .channel-item {
+        padding: 25px 20px;
+    }
+    
+    .avatar-circle {
+        width: 80px;
+        height: 80px;
+    }
+}
+
+@media (max-width: 480px) {
+    .navbar {
+        padding: 5px 0;
+    }
+    
+    .logo-text {
+        font-size: 1.1rem;
+    }
+    
+    .logo-subtitle {
+        font-size: 0.55rem;
+        letter-spacing: 1px;
+    }
+    
+    .hero-title {
+        font-size: 1.5rem;
+    }
+    
+    .hero-description {
+        font-size: 1rem;
+    }
+    
+    .section-title {
+        font-size: 1.7rem;
+    }
+    
+    .review-card {
+        padding: 15px 12px;
+        height: 250px;
+    }
+    
+    .review-text {
+        font-size: 0.8rem;
+        -webkit-line-clamp: 7;
+    }
+    
+    .review-header {
+        flex-direction: column;
+        text-align: center;
+        gap: 10px;
+    }
+    
+    .review-avatar {
+        margin-right: 0;
+        margin-bottom: 5px;
+    }
+    
+    .reviews-carousel-container {
+        padding: 0 20px;
+    }
+    
+    .carousel-controls {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .carousel-dots {
+        order: -1;
+    }
+    
+    .footer-top {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+}
