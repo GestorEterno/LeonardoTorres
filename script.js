@@ -220,6 +220,166 @@ class ScrollEffects {
     }
 }
 
+// Cargador de Avatares de YouTube
+class YouTubeAvatarLoader {
+    constructor() {
+        this.cache = new Map();
+        this.fallbackGradients = [
+            'linear-gradient(135deg, #ff00ff, #e91e63)',
+            'linear-gradient(135deg, #9c27b0, #e91e63)',
+            'linear-gradient(135deg, #ff00ff, #9c27b0)',
+            'linear-gradient(135deg, #e91e63, #ff00ff)',
+            'linear-gradient(135deg, #9c27b0, #ff00ff)'
+        ];
+        this.fallbackIcons = ['fab fa-youtube', 'fas fa-gamepad', 'fas fa-crown', 'fas fa-dice-d20', 'fas fa-robot'];
+    }
+    
+    // Extraer ID del canal desde la URL de YouTube
+    extractChannelId(url) {
+        try {
+            // Para URLs tipo: https://www.youtube.com/@GROSSO_MODO
+            const handleMatch = url.match(/youtube\.com\/@([^\/]+)/);
+            if (handleMatch) return handleMatch[1];
+            
+            // Para URLs tipo: https://www.youtube.com/channel/UCxxxxx
+            const channelMatch = url.match(/youtube\.com\/channel\/([^\/]+)/);
+            if (channelMatch) return channelMatch[1];
+            
+            // Para URLs tipo: https://www.youtube.com/user/username
+            const userMatch = url.match(/youtube\.com\/user\/([^\/]+)/);
+            if (userMatch) return userMatch[1];
+            
+            return null;
+        } catch (error) {
+            console.error('Error al extraer ID del canal:', error);
+            return null;
+        }
+    }
+    
+    // Obtener URL del avatar del canal
+    getAvatarUrl(channelIdentifier) {
+        // Si ya tenemos en caché, retornarlo
+        if (this.cache.has(channelIdentifier)) {
+            return this.cache.get(channelIdentifier);
+        }
+        
+        // Usar unavatar.io como servicio principal (más confiable)
+        const unavatarUrl = `https://unavatar.io/youtube/${channelIdentifier}`;
+        
+        // Almacenar en caché
+        this.cache.set(channelIdentifier, unavatarUrl);
+        
+        return unavatarUrl;
+    }
+    
+    // Avatar de respaldo si no se puede obtener
+    getFallbackConfig(index) {
+        const gradientIndex = index % this.fallbackGradients.length;
+        const iconIndex = index % this.fallbackIcons.length;
+        
+        return {
+            gradient: this.fallbackGradients[gradientIndex],
+            icon: this.fallbackIcons[iconIndex]
+        };
+    }
+    
+    // Cargar todos los avatares
+    async loadAllAvatars() {
+        // Cargar avatares de canales
+        const channelItems = document.querySelectorAll('.channel-item');
+        channelItems.forEach(async (item, index) => {
+            const channelData = item.getAttribute('data-channel');
+            const img = item.querySelector('.channel-avatar-img');
+            const avatarContainer = item.querySelector('.avatar-circle');
+            
+            if (channelData && img && avatarContainer) {
+                await this.loadAvatar(img, avatarContainer, channelData, index, true);
+            }
+        });
+        
+        // Cargar avatares de reseñas
+        const reviewAvatars = document.querySelectorAll('.review-avatar');
+        reviewAvatars.forEach(async (avatarContainer, index) => {
+            const channelData = avatarContainer.getAttribute('data-channel');
+            const img = avatarContainer.querySelector('.review-avatar-img');
+            
+            if (channelData && img) {
+                await this.loadAvatar(img, avatarContainer, channelData, index, false);
+            }
+        });
+    }
+    
+    // Cargar un avatar individual
+    async loadAvatar(imgElement, container, channelIdentifier, index, isChannel) {
+        try {
+            const avatarUrl = this.getAvatarUrl(channelIdentifier);
+            
+            // Intentar cargar la imagen
+            const loaded = await this.testImageLoad(avatarUrl);
+            
+            if (loaded) {
+                // Si se carga exitosamente, establecer la imagen
+                imgElement.src = avatarUrl;
+                imgElement.style.display = 'block';
+                container.classList.remove('fallback-gradient');
+                
+                // Remover cualquier icono de fallback
+                const existingIcon = container.querySelector('i');
+                if (existingIcon) {
+                    existingIcon.remove();
+                }
+            } else {
+                // Si falla, usar fallback
+                this.setFallbackAvatar(container, index, isChannel);
+                imgElement.style.display = 'none';
+            }
+        } catch (error) {
+            console.error(`Error cargando avatar para ${channelIdentifier}:`, error);
+            this.setFallbackAvatar(container, index, isChannel);
+            imgElement.style.display = 'none';
+        }
+    }
+    
+    // Probar si la imagen se puede cargar
+    testImageLoad(url) {
+        return new Promise((resolve) => {
+            const testImg = new Image();
+            testImg.onload = () => resolve(true);
+            testImg.onerror = () => resolve(false);
+            testImg.src = url;
+            
+            // Timeout después de 3 segundos
+            setTimeout(() => resolve(false), 3000);
+        });
+    }
+    
+    // Establecer avatar de fallback
+    setFallbackAvatar(container, index, isChannel) {
+        const config = this.getFallbackConfig(index);
+        
+        // Aplicar gradiente de fondo
+        container.style.background = config.gradient;
+        container.classList.add('fallback-gradient');
+        
+        // Crear icono de FontAwesome
+        const icon = document.createElement('i');
+        icon.className = config.icon;
+        
+        // Estilos diferentes para canales vs reseñas
+        if (isChannel) {
+            icon.style.fontSize = '2rem';
+            icon.style.color = 'white';
+        } else {
+            icon.style.fontSize = '1.2rem';
+            icon.style.color = 'white';
+        }
+        
+        // Limpiar contenido previo y agregar icono
+        container.innerHTML = '';
+        container.appendChild(icon);
+    }
+}
+
 // Carrusel de reseñas - COMPACTADO
 class ReviewsCarousel {
     constructor() {
@@ -504,6 +664,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const channelsHoverEffects = new ChannelsHoverEffects();
     const hoverEffects = new HoverEffects();
     
+    // Inicializar cargador de avatares de YouTube
+    const avatarLoader = new YouTubeAvatarLoader();
+    avatarLoader.loadAllAvatars();
+    
     const heroTitle = document.querySelector('.hero-title');
     if (heroTitle) {
         heroTitle.classList.add('animate-title');
@@ -621,7 +785,7 @@ document.addEventListener('DOMContentLoaded', () => {
         'https://www.youtube.com/@PixelHeroRBX/videos',
         'https://www.youtube.com/@elkaidram',
         'https://www.youtube.com/@Mordyto/videos',
-        '#'
+        'https://www.youtube.com/@LOCOFER'
     ];
     
     document.querySelectorAll('.review-channel-link').forEach((link, index) => {
