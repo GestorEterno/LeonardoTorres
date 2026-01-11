@@ -8,9 +8,9 @@
 :root {
     --primary-color: #0a0a1a;
     --secondary-color: #1a0a1f;
-    --accent-color: #ff00ff;
-    --accent-secondary: #e91e63;
-    --accent-tertiary: #9c27b0;
+    --accent-color: #ff00ff;          /* MAGENTA - Color principal */
+    --accent-secondary: #e91e63;      /* ROSA */
+    --accent-tertiary: #9c27b0;       /* MORADO */
     --accent-gradient: linear-gradient(90deg, var(--accent-color) 0%, var(--accent-secondary) 100%);
     --accent-gradient-full: linear-gradient(90deg, var(--accent-color) 0%, var(--accent-secondary) 50%, var(--accent-tertiary) 100%);
     --text-color: #f0f0f0;
@@ -59,6 +59,7 @@ body {
         );
 }
 
+/* Estilos del contenedor */
 .container {
     max-width: 1200px;
     margin: 0 auto;
@@ -67,6 +68,7 @@ body {
     z-index: 1;
 }
 
+/* Estilos del menú de navegación - COMPACTO */
 .navbar {
     position: fixed;
     top: 0;
@@ -166,6 +168,90 @@ body {
     transition: all 0.3s ease;
 }
 
+/* Estilos para imágenes de canales */
+.avatar-circle {
+    position: relative;
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease;
+    background: var(--accent-gradient);
+}
+
+.channel-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+}
+
+/* Fallback para cuando no hay imagen */
+.channel-fallback {
+    display: none;
+    font-family: var(--font-tech);
+    font-weight: bold;
+    color: white;
+    font-size: 1.5rem;
+    z-index: 1;
+}
+
+/* Mostrar fallback si la imagen no se carga */
+.avatar-circle:has(.channel-image[src=""]) .channel-fallback,
+.avatar-circle:not(:has(.channel-image)) .channel-fallback {
+    display: block;
+}
+
+/* Estilos para imágenes en reseñas */
+.review-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-right: 15px;
+    flex-shrink: 0;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    position: relative;
+    background: var(--accent-gradient);
+}
+
+.review-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+}
+
+.review-fallback {
+    display: none;
+    font-family: var(--font-tech);
+    font-weight: bold;
+    color: white;
+    font-size: 1rem;
+    z-index: 1;
+}
+
+/* Mostrar fallback si la imagen no se carga */
+.review-avatar:has(.review-image[src=""]) .review-fallback,
+.review-avatar:not(:has(.review-image)) .review-fallback {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+/* Estilos del hero section */
 .hero {
     padding: 120px 0 100px;
     position: relative;
@@ -303,7 +389,7 @@ body {
 
 .video-wrapper {
     position: relative;
-    padding-bottom: 56.25%;
+    padding-bottom: 56.25%; /* 16:9 aspect ratio */
     height: 0;
     overflow: hidden;
 }
@@ -317,6 +403,16 @@ body {
     border: none;
 }
 
+/* Hero video específico - sin overlay */
+.hero-video .video-overlay {
+    display: none;
+}
+
+.hero-video .play-button {
+    display: none;
+}
+
+/* Estilos de características */
 .features {
     padding: 100px 0;
 }
@@ -382,6 +478,7 @@ body {
     line-height: 1.6;
 }
 
+/* Estilos del portafolio - 2 COLUMNAS */
 .portfolio {
     padding: 100px 0;
 }
@@ -405,6 +502,7 @@ body {
     transform: translateY(-5px);
 }
 
+/* ===== NUEVA SECCIÓN: GRID DE 5 CANALES VISIBLES ===== */
 .channels {
     padding: 100px 0;
     background: rgba(26, 10, 31, 0.7);
@@ -474,47 +572,6 @@ body {
     margin-bottom: 20px;
 }
 
-.avatar-circle {
-    width: 90px;
-    height: 90px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    overflow: hidden;
-    transition: transform 0.3s ease;
-    background: linear-gradient(135deg, #2a0e35, #1a0a1f);
-}
-
-.avatar-circle img,
-.review-avatar img {
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    object-fit: cover;
-    transition: transform 0.3s ease;
-}
-
-.avatar-circle img:hover,
-.review-avatar img:hover {
-    transform: scale(1.05);
-}
-
-.avatar-circle.fallback-gradient,
-.review-avatar.fallback-gradient {
-    background: var(--accent-gradient) !important;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.avatar-circle.fallback-gradient i,
-.review-avatar.fallback-gradient i {
-    color: white;
-    font-size: 2rem;
-}
-
 .channel-item:hover .avatar-circle {
     transform: scale(1.1);
 }
@@ -527,6 +584,7 @@ body {
     width: 100%;
     height: 100%;
     background: linear-gradient(135deg, rgba(255,255,255,0.1), transparent);
+    z-index: 3;
 }
 
 .online-dot {
@@ -539,6 +597,7 @@ body {
     border-radius: 50%;
     border: 3px solid var(--card-bg);
     transition: all 0.3s ease;
+    z-index: 4;
 }
 
 .online-dot.active {
@@ -608,6 +667,7 @@ body {
     border-radius: 15px;
     text-align: center;
     padding: 20px;
+    z-index: 5;
 }
 
 .channel-item:hover .channel-hover {
@@ -626,6 +686,7 @@ body {
     letter-spacing: 0.5px;
 }
 
+/* Estadísticas de canales */
 .channels-stats {
     display: flex;
     justify-content: center;
@@ -666,6 +727,7 @@ body {
     background: linear-gradient(to bottom, transparent, rgba(255, 0, 255, 0.3), transparent);
 }
 
+/* ===== ESTILOS REFACTORIZADOS PARA SHORTS SIMPLIFICADOS ===== */
 .shorts {
     padding: 100px 0;
     position: relative;
@@ -742,6 +804,7 @@ body {
     box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
 }
 
+/* Contenedor del video - ocupando todo el espacio */
 .short-item .short-video {
     flex: 1;
     position: relative;
@@ -765,6 +828,7 @@ body {
     transform: scale(1.02);
 }
 
+/* ===== CARRUSEL DE RESEÑAS COMPACTADO ===== */
 .reviews {
     padding: 80px 0;
     background: rgba(26, 10, 31, 0.6);
@@ -825,35 +889,13 @@ body {
     box-shadow: 0 15px 40px rgba(255, 0, 255, 0.25);
 }
 
+/* Cabecera de la reseña */
 .review-header {
     display: flex;
     align-items: center;
     margin-bottom: 15px;
     padding-bottom: 12px;
     border-bottom: 1px solid rgba(255, 0, 255, 0.2);
-}
-
-.review-avatar {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-right: 15px;
-    flex-shrink: 0;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-    background: linear-gradient(135deg, #2a0e35, #1a0a1f);
-    overflow: hidden;
-}
-
-.review-avatar.fallback-gradient {
-    background: var(--accent-gradient) !important;
-}
-
-.review-avatar.fallback-gradient i {
-    color: white;
-    font-size: 1.2rem;
 }
 
 .review-channel-info {
@@ -886,6 +928,7 @@ body {
     font-size: 0.7rem;
 }
 
+/* Texto de la opinión */
 .review-text {
     flex: 1;
     font-size: 0.9rem;
@@ -899,6 +942,7 @@ body {
     padding: 5px 0;
 }
 
+/* Controles del carrusel mejorados */
 .carousel-controls {
     display: flex;
     justify-content: space-between;
@@ -961,6 +1005,7 @@ body {
     transform: scale(1.1);
 }
 
+/* Estilos de la sección de contacto */
 .contact {
     padding: 100px 0;
     text-align: center;
@@ -988,6 +1033,7 @@ body {
     line-height: 1.6;
 }
 
+/* Estilos del pie de página */
 .footer {
     padding: 20px 0 15px;
     background: rgba(10, 10, 26, 0.95);
@@ -1069,6 +1115,7 @@ body {
     letter-spacing: 0.5px;
 }
 
+/* Responsive */
 @media (max-width: 1200px) {
     .features-grid {
         grid-template-columns: repeat(2, 1fr);
@@ -1088,6 +1135,10 @@ body {
     
     .hero-title {
         font-size: 2.2rem;
+    }
+    
+    .section-title {
+        font-size: 2rem;
     }
     
     .portfolio-grid {
@@ -1193,10 +1244,6 @@ body {
         height: 45px;
     }
     
-    .review-avatar.fallback-gradient i {
-        font-size: 1.1rem;
-    }
-    
     .review-channel-name {
         font-size: 1rem;
     }
@@ -1226,10 +1273,6 @@ body {
     .avatar-circle {
         width: 80px;
         height: 80px;
-    }
-    
-    .avatar-circle.fallback-gradient i {
-        font-size: 1.8rem;
     }
     
     .stat-number {
