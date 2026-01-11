@@ -480,4 +480,149 @@ document.addEventListener('DOMContentLoaded', () => {
         iframe.setAttribute('loading', 'lazy');
         
         if (iframe.src.includes('drive.google.com')) {
-            if (!iframe.src.includes(
+            if (!iframe.src.includes('?')) {
+                iframe.src += '?autoplay=0&mute=1';
+            }
+        }
+    });
+    
+    // Añadir efecto de carga para iframes
+    const allVideos = document.querySelectorAll('.video-wrapper');
+    allVideos.forEach(video => {
+        video.style.position = 'relative';
+        const loading = document.createElement('div');
+        loading.className = 'video-loading';
+        loading.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+        loading.style.position = 'absolute';
+        loading.style.top = '50%';
+        loading.style.left = '50%';
+        loading.style.transform = 'translate(-50%, -50%)';
+        loading.style.color = 'var(--accent-color)';
+        loading.style.fontSize = '1.5rem';
+        loading.style.zIndex = '5';
+        video.appendChild(loading);
+        
+        const iframe = video.querySelector('iframe');
+        if (iframe) {
+            iframe.addEventListener('load', () => {
+                loading.style.display = 'none';
+            });
+        }
+    });
+    
+    // Efecto de scroll para secciones
+    const sections = document.querySelectorAll('section');
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -100px 0px'
+    };
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                
+                // Efecto especial para la sección de canales
+                if (entry.target.id === 'canales') {
+                    const channelItems = entry.target.querySelectorAll('.channel-item');
+                    channelItems.forEach((item, index) => {
+                        setTimeout(() => {
+                            item.style.opacity = '0';
+                            item.style.transform = 'translateY(30px)';
+                            item.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                            
+                            setTimeout(() => {
+                                item.style.opacity = '1';
+                                item.style.transform = 'translateY(0)';
+                            }, 100);
+                        }, index * 100);
+                    });
+                }
+            }
+        });
+    }, observerOptions);
+    
+    sections.forEach(section => {
+        observer.observe(section);
+    });
+    
+    // Smooth scroll para enlaces del menú
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            const href = this.getAttribute('href');
+            if (href === '#' || href === '#!') return;
+            
+            e.preventDefault();
+            const target = document.querySelector(href);
+            if (target) {
+                window.scrollTo({
+                    top: target.offsetTop - 80,
+                    behavior: 'smooth'
+                });
+            }
+        });
+    });
+    
+    // Actualizar enlaces de canales en reseñas para que coincidan con los canales
+    const reviewLinks = [
+        'https://www.youtube.com/@GROSSO_MODO/videos',
+        'https://www.youtube.com/@PixelHeroRBX/videos',
+        'https://www.youtube.com/@elkaidram',
+        'https://www.youtube.com/@Mordyto/videos',
+        'https://www.youtube.com/@soyzer'
+    ];
+    
+    document.querySelectorAll('.review-channel-link').forEach((link, index) => {
+        if (index < reviewLinks.length && reviewLinks[index] !== '#') {
+            link.setAttribute('href', reviewLinks[index]);
+        }
+    });
+    
+    // Rotación automática de canales online (cambia estado cada 5 segundos)
+    const onlineDots = document.querySelectorAll('.online-dot');
+    let currentActiveDot = 0;
+    
+    setInterval(() => {
+        onlineDots.forEach(dot => {
+            dot.classList.remove('active');
+            dot.style.background = '#666';
+        });
+        
+        // Activar un punto aleatorio
+        const randomIndex = Math.floor(Math.random() * onlineDots.length);
+        onlineDots[randomIndex].classList.add('active');
+        onlineDots[randomIndex].style.background = '#ff00ff';
+        
+        currentActiveDot = randomIndex;
+    }, 5000);
+    
+    // Manejar carga de imágenes de canales
+    const channelImages = document.querySelectorAll('.channel-image');
+    channelImages.forEach(img => {
+        img.onerror = function() {
+            const fallback = this.parentElement.querySelector('.channel-fallback');
+            if (fallback) {
+                fallback.style.display = 'flex';
+                fallback.style.alignItems = 'center';
+                fallback.style.justifyContent = 'center';
+                fallback.style.width = '100%';
+                fallback.style.height = '100%';
+            }
+        };
+    });
+    
+    // Manejar carga de imágenes de reseñas
+    const reviewImages = document.querySelectorAll('.review-image');
+    reviewImages.forEach(img => {
+        img.onerror = function() {
+            const fallback = this.parentElement.querySelector('.review-fallback');
+            if (fallback) {
+                fallback.style.display = 'flex';
+                fallback.style.alignItems = 'center';
+                fallback.style.justifyContent = 'center';
+                fallback.style.width = '100%';
+                fallback.style.height = '100%';
+            }
+        };
+    });
+});
