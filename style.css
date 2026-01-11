@@ -32,7 +32,7 @@ body {
     position: relative;
 }
 
-/* FONDO DE RED NEURONAL TECNOLÓGICA */
+/* FONDO DE RED TECNOLÓGICA - ESTILO DATOS EN FLUJO */
 #techBackground {
     position: fixed;
     top: 0;
@@ -41,7 +41,8 @@ body {
     height: 100%;
     z-index: -1;
     background-color: #0a0a1a;
-    opacity: 0.9;
+    /* Deshabilitar interacción para mejor rendimiento */
+    pointer-events: none;
 }
 
 /* Estilos del contenedor */
