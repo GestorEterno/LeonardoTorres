@@ -32,7 +32,7 @@ body {
     position: relative;
 }
 
-/* FONDO DE HOJA DE MATEMÁTICAS - SIMPLE Y LIMPIO */
+/* FONDO DE RED NEURONAL TECNOLÓGICA */
 #techBackground {
     position: fixed;
     top: 0;
@@ -40,8 +40,8 @@ body {
     width: 100%;
     height: 100%;
     z-index: -1;
-    /* Fondo sólido oscuro */
     background-color: #0a0a1a;
+    opacity: 0.9;
 }
 
 /* Estilos del contenedor */
