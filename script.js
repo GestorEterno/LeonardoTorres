@@ -1,4 +1,4 @@
-// Animación del fondo tecnológico - Red Neuronal Azul
+// Animación del fondo tecnológico - Red Neuronal Morado/Rosa
 class TechBackground {
     constructor() {
         this.canvas = document.getElementById('techBackground');
@@ -44,7 +44,7 @@ class TechBackground {
                 size: Math.random() * 1.5 + 0.3,
                 speedX: (Math.random() - 0.5) * 0.3,
                 speedY: (Math.random() - 0.5) * 0.3,
-                color: `rgba(0, 212, 255, ${Math.random() * 0.4 + 0.1})`,
+                color: `rgba(255, 0, 255, ${Math.random() * 0.4 + 0.1})`,
                 originalX: null,
                 originalY: null,
                 oscillation: Math.random() * Math.PI * 2
@@ -69,7 +69,7 @@ class TechBackground {
                 if (distance < 150) {
                     const opacity = 0.15 * (1 - distance/150);
                     this.ctx.beginPath();
-                    this.ctx.strokeStyle = `rgba(0, 212, 255, ${opacity})`;
+                    this.ctx.strokeStyle = `rgba(255, 0, 255, ${opacity})`;
                     this.ctx.lineWidth = 0.3;
                     this.ctx.moveTo(this.particles[i].x, this.particles[i].y);
                     this.ctx.lineTo(this.particles[j].x, this.particles[j].y);
@@ -115,7 +115,7 @@ class TechBackground {
                 particle.x, particle.y, particle.size * 2
             );
             gradient.addColorStop(0, particle.color);
-            gradient.addColorStop(1, 'rgba(0, 212, 255, 0)');
+            gradient.addColorStop(1, 'rgba(255, 0, 255, 0)');
             
             this.ctx.beginPath();
             this.ctx.fillStyle = gradient;
@@ -143,7 +143,7 @@ class TechBackground {
     animate() {
         const gradient = this.ctx.createLinearGradient(0, 0, 0, this.canvas.height);
         gradient.addColorStop(0, 'rgba(10, 10, 26, 0.1)');
-        gradient.addColorStop(1, 'rgba(5, 5, 15, 0.2)');
+        gradient.addColorStop(1, 'rgba(26, 10, 31, 0.2)');
         
         this.ctx.fillStyle = gradient;
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
@@ -353,7 +353,7 @@ class ChannelsHoverEffects {
                 // Añadir efecto de brillo al avatar
                 const avatar = item.querySelector('.avatar-circle');
                 if (avatar) {
-                    avatar.style.boxShadow = '0 15px 35px rgba(0, 212, 255, 0.4)';
+                    avatar.style.boxShadow = '0 15px 35px rgba(255, 0, 255, 0.4)';
                 }
                 
                 // Resaltar el punto online
@@ -466,7 +466,7 @@ class HoverEffects {
                 glow.style.width = '100%';
                 glow.style.height = '100%';
                 glow.style.borderRadius = 'inherit';
-                glow.style.background = 'radial-gradient(circle at center, rgba(0,212,255,0.15) 0%, transparent 70%)';
+                glow.style.background = 'radial-gradient(circle at center, rgba(255,0,255,0.15) 0%, transparent 70%)';
                 glow.style.pointerEvents = 'none';
                 glow.style.zIndex = '1';
                 card.style.position = 'relative';
@@ -633,13 +633,7 @@ document.addEventListener('DOMContentLoaded', () => {
         '#'
     ];
     
-    document.querySelectorAll('.review-author .author-avatar').forEach((avatar, index) => {
-        if (index < reviewLinks.length && reviewLinks[index] !== '#') {
-            avatar.setAttribute('href', reviewLinks[index]);
-        }
-    });
-    
-    document.querySelectorAll('.review-author .channel-link').forEach((link, index) => {
+    document.querySelectorAll('.review-channel-link').forEach((link, index) => {
         if (index < reviewLinks.length && reviewLinks[index] !== '#') {
             link.setAttribute('href', reviewLinks[index]);
         }
@@ -658,7 +652,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Activar un punto aleatorio
         const randomIndex = Math.floor(Math.random() * onlineDots.length);
         onlineDots[randomIndex].classList.add('active');
-        onlineDots[randomIndex].style.background = '#4CAF50';
+        onlineDots[randomIndex].style.background = '#ff00ff';
         
         currentActiveDot = randomIndex;
     }, 5000);
