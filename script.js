@@ -1,292 +1,154 @@
-// FONDO DE CUADRÍCULA CON AURORAS TECNOLÓGICAS VORALES
+// Animación del fondo tecnológico - Red Neuronal Azul
 class TechBackground {
     constructor() {
         this.canvas = document.getElementById('techBackground');
         this.ctx = this.canvas.getContext('2d');
-        this.time = 0;
-        this.gridSize = 50;
-        this.auroras = [];
-        this.dataStreams = [];
+        this.particles = [];
+        this.mouse = {
+            x: null,
+            y: null,
+            radius: 120
+        };
         
         this.init();
         this.animate();
         
+        // Eventos
         window.addEventListener('resize', () => this.resize());
+        this.canvas.addEventListener('mousemove', (e) => this.handleMouseMove(e));
+        this.canvas.addEventListener('mouseleave', () => {
+            this.mouse.x = null;
+            this.mouse.y = null;
+        });
     }
     
     init() {
         this.resize();
-        this.createAuroras();
-        this.createDataStreams();
+        this.createParticles();
     }
     
     resize() {
         this.canvas.width = window.innerWidth;
         this.canvas.height = window.innerHeight;
-        this.createAuroras();
-        this.createDataStreams();
+        this.createParticles();
     }
     
-    createAuroras() {
-        this.auroras = [];
-        const auroraCount = Math.floor(this.canvas.width / 300);
+    createParticles() {
+        const particleCount = Math.floor((this.canvas.width * this.canvas.height) / 7000);
+        this.particles = [];
         
-        for (let i = 0; i < auroraCount; i++) {
-            const x = Math.random() * this.canvas.width;
-            const y = Math.random() * this.canvas.height * 0.7;
-            const width = 100 + Math.random() * 200;
-            const height = 30 + Math.random() * 70;
-            
-            this.auroras.push({
-                x: x,
-                y: y,
-                width: width,
-                height: height,
-                speed: 0.2 + Math.random() * 0.3,
-                phase: Math.random() * Math.PI * 2,
-                color1: Math.random() > 0.5 ? '#00d4ff' : '#0066ff',
-                color2: Math.random() > 0.5 ? '#0066ff' : '#00d4ff',
-                opacity: 0.05 + Math.random() * 0.1
+        for (let i = 0; i < particleCount; i++) {
+            this.particles.push({
+                x: Math.random() * this.canvas.width,
+                y: Math.random() * this.canvas.height,
+                size: Math.random() * 1.5 + 0.3,
+                speedX: (Math.random() - 0.5) * 0.3,
+                speedY: (Math.random() - 0.5) * 0.3,
+                color: `rgba(0, 212, 255, ${Math.random() * 0.4 + 0.1})`,
+                originalX: null,
+                originalY: null,
+                oscillation: Math.random() * Math.PI * 2
             });
         }
     }
     
-    createDataStreams() {
-        this.dataStreams = [];
-        const streamCount = Math.floor(this.canvas.width / 150);
-        
-        for (let i = 0; i < streamCount; i++) {
-            const startX = Math.random() * this.canvas.width;
-            const endX = startX + (Math.random() - 0.5) * 200;
-            
-            this.dataStreams.push({
-                startX: startX,
-                startY: 0,
-                endX: endX,
-                endY: this.canvas.height,
-                speed: 0.5 + Math.random() * 1,
-                phase: Math.random() * Math.PI * 2,
-                particles: [],
-                lastParticleTime: 0
-            });
-            
-            // Crear partículas iniciales para este stream
-            const particleCount = 5 + Math.floor(Math.random() * 10);
-            for (let j = 0; j < particleCount; j++) {
-                this.dataStreams[i].particles.push({
-                    progress: Math.random(),
-                    speed: 0.002 + Math.random() * 0.003,
-                    size: 1 + Math.random() * 2
-                });
+    handleMouseMove(e) {
+        const rect = this.canvas.getBoundingClientRect();
+        this.mouse.x = e.clientX - rect.left;
+        this.mouse.y = e.clientY - rect.top;
+    }
+    
+    drawParticles() {
+        // Dibujar conexiones primero
+        for (let i = 0; i < this.particles.length; i++) {
+            for (let j = i + 1; j < this.particles.length; j++) {
+                const dx = this.particles[i].x - this.particles[j].x;
+                const dy = this.particles[i].y - this.particles[j].y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                
+                if (distance < 150) {
+                    const opacity = 0.15 * (1 - distance/150);
+                    this.ctx.beginPath();
+                    this.ctx.strokeStyle = `rgba(0, 212, 255, ${opacity})`;
+                    this.ctx.lineWidth = 0.3;
+                    this.ctx.moveTo(this.particles[i].x, this.particles[i].y);
+                    this.ctx.lineTo(this.particles[j].x, this.particles[j].y);
+                    this.ctx.stroke();
+                }
             }
         }
-    }
-    
-    drawGrid() {
-        const ctx = this.ctx;
-        const width = this.canvas.width;
-        const height = this.canvas.height;
         
-        // Fondo sólido oscuro
-        ctx.fillStyle = '#0a0a1a';
-        ctx.fillRect(0, 0, width, height);
-        
-        // Cuadrícula de fondo (MANTENIENDO EXACTAMENTE EL ORIGINAL)
-        const gridSize = this.gridSize;
-        const lineColor = 'rgba(0, 150, 255, 0.1)';
-        
-        ctx.beginPath();
-        ctx.strokeStyle = lineColor;
-        ctx.lineWidth = 1;
-        
-        // Líneas horizontales
-        for (let y = 0; y <= height; y += gridSize) {
-            ctx.moveTo(0, y);
-            ctx.lineTo(width, y);
-        }
-        
-        // Líneas verticales
-        for (let x = 0; x <= width; x += gridSize) {
-            ctx.moveTo(x, 0);
-            ctx.lineTo(x, height);
-        }
-        
-        ctx.stroke();
-    }
-    
-    drawAuroras() {
-        this.time += 0.005;
-        
-        for (let aurora of this.auroras) {
-            // Movimiento ondulante
-            const waveX = Math.sin(this.time * aurora.speed + aurora.phase) * 50;
-            const waveY = Math.cos(this.time * aurora.speed * 0.7 + aurora.phase) * 20;
+        // Dibujar partículas
+        for (let particle of this.particles) {
+            particle.oscillation += 0.02;
+            const oscillationX = Math.sin(particle.oscillation) * 0.3;
+            const oscillationY = Math.cos(particle.oscillation * 0.7) * 0.3;
             
-            // Crear gradiente para el efecto vorale
-            const gradient = this.ctx.createLinearGradient(
-                aurora.x + waveX - aurora.width/2, aurora.y + waveY,
-                aurora.x + waveX + aurora.width/2, aurora.y + waveY
+            particle.x += particle.speedX + oscillationX;
+            particle.y += particle.speedY + oscillationY;
+            
+            if (particle.x < 0 || particle.x > this.canvas.width) {
+                particle.speedX *= -0.98;
+                particle.x = Math.max(0, Math.min(this.canvas.width, particle.x));
+            }
+            if (particle.y < 0 || particle.y > this.canvas.height) {
+                particle.speedY *= -0.98;
+                particle.y = Math.max(0, Math.min(this.canvas.height, particle.y));
+            }
+            
+            if (this.mouse.x && this.mouse.y) {
+                const dx = particle.x - this.mouse.x;
+                const dy = particle.y - this.mouse.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                
+                if (distance < this.mouse.radius) {
+                    const force = (this.mouse.radius - distance) / this.mouse.radius;
+                    const angle = Math.atan2(dy, dx);
+                    
+                    particle.x += Math.cos(angle) * force * 3;
+                    particle.y += Math.sin(angle) * force * 3;
+                }
+            }
+            
+            const gradient = this.ctx.createRadialGradient(
+                particle.x, particle.y, 0,
+                particle.x, particle.y, particle.size * 2
             );
+            gradient.addColorStop(0, particle.color);
+            gradient.addColorStop(1, 'rgba(0, 212, 255, 0)');
             
-            gradient.addColorStop(0, 'transparent');
-            gradient.addColorStop(0.3, `${aurora.color1}${Math.floor(aurora.opacity * 255).toString(16).padStart(2, '0')}`);
-            gradient.addColorStop(0.7, `${aurora.color2}${Math.floor(aurora.opacity * 255).toString(16).padStart(2, '0')}`);
-            gradient.addColorStop(1, 'transparent');
-            
-            // Dibujar la aurora
             this.ctx.beginPath();
             this.ctx.fillStyle = gradient;
-            
-            // Forma ondulada tipo aurora boreal
-            const segments = 20;
-            const segmentWidth = aurora.width / segments;
-            
-            for (let i = 0; i <= segments; i++) {
-                const x = aurora.x + waveX - aurora.width/2 + i * segmentWidth;
-                const segmentPhase = aurora.phase + (i / segments) * Math.PI * 2;
-                const yOffset = Math.sin(this.time * aurora.speed * 1.5 + segmentPhase) * aurora.height/2;
-                const y = aurora.y + waveY + yOffset;
-                
-                if (i === 0) {
-                    this.ctx.moveTo(x, y);
-                } else {
-                    this.ctx.lineTo(x, y);
-                }
-            }
-            
-            // Completar la forma
-            for (let i = segments; i >= 0; i--) {
-                const x = aurora.x + waveX - aurora.width/2 + i * segmentWidth;
-                const segmentPhase = aurora.phase + (i / segments) * Math.PI * 2;
-                const yOffset = Math.sin(this.time * aurora.speed * 1.5 + segmentPhase) * aurora.height/2;
-                const y = aurora.y + waveY + yOffset - aurora.height/4;
-                
-                this.ctx.lineTo(x, y);
-            }
-            
-            this.ctx.closePath();
+            this.ctx.arc(particle.x, particle.y, particle.size * 2, 0, Math.PI * 2);
             this.ctx.fill();
             
-            // Brillo adicional
-            const glowGradient = this.ctx.createRadialGradient(
-                aurora.x + waveX, aurora.y + waveY, 0,
-                aurora.x + waveX, aurora.y + waveY, aurora.width/2
+            this.ctx.beginPath();
+            this.ctx.fillStyle = particle.color;
+            this.ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+            this.ctx.fill();
+            
+            this.ctx.beginPath();
+            this.ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
+            this.ctx.arc(
+                particle.x - particle.size * 0.3, 
+                particle.y - particle.size * 0.3, 
+                particle.size * 0.5, 
+                0, 
+                Math.PI * 2
             );
-            glowGradient.addColorStop(0, `${aurora.color1}30`);
-            glowGradient.addColorStop(1, 'transparent');
-            
-            this.ctx.beginPath();
-            this.ctx.fillStyle = glowGradient;
-            this.ctx.arc(aurora.x + waveX, aurora.y + waveY, aurora.width/2, 0, Math.PI * 2);
             this.ctx.fill();
-        }
-    }
-    
-    drawDataStreams() {
-        for (let stream of this.dataStreams) {
-            // Actualizar partículas
-            const currentTime = Date.now();
-            if (currentTime - stream.lastParticleTime > 500) {
-                stream.particles.push({
-                    progress: 0,
-                    speed: 0.002 + Math.random() * 0.003,
-                    size: 1 + Math.random() * 2
-                });
-                stream.lastParticleTime = currentTime;
-            }
-            
-            // Dibujar línea de conexión tenue
-            this.ctx.beginPath();
-            this.ctx.moveTo(stream.startX, stream.startY);
-            this.ctx.lineTo(stream.endX, stream.endY);
-            this.ctx.strokeStyle = 'rgba(0, 212, 255, 0.05)';
-            this.ctx.lineWidth = 1;
-            this.ctx.stroke();
-            
-            // Dibujar partículas
-            for (let i = 0; i < stream.particles.length; i++) {
-                const particle = stream.particles[i];
-                
-                // Calcular posición
-                const x = stream.startX + (stream.endX - stream.startX) * particle.progress;
-                const y = stream.startY + (stream.endY - stream.startY) * particle.progress;
-                
-                // Actualizar progreso
-                particle.progress += particle.speed;
-                
-                // Dibujar partícula
-                const gradient = this.ctx.createRadialGradient(
-                    x, y, 0,
-                    x, y, particle.size * 2
-                );
-                gradient.addColorStop(0, 'rgba(0, 212, 255, 0.8)');
-                gradient.addColorStop(1, 'rgba(0, 212, 255, 0)');
-                
-                this.ctx.beginPath();
-                this.ctx.fillStyle = gradient;
-                this.ctx.arc(x, y, particle.size * 2, 0, Math.PI * 2);
-                this.ctx.fill();
-                
-                // Eliminar partículas que han terminado
-                if (particle.progress > 1) {
-                    stream.particles.splice(i, 1);
-                    i--;
-                }
-            }
-            
-            // Limitar número de partículas
-            if (stream.particles.length > 20) {
-                stream.particles = stream.particles.slice(-20);
-            }
-        }
-    }
-    
-    drawTechNodes() {
-        // Nodos tecnológicos en intersecciones de la cuadrícula
-        const cols = Math.floor(this.canvas.width / this.gridSize);
-        const rows = Math.floor(this.canvas.height / this.gridSize);
-        
-        for (let x = 0; x <= cols; x++) {
-            for (let y = 0; y <= rows; y++) {
-                // Solo algunos nodos (aleatorio)
-                if (Math.random() > 0.7) {
-                    const nodeX = x * this.gridSize;
-                    const nodeY = y * this.gridSize;
-                    
-                    // Pequeño pulso
-                    const pulse = Math.sin(this.time * 2 + x + y) * 0.5 + 0.5;
-                    
-                    // Brillo suave
-                    const gradient = this.ctx.createRadialGradient(
-                        nodeX, nodeY, 0,
-                        nodeX, nodeY, 3
-                    );
-                    gradient.addColorStop(0, `rgba(0, 212, 255, ${0.3 * pulse})`);
-                    gradient.addColorStop(1, 'transparent');
-                    
-                    this.ctx.beginPath();
-                    this.ctx.fillStyle = gradient;
-                    this.ctx.arc(nodeX, nodeY, 3, 0, Math.PI * 2);
-                    this.ctx.fill();
-                    
-                    // Punto central
-                    this.ctx.beginPath();
-                    this.ctx.fillStyle = `rgba(0, 212, 255, ${0.6 * pulse})`;
-                    this.ctx.arc(nodeX, nodeY, 1, 0, Math.PI * 2);
-                    this.ctx.fill();
-                }
-            }
         }
     }
     
     animate() {
-        // Limpiar canvas con fondo
-        this.drawGrid();
+        const gradient = this.ctx.createLinearGradient(0, 0, 0, this.canvas.height);
+        gradient.addColorStop(0, 'rgba(10, 10, 26, 0.1)');
+        gradient.addColorStop(1, 'rgba(5, 5, 15, 0.2)');
         
-        // Dibujar elementos tecnológicos
-        this.drawAuroras();
-        this.drawDataStreams();
-        this.drawTechNodes();
+        this.ctx.fillStyle = gradient;
+        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+        
+        this.drawParticles();
         
         requestAnimationFrame(() => this.animate());
     }
