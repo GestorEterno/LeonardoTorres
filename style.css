@@ -392,6 +392,12 @@ body {
     padding-bottom: 56.25%; /* 16:9 aspect ratio */
     height: 0;
     overflow: hidden;
+    transition: filter 0.4s ease;
+    will-change: filter;
+}
+
+.video-wrapper:hover {
+    filter: brightness(1.1) contrast(1.05);
 }
 
 .video-wrapper iframe {
@@ -401,6 +407,12 @@ body {
     width: 100%;
     height: 100%;
     border: none;
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    will-change: transform;
+}
+
+.video-wrapper:hover iframe {
+    transform: scale(1.02);
 }
 
 /* Hero video específico - sin overlay */
@@ -446,14 +458,15 @@ body {
     padding: 30px;
     text-align: center;
     border: 1px solid var(--card-border);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
     position: relative;
     overflow: hidden;
+    will-change: transform, box-shadow;
 }
 
 .feature-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 15px 30px rgba(255, 0, 255, 0.2);
+    transform: translateY(-12px);
+    box-shadow: 0 20px 35px rgba(255, 0, 255, 0.25);
 }
 
 .feature-icon {
@@ -494,12 +507,14 @@ body {
     border-radius: 15px;
     overflow: hidden;
     border: 1px solid var(--card-border);
-    transition: transform 0.3s ease;
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
     position: relative;
+    will-change: transform, box-shadow;
 }
 
 .portfolio-item:hover {
-    transform: translateY(-5px);
+    transform: translateY(-10px);
+    box-shadow: 0 20px 35px rgba(255, 0, 255, 0.25);
 }
 
 /* ===== NUEVA SECCIÓN: SHORTS ===== */
@@ -547,7 +562,7 @@ body {
     border-radius: 12px;
     overflow: hidden;
     border: 1px solid var(--card-border);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
     position: relative;
     aspect-ratio: 9/16;
     height: auto;
@@ -555,12 +570,12 @@ body {
     display: flex;
     flex-direction: column;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    will-change: transform, box-shadow;
 }
 
 .short-item:hover {
-    transform: translateY(-8px) scale(1.02);
-    box-shadow: 0 20px 40px rgba(255, 0, 255, 0.3);
-    border-color: rgba(255, 0, 255, 0.5);
+    transform: translateY(-10px);
+    box-shadow: 0 25px 50px rgba(255, 0, 255, 0.25);
 }
 
 .short-badge {
@@ -596,11 +611,12 @@ body {
     width: 100%;
     height: 100%;
     border: none;
-    transition: transform 0.3s ease;
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    will-change: transform;
 }
 
 .short-item:hover iframe {
-    transform: scale(1.02);
+    transform: scale(1.03);
 }
 
 /* ===== SECCIÓN: GRID DE 5 CANALES VISIBLES ===== */
@@ -641,9 +657,10 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
     position: relative;
     overflow: hidden;
+    will-change: transform, box-shadow;
 }
 
 .channel-item:hover {
@@ -764,7 +781,7 @@ body {
     color: white;
     opacity: 0;
     transform: translateY(10px);
-    transition: all 0.3s ease;
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
     border-radius: 15px;
     text-align: center;
     padding: 20px;
@@ -832,12 +849,13 @@ body {
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
     opacity: 0;
     transform: translateX(50px) scale(0.95);
-    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
     visibility: hidden;
     z-index: 1;
     height: 220px;
     display: flex;
     flex-direction: column;
+    will-change: transform, opacity, box-shadow;
 }
 
 .review-card.active {
@@ -920,10 +938,11 @@ body {
     justify-content: center;
     align-items: center;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
     font-size: 1.1rem;
     position: relative;
     z-index: 10;
+    will-change: transform, background, box-shadow;
 }
 
 .carousel-btn:hover:not(:disabled) {
@@ -949,8 +968,9 @@ body {
     border-radius: 50%;
     background: var(--text-muted);
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
     position: relative;
+    will-change: transform, background;
 }
 
 .dot.active {
@@ -1048,7 +1068,8 @@ body {
     color: var(--text-color);
     font-size: 0.9rem;
     text-decoration: none;
-    transition: all 0.3s ease;
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    will-change: transform, background, box-shadow;
 }
 
 .social-circle:hover {
