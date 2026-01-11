@@ -11,8 +11,12 @@
     --accent-color: #ff00ff;          /* MAGENTA - Color principal */
     --accent-secondary: #e91e63;      /* ROSA */
     --accent-tertiary: #9c27b0;       /* MORADO */
+    --accent-blue: #00a2ff;           /* AZUL para botón portfolio */
+    --accent-twitter: #1DA1F2;        /* AZUL Twitter */
     --accent-gradient: linear-gradient(90deg, var(--accent-color) 0%, var(--accent-secondary) 100%);
     --accent-gradient-full: linear-gradient(90deg, var(--accent-color) 0%, var(--accent-secondary) 50%, var(--accent-tertiary) 100%);
+    --gradient-blue: linear-gradient(90deg, var(--accent-blue) 0%, #00d4ff 100%);
+    --gradient-twitter: linear-gradient(90deg, var(--accent-twitter) 0%, #00aced 100%);
     --text-color: #f0f0f0;
     --text-muted: #a0a0b0;
     --card-bg: rgba(42, 14, 53, 0.7);
@@ -314,6 +318,14 @@ body {
     animation: fadeInUp 1s ease 0.8s forwards;
 }
 
+/* Contenedor para botones del hero */
+.hero-buttons {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 40px;
+}
+
 .cta-button {
     display: inline-flex;
     align-items: center;
@@ -328,6 +340,9 @@ body {
     opacity: 0;
     transform: translateY(20px);
     animation: fadeInUp 1s ease 1.1s forwards;
+    border: none;
+    cursor: pointer;
+    font-family: var(--font-main);
 }
 
 .cta-button:hover {
@@ -347,6 +362,28 @@ body {
 .cta-button.large {
     padding: 18px 45px;
     font-size: 1.1rem;
+}
+
+/* Botón de portfolio (AZUL) */
+.portfolio-btn {
+    background: var(--gradient-blue);
+    box-shadow: 0 5px 15px rgba(0, 162, 255, 0.3);
+}
+
+.portfolio-btn:hover {
+    background: var(--gradient-blue);
+    box-shadow: 0 8px 25px rgba(0, 162, 255, 0.5);
+}
+
+/* Botón de Twitter (AZUL TWITTER) */
+.twitter-btn {
+    background: var(--gradient-twitter);
+    box-shadow: 0 5px 15px rgba(29, 161, 242, 0.3);
+}
+
+.twitter-btn:hover {
+    background: var(--gradient-twitter);
+    box-shadow: 0 8px 25px rgba(29, 161, 242, 0.5);
 }
 
 .hero-video {
@@ -1185,6 +1222,17 @@ body {
     
     .hero-title {
         font-size: 1.8rem;
+    }
+    
+    .hero-buttons {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .hero-buttons .cta-button {
+        width: 100%;
+        justify-content: center;
+        text-align: center;
     }
     
     .section-title {
