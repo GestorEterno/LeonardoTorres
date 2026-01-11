@@ -538,15 +538,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
     
-    const tiktokPlaceholders = document.querySelectorAll('.tiktok-embed-placeholder');
-    tiktokPlaceholders.forEach(placeholder => {
-        const videoId = placeholder.getAttribute('data-video-id');
-        placeholder.addEventListener('click', function() {
-            console.log(`Cargando video de TikTok con ID: ${videoId}`);
-            alert(`En producción, este short cargaría el video de TikTok con ID: ${videoId}\n\nActualmente usando placeholders por restricciones de embed.`);
-        });
-    });
-    
     // Añadir efecto de carga para iframes
     const allVideos = document.querySelectorAll('.video-wrapper');
     allVideos.forEach(video => {
