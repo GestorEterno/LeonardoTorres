@@ -545,6 +545,15 @@ document.addEventListener('DOMContentLoaded', () => {
         gradientSpans.forEach((span, index) => {
             span.style.animationDelay = `${0.3 + (index * 0.2)}s`;
         });
+        
+        // Animación para los botones del hero
+        const heroButtons = document.querySelectorAll('.hero-buttons .cta-button');
+        heroButtons.forEach((button, index) => {
+            button.style.opacity = '0';
+            button.style.transform = 'translateY(20px)';
+            button.style.animation = 'fadeInUp 1s ease forwards';
+            button.style.animationDelay = `${1.1 + (index * 0.2)}s`;
+        });
     }
     
     document.body.style.opacity = '0';
