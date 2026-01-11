@@ -220,124 +220,6 @@ class ScrollEffects {
     }
 }
 
-// Carrusel de Canales - NUEVA CLASE
-class ChannelsCarousel {
-    constructor() {
-        this.cards = document.querySelectorAll('.channel-card');
-        this.dots = document.querySelectorAll('.channels .dot');
-        this.prevBtn = document.querySelector('.channels .carousel-btn.prev');
-        this.nextBtn = document.querySelector('.channels .carousel-btn.next');
-        this.currentIndex = 0;
-        this.totalCards = this.cards.length;
-        this.autoPlayInterval = null;
-        this.isTransitioning = false;
-        
-        this.init();
-    }
-    
-    init() {
-        this.prevBtn.addEventListener('click', () => this.prev());
-        this.nextBtn.addEventListener('click', () => this.next());
-        
-        this.dots.forEach(dot => {
-            dot.addEventListener('click', (e) => {
-                const index = parseInt(e.target.getAttribute('data-index'));
-                if (index !== this.currentIndex && !this.isTransitioning) {
-                    this.goToSlide(index);
-                }
-            });
-        });
-        
-        this.startAutoPlay();
-        
-        const carouselTrack = document.querySelector('.channels-carousel-track');
-        carouselTrack.addEventListener('mouseenter', () => this.stopAutoPlay());
-        carouselTrack.addEventListener('mouseleave', () => this.startAutoPlay());
-        
-        this.updateControls();
-    }
-    
-    updateControls() {
-        this.prevBtn.disabled = this.currentIndex === 0;
-        this.nextBtn.disabled = this.currentIndex === this.totalCards - 1;
-        
-        this.dots.forEach((dot, index) => {
-            dot.classList.toggle('active', index === this.currentIndex);
-        });
-        
-        this.cards.forEach((card, index) => {
-            const isActive = index === this.currentIndex;
-            card.classList.toggle('active', isActive);
-            
-            if (isActive) {
-                card.style.zIndex = '2';
-                card.style.opacity = '1';
-                card.style.transform = 'translateX(0) scale(1)';
-                card.style.visibility = 'visible';
-            } else {
-                card.style.zIndex = '1';
-                card.style.opacity = '0';
-                card.style.transform = 'translateX(50px) scale(0.95)';
-                card.style.visibility = 'hidden';
-            }
-        });
-    }
-    
-    prev() {
-        if (this.currentIndex > 0 && !this.isTransitioning) {
-            this.isTransitioning = true;
-            this.currentIndex--;
-            this.updateControls();
-            
-            setTimeout(() => {
-                this.isTransitioning = false;
-            }, 500);
-        }
-    }
-    
-    next() {
-        if (this.currentIndex < this.totalCards - 1 && !this.isTransitioning) {
-            this.isTransitioning = true;
-            this.currentIndex++;
-            this.updateControls();
-            
-            setTimeout(() => {
-                this.isTransitioning = false;
-            }, 500);
-        }
-    }
-    
-    goToSlide(index) {
-        if (index >= 0 && index < this.totalCards && !this.isTransitioning) {
-            this.isTransitioning = true;
-            this.currentIndex = index;
-            this.updateControls();
-            
-            setTimeout(() => {
-                this.isTransitioning = false;
-            }, 500);
-        }
-    }
-    
-    startAutoPlay() {
-        this.stopAutoPlay();
-        this.autoPlayInterval = setInterval(() => {
-            if (this.currentIndex === this.totalCards - 1) {
-                this.goToSlide(0);
-            } else {
-                this.next();
-            }
-        }, 6000);
-    }
-    
-    stopAutoPlay() {
-        if (this.autoPlayInterval) {
-            clearInterval(this.autoPlayInterval);
-            this.autoPlayInterval = null;
-        }
-    }
-}
-
 // Carrusel de reseñas - COMPACTADO
 class ReviewsCarousel {
     constructor() {
@@ -456,7 +338,115 @@ class ReviewsCarousel {
     }
 }
 
-// Efectos de hover
+// Efectos de hover para canales
+class ChannelsHoverEffects {
+    constructor() {
+        this.initChannelsHover();
+        this.initAnimatedStats();
+    }
+    
+    initChannelsHover() {
+        const channelItems = document.querySelectorAll('.channel-item');
+        
+        channelItems.forEach(item => {
+            item.addEventListener('mouseenter', () => {
+                // Añadir efecto de brillo al avatar
+                const avatar = item.querySelector('.avatar-circle');
+                if (avatar) {
+                    avatar.style.boxShadow = '0 15px 35px rgba(0, 212, 255, 0.4)';
+                }
+                
+                // Resaltar el punto online
+                const onlineDot = item.querySelector('.online-dot.active');
+                if (onlineDot) {
+                    onlineDot.style.transform = 'scale(1.3)';
+                }
+            });
+            
+            item.addEventListener('mouseleave', () => {
+                // Restaurar efectos
+                const avatar = item.querySelector('.avatar-circle');
+                if (avatar) {
+                    avatar.style.boxShadow = '0 10px 25px rgba(0, 0, 0, 0.3)';
+                }
+                
+                const onlineDot = item.querySelector('.online-dot.active');
+                if (onlineDot) {
+                    onlineDot.style.transform = 'scale(1)';
+                }
+            });
+        });
+    }
+    
+    initAnimatedStats() {
+        const statNumbers = document.querySelectorAll('.stat-number');
+        
+        statNumbers.forEach(stat => {
+            const finalValue = parseInt(stat.textContent.replace(/[^0-9]/g, ''));
+            const isPercentage = stat.textContent.includes('%');
+            const suffix = stat.textContent.replace(/[0-9]/g, '');
+            
+            let startValue = 0;
+            const duration = 2000;
+            const startTime = Date.now();
+            
+            const animate = () => {
+                const currentTime = Date.now();
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                
+                // Easing function
+                const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+                
+                let currentValue = Math.floor(easeOutQuart * finalValue);
+                
+                if (isPercentage) {
+                    stat.textContent = `${currentValue}%${suffix}`;
+                } else {
+                    // Formatear números grandes
+                    let displayValue = currentValue;
+                    if (currentValue >= 1000000) {
+                        displayValue = (currentValue / 1000000).toFixed(1) + 'M';
+                    } else if (currentValue >= 1000) {
+                        displayValue = (currentValue / 1000).toFixed(0) + 'K';
+                    }
+                    stat.textContent = `${displayValue}${suffix}`;
+                }
+                
+                if (progress < 1) {
+                    requestAnimationFrame(animate);
+                } else {
+                    // Valor final exacto
+                    if (isPercentage) {
+                        stat.textContent = `${finalValue}%${suffix}`;
+                    } else {
+                        let finalDisplay = finalValue;
+                        if (finalValue >= 1000000) {
+                            finalDisplay = (finalValue / 1000000).toFixed(1) + 'M';
+                        } else if (finalValue >= 1000) {
+                            finalDisplay = (finalValue / 1000).toFixed(0) + 'K';
+                        }
+                        stat.textContent = `${finalDisplay}${suffix}`;
+                    }
+                }
+            };
+            
+            // Iniciar animación cuando la sección sea visible
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        setTimeout(animate, 500);
+                        observer.unobserve(stat);
+                    }
+                });
+            }, { threshold: 0.5 });
+            
+            observer.observe(stat);
+        });
+    }
+}
+
+// Efectos de hover generales
 class HoverEffects {
     constructor() {
         this.initCardHovers();
@@ -464,7 +454,7 @@ class HoverEffects {
     }
     
     initCardHovers() {
-        const cards = document.querySelectorAll('.feature-card, .portfolio-item, .short-item, .channel-card');
+        const cards = document.querySelectorAll('.feature-card, .portfolio-item, .short-item');
         
         cards.forEach(card => {
             card.addEventListener('mouseenter', () => {
@@ -510,8 +500,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const techBackground = new TechBackground();
     const navigation = new Navigation();
     const scrollEffects = new ScrollEffects();
-    const channelsCarousel = new ChannelsCarousel();
     const reviewsCarousel = new ReviewsCarousel();
+    const channelsHoverEffects = new ChannelsHoverEffects();
     const hoverEffects = new HoverEffects();
     
     const heroTitle = document.querySelector('.hero-title');
@@ -592,6 +582,23 @@ document.addEventListener('DOMContentLoaded', () => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('visible');
+                
+                // Efecto especial para la sección de canales
+                if (entry.target.id === 'canales') {
+                    const channelItems = entry.target.querySelectorAll('.channel-item');
+                    channelItems.forEach((item, index) => {
+                        setTimeout(() => {
+                            item.style.opacity = '0';
+                            item.style.transform = 'translateY(30px)';
+                            item.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                            
+                            setTimeout(() => {
+                                item.style.opacity = '1';
+                                item.style.transform = 'translateY(0)';
+                            }, 100);
+                        }, index * 100);
+                    });
+                }
             }
         });
     }, observerOptions);
@@ -637,4 +644,22 @@ document.addEventListener('DOMContentLoaded', () => {
             link.setAttribute('href', reviewLinks[index]);
         }
     });
+    
+    // Rotación automática de canales online (cambia estado cada 5 segundos)
+    const onlineDots = document.querySelectorAll('.online-dot');
+    let currentActiveDot = 0;
+    
+    setInterval(() => {
+        onlineDots.forEach(dot => {
+            dot.classList.remove('active');
+            dot.style.background = '#666';
+        });
+        
+        // Activar un punto aleatorio
+        const randomIndex = Math.floor(Math.random() * onlineDots.length);
+        onlineDots[randomIndex].classList.add('active');
+        onlineDots[randomIndex].style.background = '#4CAF50';
+        
+        currentActiveDot = randomIndex;
+    }, 5000);
 });
