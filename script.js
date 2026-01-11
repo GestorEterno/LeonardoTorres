@@ -342,7 +342,6 @@ class ReviewsCarousel {
 class ChannelsHoverEffects {
     constructor() {
         this.initChannelsHover();
-        this.initAnimatedStats();
     }
     
     initChannelsHover() {
@@ -375,73 +374,6 @@ class ChannelsHoverEffects {
                     onlineDot.style.transform = 'scale(1)';
                 }
             });
-        });
-    }
-    
-    initAnimatedStats() {
-        const statNumbers = document.querySelectorAll('.stat-number');
-        
-        statNumbers.forEach(stat => {
-            const finalValue = parseInt(stat.textContent.replace(/[^0-9]/g, ''));
-            const isPercentage = stat.textContent.includes('%');
-            const suffix = stat.textContent.replace(/[0-9]/g, '');
-            
-            let startValue = 0;
-            const duration = 2000;
-            const startTime = Date.now();
-            
-            const animate = () => {
-                const currentTime = Date.now();
-                const elapsed = currentTime - startTime;
-                const progress = Math.min(elapsed / duration, 1);
-                
-                // Easing function
-                const easeOutQuart = 1 - Math.pow(1 - progress, 4);
-                
-                let currentValue = Math.floor(easeOutQuart * finalValue);
-                
-                if (isPercentage) {
-                    stat.textContent = `${currentValue}%${suffix}`;
-                } else {
-                    // Formatear números grandes
-                    let displayValue = currentValue;
-                    if (currentValue >= 1000000) {
-                        displayValue = (currentValue / 1000000).toFixed(1) + 'M';
-                    } else if (currentValue >= 1000) {
-                        displayValue = (currentValue / 1000).toFixed(0) + 'K';
-                    }
-                    stat.textContent = `${displayValue}${suffix}`;
-                }
-                
-                if (progress < 1) {
-                    requestAnimationFrame(animate);
-                } else {
-                    // Valor final exacto
-                    if (isPercentage) {
-                        stat.textContent = `${finalValue}%${suffix}`;
-                    } else {
-                        let finalDisplay = finalValue;
-                        if (finalValue >= 1000000) {
-                            finalDisplay = (finalValue / 1000000).toFixed(1) + 'M';
-                        } else if (finalValue >= 1000) {
-                            finalDisplay = (finalValue / 1000).toFixed(0) + 'K';
-                        }
-                        stat.textContent = `${finalDisplay}${suffix}`;
-                    }
-                }
-            };
-            
-            // Iniciar animación cuando la sección sea visible
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        setTimeout(animate, 500);
-                        observer.unobserve(stat);
-                    }
-                });
-            }, { threshold: 0.5 });
-            
-            observer.observe(stat);
         });
     }
 }
