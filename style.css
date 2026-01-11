@@ -32,7 +32,7 @@ body {
     position: relative;
 }
 
-/* FONDO DE RED TECNOLÓGICA - ESTILO DATOS EN FLUJO */
+/* FONDO DE CUADRÍCULA CON AURORAS TECNOLÓGICAS */
 #techBackground {
     position: fixed;
     top: 0;
@@ -41,7 +41,6 @@ body {
     height: 100%;
     z-index: -1;
     background-color: #0a0a1a;
-    /* Deshabilitar interacción para mejor rendimiento */
     pointer-events: none;
 }
 
