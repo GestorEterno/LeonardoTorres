@@ -1,13 +1,13 @@
-// FONDO DE RED NEURONAL TECNOLÓGICA
+// FONDO DE RED TECNOLÓGICA DE DATOS
 class TechBackground {
     constructor() {
         this.canvas = document.getElementById('techBackground');
         this.ctx = this.canvas.getContext('2d');
-        this.nodes = [];
-        this.connections = [];
-        this.layers = 5; // Número de capas neuronales
-        this.nodesPerLayer = 8; // Nodos por capa
-        this.animationPhase = 0;
+        this.nodes = []; // Puntos/nodos fijos
+        this.connections = []; // Conexiones entre nodos
+        this.dataFlows = []; // Flujos de datos animados
+        this.time = 0;
+        this.gridSpacing = 60;
         
         this.init();
         this.animate();
@@ -17,15 +17,80 @@ class TechBackground {
     
     init() {
         this.resize();
-        this.createNeuralNetwork();
-        this.drawGrid();
+        this.createGrid();
+        this.createDataFlows();
     }
     
     resize() {
         this.canvas.width = window.innerWidth;
         this.canvas.height = window.innerHeight;
-        this.createNeuralNetwork();
-        this.drawGrid();
+        this.createGrid();
+        this.createDataFlows();
+    }
+    
+    createGrid() {
+        this.nodes = [];
+        this.connections = [];
+        
+        const cols = Math.ceil(this.canvas.width / this.gridSpacing);
+        const rows = Math.ceil(this.canvas.height / this.gridSpacing);
+        
+        // Crear nodos en una cuadrícula
+        for (let x = 0; x <= cols; x++) {
+            for (let y = 0; y <= rows; y++) {
+                const nodeX = x * this.gridSpacing + (Math.random() * 10 - 5);
+                const nodeY = y * this.gridSpacing + (Math.random() * 10 - 5);
+                
+                this.nodes.push({
+                    x: nodeX,
+                    y: nodeY,
+                    originalX: nodeX,
+                    originalY: nodeY,
+                    pulse: Math.random() * Math.PI * 2
+                });
+            }
+        }
+        
+        // Crear conexiones entre nodos cercanos
+        for (let i = 0; i < this.nodes.length; i++) {
+            for (let j = i + 1; j < this.nodes.length; j++) {
+                const dx = this.nodes[i].x - this.nodes[j].x;
+                const dy = this.nodes[i].y - this.nodes[j].y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                
+                // Conectar nodos que estén a una distancia razonable
+                if (distance < this.gridSpacing * 1.8) {
+                    this.connections.push({
+                        node1: i,
+                        node2: j,
+                        distance: distance,
+                        opacity: Math.random() * 0.3 + 0.1,
+                        speed: Math.random() * 0.02 + 0.005,
+                        phase: Math.random() * Math.PI * 2
+                    });
+                }
+            }
+        }
+    }
+    
+    createDataFlows() {
+        this.dataFlows = [];
+        
+        // Crear flujos de datos que viajan por las conexiones
+        for (let i = 0; i < this.connections.length / 3; i++) {
+            const connIndex = Math.floor(Math.random() * this.connections.length);
+            const conn = this.connections[connIndex];
+            const node1 = this.nodes[conn.node1];
+            const node2 = this.nodes[conn.node2];
+            
+            this.dataFlows.push({
+                connection: connIndex,
+                position: Math.random(), // posición en la línea (0 a 1)
+                speed: conn.speed * (Math.random() * 0.5 + 0.5),
+                size: Math.random() * 3 + 1,
+                color: Math.random() > 0.5 ? '#00d4ff' : '#0066ff'
+            });
+        }
     }
     
     drawGrid() {
@@ -33,12 +98,17 @@ class TechBackground {
         const width = this.canvas.width;
         const height = this.canvas.height;
         
-        const gridSize = 50;
-        const lineColor = 'rgba(0, 150, 255, 0.1)';
+        // Fondo sólido oscuro
+        ctx.fillStyle = '#0a0a1a';
+        ctx.fillRect(0, 0, width, height);
+        
+        // Cuadrícula más sutil
+        const gridSize = 60;
+        const lineColor = 'rgba(0, 150, 255, 0.08)';
         
         ctx.beginPath();
         ctx.strokeStyle = lineColor;
-        ctx.lineWidth = 1;
+        ctx.lineWidth = 0.5;
         
         // Líneas horizontales
         for (let y = 0; y <= height; y += gridSize) {
@@ -55,172 +125,121 @@ class TechBackground {
         ctx.stroke();
     }
     
-    createNeuralNetwork() {
-        this.nodes = [];
-        this.connections = [];
+    drawNetwork() {
+        this.time += 0.01;
         
-        const width = this.canvas.width;
-        const height = this.canvas.height;
-        const marginX = width * 0.1;
-        const marginY = height * 0.15;
-        const usableWidth = width - 2 * marginX;
-        const usableHeight = height - 2 * marginY;
-        const layerSpacing = usableWidth / (this.layers - 1);
-        
-        // Crear nodos organizados en capas
-        for (let layer = 0; layer < this.layers; layer++) {
-            const x = marginX + layer * layerSpacing;
+        // Dibujar conexiones primero (líneas)
+        for (let conn of this.connections) {
+            const node1 = this.nodes[conn.node1];
+            const node2 = this.nodes[conn.node2];
             
-            // Ajustar número de nodos por capa (más en capas intermedias)
-            let nodesInLayer = this.nodesPerLayer;
-            if (layer === 0 || layer === this.layers - 1) {
-                nodesInLayer = Math.floor(this.nodesPerLayer * 0.7); // Menos nodos en capas de entrada/salida
-            }
+            // Efecto de pulso en las líneas
+            const pulse = Math.sin(this.time * conn.speed + conn.phase) * 0.5 + 0.5;
+            const opacity = conn.opacity * (0.7 + 0.3 * pulse);
             
-            const verticalSpacing = usableHeight / (nodesInLayer + 1);
-            
-            for (let i = 0; i < nodesInLayer; i++) {
-                const y = marginY + (i + 1) * verticalSpacing;
-                const jitter = 5; // Pequeña variación aleatoria
-                const jitterX = (Math.random() - 0.5) * jitter;
-                const jitterY = (Math.random() - 0.5) * jitter;
-                
-                this.nodes.push({
-                    x: x + jitterX,
-                    y: y + jitterY,
-                    layer: layer,
-                    size: Math.random() * 2 + 1.5,
-                    pulsePhase: Math.random() * Math.PI * 2,
-                    pulseSpeed: 0.01 + Math.random() * 0.02,
-                    isActive: Math.random() > 0.7,
-                    activation: 0
-                });
-            }
-        }
-        
-        // Crear conexiones entre capas adyacentes
-        for (let i = 0; i < this.nodes.length; i++) {
-            const nodeA = this.nodes[i];
-            
-            for (let j = i + 1; j < this.nodes.length; j++) {
-                const nodeB = this.nodes[j];
-                const layerDiff = Math.abs(nodeA.layer - nodeB.layer);
-                
-                // Conectar solo nodos de capas adyacentes
-                if (layerDiff === 1) {
-                    const verticalDistance = Math.abs(nodeA.y - nodeB.y);
-                    const maxDistance = height / (this.nodesPerLayer * 2);
-                    
-                    if (verticalDistance < maxDistance && Math.random() > 0.4) {
-                        this.connections.push({
-                            from: i,
-                            to: j,
-                            strength: Math.random() * 0.5 + 0.3,
-                            pulsePhase: Math.random() * Math.PI * 2
-                        });
-                    }
-                }
-            }
-        }
-    }
-    
-    drawNeuralNetwork() {
-        this.animationPhase += 0.005;
-        
-        // Dibujar conexiones primero
-        for (const connection of this.connections) {
-            const nodeA = this.nodes[connection.from];
-            const nodeB = this.nodes[connection.to];
-            
-            const pulse = Math.sin(this.animationPhase * 2 + connection.pulsePhase) * 0.5 + 0.5;
-            const distance = Math.sqrt(
-                Math.pow(nodeB.x - nodeA.x, 2) + 
-                Math.pow(nodeB.y - nodeA.y, 2)
-            );
-            
-            const distanceFactor = Math.max(0, 1 - distance / 300);
-            const opacity = 0.08 * connection.strength * pulse * distanceFactor;
-            
+            // Dibujar línea de conexión
             this.ctx.beginPath();
             this.ctx.strokeStyle = `rgba(0, 212, 255, ${opacity})`;
             this.ctx.lineWidth = 0.8;
-            this.ctx.moveTo(nodeA.x, nodeA.y);
-            this.ctx.lineTo(nodeB.x, nodeB.y);
+            this.ctx.moveTo(node1.x, node1.y);
+            this.ctx.lineTo(node2.x, node2.y);
             this.ctx.stroke();
             
-            // Efecto de "pulso" de datos en algunas conexiones
-            if (connection.strength > 0.6 && Math.random() > 0.95) {
-                const progress = (Math.sin(this.animationPhase * 3 + connection.pulsePhase) * 0.5 + 0.5);
-                
-                const dataX = nodeA.x + (nodeB.x - nodeA.x) * progress;
-                const dataY = nodeA.y + (nodeB.y - nodeA.y) * progress;
-                
-                // Punto de datos en movimiento
-                this.ctx.beginPath();
-                this.ctx.fillStyle = 'rgba(0, 212, 255, 0.8)';
-                this.ctx.arc(dataX, dataY, 2, 0, Math.PI * 2);
-                this.ctx.fill();
-                
-                // Glow alrededor del punto de datos
-                const gradient = this.ctx.createRadialGradient(
-                    dataX, dataY, 0,
-                    dataX, dataY, 6
-                );
-                gradient.addColorStop(0, 'rgba(0, 212, 255, 0.6)');
-                gradient.addColorStop(1, 'rgba(0, 212, 255, 0)');
-                
-                this.ctx.beginPath();
-                this.ctx.fillStyle = gradient;
-                this.ctx.arc(dataX, dataY, 6, 0, Math.PI * 2);
-                this.ctx.fill();
-            }
-        }
-        
-        // Dibujar nodos
-        for (const node of this.nodes) {
-            node.pulsePhase += node.pulseSpeed;
-            const pulse = Math.sin(this.animationPhase * 1.5 + node.pulsePhase) * 0.3 + 0.7;
-            
-            // Gradiente para nodo
+            // Efecto de brillo en los puntos de conexión
             const gradient = this.ctx.createRadialGradient(
-                node.x, node.y, 0,
-                node.x, node.y, node.size * 3
+                node1.x, node1.y, 0,
+                node1.x, node1.y, 3
             );
-            gradient.addColorStop(0, `rgba(0, 212, 255, ${0.4 * pulse})`);
-            gradient.addColorStop(1, 'rgba(0, 212, 255, 0)');
+            gradient.addColorStop(0, `rgba(0, 212, 255, ${opacity + 0.2})`);
+            gradient.addColorStop(1, 'transparent');
             
             this.ctx.beginPath();
             this.ctx.fillStyle = gradient;
-            this.ctx.arc(node.x, node.y, node.size * 3, 0, Math.PI * 2);
+            this.ctx.arc(node1.x, node1.y, 3, 0, Math.PI * 2);
             this.ctx.fill();
             
-            // Nodo central
+            const gradient2 = this.ctx.createRadialGradient(
+                node2.x, node2.y, 0,
+                node2.x, node2.y, 3
+            );
+            gradient2.addColorStop(0, `rgba(0, 212, 255, ${opacity + 0.2})`);
+            gradient2.addColorStop(1, 'transparent');
+            
             this.ctx.beginPath();
-            this.ctx.fillStyle = node.isActive 
-                ? `rgba(0, 212, 255, ${0.9 * pulse})` 
-                : `rgba(100, 150, 255, ${0.6 * pulse})`;
-            this.ctx.arc(node.x, node.y, node.size, 0, Math.PI * 2);
+            this.ctx.fillStyle = gradient2;
+            this.ctx.arc(node2.x, node2.y, 3, 0, Math.PI * 2);
+            this.ctx.fill();
+        }
+        
+        // Dibujar flujos de datos (puntos que viajan por las líneas)
+        for (let flow of this.dataFlows) {
+            const conn = this.connections[flow.connection];
+            const node1 = this.nodes[conn.node1];
+            const node2 = this.nodes[conn.node2];
+            
+            // Actualizar posición del flujo
+            flow.position += flow.speed;
+            if (flow.position > 1) flow.position = 0;
+            
+            // Calcular posición actual en la línea
+            const x = node1.x + (node2.x - node1.x) * flow.position;
+            const y = node1.y + (node2.y - node1.y) * flow.position;
+            
+            // Efecto de brillo del punto de datos
+            const pulseSize = Math.sin(this.time * 5 + flow.position * Math.PI) * 1 + flow.size;
+            
+            const gradient = this.ctx.createRadialGradient(
+                x, y, 0,
+                x, y, pulseSize * 1.5
+            );
+            gradient.addColorStop(0, flow.color);
+            gradient.addColorStop(1, 'transparent');
+            
+            this.ctx.beginPath();
+            this.ctx.fillStyle = gradient;
+            this.ctx.arc(x, y, pulseSize * 1.5, 0, Math.PI * 2);
             this.ctx.fill();
             
-            // Borde del nodo
+            // Punto central brillante
             this.ctx.beginPath();
-            this.ctx.strokeStyle = `rgba(0, 212, 255, ${0.8 * pulse})`;
-            this.ctx.lineWidth = 0.5;
-            this.ctx.arc(node.x, node.y, node.size, 0, Math.PI * 2);
-            this.ctx.stroke();
+            this.ctx.fillStyle = flow.color;
+            this.ctx.arc(x, y, flow.size / 2, 0, Math.PI * 2);
+            this.ctx.fill();
+        }
+        
+        // Dibujar nodos principales (más grandes en intersecciones)
+        for (let node of this.nodes) {
+            // Pequeño movimiento sutil
+            node.pulse += 0.01;
+            const pulseOffset = Math.sin(node.pulse) * 0.5;
+            
+            // Dibujar nodo
+            this.ctx.beginPath();
+            this.ctx.fillStyle = 'rgba(0, 212, 255, 0.6)';
+            this.ctx.arc(node.x, node.y, 1.2 + pulseOffset, 0, Math.PI * 2);
+            this.ctx.fill();
+            
+            // Brillo alrededor del nodo
+            const gradient = this.ctx.createRadialGradient(
+                node.x, node.y, 0,
+                node.x, node.y, 4
+            );
+            gradient.addColorStop(0, 'rgba(0, 212, 255, 0.3)');
+            gradient.addColorStop(1, 'transparent');
+            
+            this.ctx.beginPath();
+            this.ctx.fillStyle = gradient;
+            this.ctx.arc(node.x, node.y, 4, 0, Math.PI * 2);
+            this.ctx.fill();
         }
     }
     
     animate() {
-        // Fondo sólido
-        this.ctx.fillStyle = '#0a0a1a';
-        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-        
-        // Cuadrícula
+        // Dibujar cuadrícula de fondo
         this.drawGrid();
         
-        // Red neuronal
-        this.drawNeuralNetwork();
+        // Dibujar red tecnológica
+        this.drawNetwork();
         
         requestAnimationFrame(() => this.animate());
     }
