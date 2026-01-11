@@ -1,37 +1,30 @@
-// FONDO DE HOJA DE MATEMÁTICAS CON REDES NEURONALES SIMPLES
+// FONDO DE RED NEURONAL TECNOLÓGICA
 class TechBackground {
     constructor() {
         this.canvas = document.getElementById('techBackground');
         this.ctx = this.canvas.getContext('2d');
-        this.particles = [];
-        this.mouse = {
-            x: null,
-            y: null,
-            radius: 100
-        };
+        this.nodes = [];
+        this.connections = [];
+        this.layers = 5; // Número de capas neuronales
+        this.nodesPerLayer = 8; // Nodos por capa
+        this.animationPhase = 0;
         
         this.init();
         this.animate();
         
-        // Eventos
         window.addEventListener('resize', () => this.resize());
-        this.canvas.addEventListener('mousemove', (e) => this.handleMouseMove(e));
-        this.canvas.addEventListener('mouseleave', () => {
-            this.mouse.x = null;
-            this.mouse.y = null;
-        });
     }
     
     init() {
         this.resize();
-        this.createParticles();
+        this.createNeuralNetwork();
         this.drawGrid();
     }
     
     resize() {
         this.canvas.width = window.innerWidth;
         this.canvas.height = window.innerHeight;
-        this.createParticles();
+        this.createNeuralNetwork();
         this.drawGrid();
     }
     
@@ -40,15 +33,14 @@ class TechBackground {
         const width = this.canvas.width;
         const height = this.canvas.height;
         
-        // Dibujar cuadrícula simple - SOLO líneas horizontales y verticales
         const gridSize = 50;
         const lineColor = 'rgba(0, 150, 255, 0.1)';
         
-        // Líneas horizontales
         ctx.beginPath();
         ctx.strokeStyle = lineColor;
         ctx.lineWidth = 1;
         
+        // Líneas horizontales
         for (let y = 0; y <= height; y += gridSize) {
             ctx.moveTo(0, y);
             ctx.lineTo(width, y);
@@ -63,111 +55,171 @@ class TechBackground {
         ctx.stroke();
     }
     
-    createParticles() {
-        const particleCount = Math.floor((this.canvas.width * this.canvas.height) / 8000);
-        this.particles = [];
+    createNeuralNetwork() {
+        this.nodes = [];
+        this.connections = [];
         
-        for (let i = 0; i < particleCount; i++) {
-            this.particles.push({
-                x: Math.random() * this.canvas.width,
-                y: Math.random() * this.canvas.height,
-                size: Math.random() * 1.2 + 0.5,
-                speedX: (Math.random() - 0.5) * 0.4,
-                speedY: (Math.random() - 0.5) * 0.4,
-                color: `rgba(0, 212, 255, ${Math.random() * 0.4 + 0.1})`,
-                originalX: null,
-                originalY: null,
-                oscillation: Math.random() * Math.PI * 2
-            });
+        const width = this.canvas.width;
+        const height = this.canvas.height;
+        const marginX = width * 0.1;
+        const marginY = height * 0.15;
+        const usableWidth = width - 2 * marginX;
+        const usableHeight = height - 2 * marginY;
+        const layerSpacing = usableWidth / (this.layers - 1);
+        
+        // Crear nodos organizados en capas
+        for (let layer = 0; layer < this.layers; layer++) {
+            const x = marginX + layer * layerSpacing;
+            
+            // Ajustar número de nodos por capa (más en capas intermedias)
+            let nodesInLayer = this.nodesPerLayer;
+            if (layer === 0 || layer === this.layers - 1) {
+                nodesInLayer = Math.floor(this.nodesPerLayer * 0.7); // Menos nodos en capas de entrada/salida
+            }
+            
+            const verticalSpacing = usableHeight / (nodesInLayer + 1);
+            
+            for (let i = 0; i < nodesInLayer; i++) {
+                const y = marginY + (i + 1) * verticalSpacing;
+                const jitter = 5; // Pequeña variación aleatoria
+                const jitterX = (Math.random() - 0.5) * jitter;
+                const jitterY = (Math.random() - 0.5) * jitter;
+                
+                this.nodes.push({
+                    x: x + jitterX,
+                    y: y + jitterY,
+                    layer: layer,
+                    size: Math.random() * 2 + 1.5,
+                    pulsePhase: Math.random() * Math.PI * 2,
+                    pulseSpeed: 0.01 + Math.random() * 0.02,
+                    isActive: Math.random() > 0.7,
+                    activation: 0
+                });
+            }
         }
-    }
-    
-    handleMouseMove(e) {
-        const rect = this.canvas.getBoundingClientRect();
-        this.mouse.x = e.clientX - rect.left;
-        this.mouse.y = e.clientY - rect.top;
+        
+        // Crear conexiones entre capas adyacentes
+        for (let i = 0; i < this.nodes.length; i++) {
+            const nodeA = this.nodes[i];
+            
+            for (let j = i + 1; j < this.nodes.length; j++) {
+                const nodeB = this.nodes[j];
+                const layerDiff = Math.abs(nodeA.layer - nodeB.layer);
+                
+                // Conectar solo nodos de capas adyacentes
+                if (layerDiff === 1) {
+                    const verticalDistance = Math.abs(nodeA.y - nodeB.y);
+                    const maxDistance = height / (this.nodesPerLayer * 2);
+                    
+                    if (verticalDistance < maxDistance && Math.random() > 0.4) {
+                        this.connections.push({
+                            from: i,
+                            to: j,
+                            strength: Math.random() * 0.5 + 0.3,
+                            pulsePhase: Math.random() * Math.PI * 2
+                        });
+                    }
+                }
+            }
+        }
     }
     
     drawNeuralNetwork() {
+        this.animationPhase += 0.005;
+        
         // Dibujar conexiones primero
-        for (let i = 0; i < this.particles.length; i++) {
-            for (let j = i + 1; j < this.particles.length; j++) {
-                const dx = this.particles[i].x - this.particles[j].x;
-                const dy = this.particles[i].y - this.particles[j].y;
-                const distance = Math.sqrt(dx * dx + dy * dy);
+        for (const connection of this.connections) {
+            const nodeA = this.nodes[connection.from];
+            const nodeB = this.nodes[connection.to];
+            
+            const pulse = Math.sin(this.animationPhase * 2 + connection.pulsePhase) * 0.5 + 0.5;
+            const distance = Math.sqrt(
+                Math.pow(nodeB.x - nodeA.x, 2) + 
+                Math.pow(nodeB.y - nodeA.y, 2)
+            );
+            
+            const distanceFactor = Math.max(0, 1 - distance / 300);
+            const opacity = 0.08 * connection.strength * pulse * distanceFactor;
+            
+            this.ctx.beginPath();
+            this.ctx.strokeStyle = `rgba(0, 212, 255, ${opacity})`;
+            this.ctx.lineWidth = 0.8;
+            this.ctx.moveTo(nodeA.x, nodeA.y);
+            this.ctx.lineTo(nodeB.x, nodeB.y);
+            this.ctx.stroke();
+            
+            // Efecto de "pulso" de datos en algunas conexiones
+            if (connection.strength > 0.6 && Math.random() > 0.95) {
+                const progress = (Math.sin(this.animationPhase * 3 + connection.pulsePhase) * 0.5 + 0.5);
                 
-                if (distance < 120) {
-                    const opacity = 0.1 * (1 - distance/120);
-                    this.ctx.beginPath();
-                    this.ctx.strokeStyle = `rgba(0, 212, 255, ${opacity})`;
-                    this.ctx.lineWidth = 0.3;
-                    this.ctx.moveTo(this.particles[i].x, this.particles[i].y);
-                    this.ctx.lineTo(this.particles[j].x, this.particles[j].y);
-                    this.ctx.stroke();
-                }
+                const dataX = nodeA.x + (nodeB.x - nodeA.x) * progress;
+                const dataY = nodeA.y + (nodeB.y - nodeA.y) * progress;
+                
+                // Punto de datos en movimiento
+                this.ctx.beginPath();
+                this.ctx.fillStyle = 'rgba(0, 212, 255, 0.8)';
+                this.ctx.arc(dataX, dataY, 2, 0, Math.PI * 2);
+                this.ctx.fill();
+                
+                // Glow alrededor del punto de datos
+                const gradient = this.ctx.createRadialGradient(
+                    dataX, dataY, 0,
+                    dataX, dataY, 6
+                );
+                gradient.addColorStop(0, 'rgba(0, 212, 255, 0.6)');
+                gradient.addColorStop(1, 'rgba(0, 212, 255, 0)');
+                
+                this.ctx.beginPath();
+                this.ctx.fillStyle = gradient;
+                this.ctx.arc(dataX, dataY, 6, 0, Math.PI * 2);
+                this.ctx.fill();
             }
         }
         
-        // Dibujar partículas
-        for (let particle of this.particles) {
-            particle.oscillation += 0.01;
-            const oscillationX = Math.sin(particle.oscillation) * 0.2;
-            const oscillationY = Math.cos(particle.oscillation * 0.8) * 0.2;
+        // Dibujar nodos
+        for (const node of this.nodes) {
+            node.pulsePhase += node.pulseSpeed;
+            const pulse = Math.sin(this.animationPhase * 1.5 + node.pulsePhase) * 0.3 + 0.7;
             
-            particle.x += particle.speedX + oscillationX;
-            particle.y += particle.speedY + oscillationY;
-            
-            if (particle.x < 0 || particle.x > this.canvas.width) {
-                particle.speedX *= -0.95;
-                particle.x = Math.max(0, Math.min(this.canvas.width, particle.x));
-            }
-            if (particle.y < 0 || particle.y > this.canvas.height) {
-                particle.speedY *= -0.95;
-                particle.y = Math.max(0, Math.min(this.canvas.height, particle.y));
-            }
-            
-            if (this.mouse.x && this.mouse.y) {
-                const dx = particle.x - this.mouse.x;
-                const dy = particle.y - this.mouse.y;
-                const distance = Math.sqrt(dx * dx + dy * dy);
-                
-                if (distance < this.mouse.radius) {
-                    const force = (this.mouse.radius - distance) / this.mouse.radius;
-                    const angle = Math.atan2(dy, dx);
-                    
-                    particle.x += Math.cos(angle) * force * 2;
-                    particle.y += Math.sin(angle) * force * 2;
-                }
-            }
-            
+            // Gradiente para nodo
             const gradient = this.ctx.createRadialGradient(
-                particle.x, particle.y, 0,
-                particle.x, particle.y, particle.size * 1.5
+                node.x, node.y, 0,
+                node.x, node.y, node.size * 3
             );
-            gradient.addColorStop(0, particle.color);
+            gradient.addColorStop(0, `rgba(0, 212, 255, ${0.4 * pulse})`);
             gradient.addColorStop(1, 'rgba(0, 212, 255, 0)');
             
             this.ctx.beginPath();
             this.ctx.fillStyle = gradient;
-            this.ctx.arc(particle.x, particle.y, particle.size * 1.5, 0, Math.PI * 2);
+            this.ctx.arc(node.x, node.y, node.size * 3, 0, Math.PI * 2);
             this.ctx.fill();
             
+            // Nodo central
             this.ctx.beginPath();
-            this.ctx.fillStyle = particle.color;
-            this.ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+            this.ctx.fillStyle = node.isActive 
+                ? `rgba(0, 212, 255, ${0.9 * pulse})` 
+                : `rgba(100, 150, 255, ${0.6 * pulse})`;
+            this.ctx.arc(node.x, node.y, node.size, 0, Math.PI * 2);
             this.ctx.fill();
+            
+            // Borde del nodo
+            this.ctx.beginPath();
+            this.ctx.strokeStyle = `rgba(0, 212, 255, ${0.8 * pulse})`;
+            this.ctx.lineWidth = 0.5;
+            this.ctx.arc(node.x, node.y, node.size, 0, Math.PI * 2);
+            this.ctx.stroke();
         }
     }
     
     animate() {
-        // Limpiar canvas con fondo oscuro
+        // Fondo sólido
         this.ctx.fillStyle = '#0a0a1a';
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
         
-        // Redibujar cuadrícula
+        // Cuadrícula
         this.drawGrid();
         
-        // Dibujar red neuronal simple
+        // Red neuronal
         this.drawNeuralNetwork();
         
         requestAnimationFrame(() => this.animate());
