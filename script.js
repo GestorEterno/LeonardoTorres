@@ -1,4 +1,4 @@
-// Animación del fondo tecnológico - VERSIÓN CORREGIDA PERFECTA
+// Animación del fondo tecnológico a- VERSIÓN CORREGIDA PERFECTA
 class TechBackground {
     constructor() {
         this.canvas = document.getElementById('techBackground');
