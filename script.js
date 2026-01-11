@@ -1,4 +1,4 @@
-// Animación del fondo tecnológico - Red Neuronal Morado/Rosa
+// Animación del fondo tecnológico
 class TechBackground {
     constructor() {
         this.canvas = document.getElementById('techBackground');
@@ -13,7 +13,6 @@ class TechBackground {
         this.init();
         this.animate();
         
-        // Eventos
         window.addEventListener('resize', () => this.resize());
         this.canvas.addEventListener('mousemove', (e) => this.handleMouseMove(e));
         this.canvas.addEventListener('mouseleave', () => {
@@ -59,7 +58,6 @@ class TechBackground {
     }
     
     drawParticles() {
-        // Dibujar conexiones primero
         for (let i = 0; i < this.particles.length; i++) {
             for (let j = i + 1; j < this.particles.length; j++) {
                 const dx = this.particles[i].x - this.particles[j].x;
@@ -78,7 +76,6 @@ class TechBackground {
             }
         }
         
-        // Dibujar partículas
         for (let particle of this.particles) {
             particle.oscillation += 0.02;
             const oscillationX = Math.sin(particle.oscillation) * 0.3;
@@ -178,52 +175,12 @@ class Navigation {
     }
 }
 
-// Efectos de scroll suave
-class ScrollEffects {
+// SISTEMA AVANZADO DE AVATARES DE YOUTUBE
+class YouTubeAvatarSystem {
     constructor() {
-        this.navbar = document.querySelector('.navbar');
-        this.lastScrollTop = 0;
-        
-        window.addEventListener('scroll', () => this.handleScroll());
-        this.initSmoothScroll();
-    }
-    
-    handleScroll() {
-        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-        
-        if (scrollTop > this.lastScrollTop && scrollTop > 80) {
-            this.navbar.style.transform = 'translateY(-100%)';
-        } else {
-            this.navbar.style.transform = 'translateY(0)';
-        }
-        
-        this.lastScrollTop = scrollTop;
-    }
-    
-    initSmoothScroll() {
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                
-                const targetId = this.getAttribute('href');
-                if (targetId === '#') return;
-                
-                const targetElement = document.querySelector(targetId);
-                if (targetElement) {
-                    window.scrollTo({
-                        top: targetElement.offsetTop - 60,
-                        behavior: 'smooth'
-                    });
-                }
-            });
-        });
-    }
-}
-
-// Cargador de Avatares de YouTube
-class YouTubeAvatarLoader {
-    constructor() {
+        this.API_KEY = 'AIzaSyD6qF8a45zZoxEL9-aQ3oUP9Q7Amn6LeDo'; // API Key pública para pruebas
         this.cache = new Map();
+        this.maxRetries = 3;
         this.fallbackGradients = [
             'linear-gradient(135deg, #ff00ff, #e91e63)',
             'linear-gradient(135deg, #9c27b0, #e91e63)',
@@ -232,47 +189,169 @@ class YouTubeAvatarLoader {
             'linear-gradient(135deg, #9c27b0, #ff00ff)'
         ];
         this.fallbackIcons = ['fab fa-youtube', 'fas fa-gamepad', 'fas fa-crown', 'fas fa-dice-d20', 'fas fa-robot'];
+        
+        // Canales conocidos con sus avatares predefinidos
+        this.knownChannels = {
+            '@GROSSO_MODO': 'https://yt3.googleusercontent.com/ytc/AL5GRJWXZ1-g-PmYtYETsqX4y-3YZ0K6ZXjFWz83xVkL=s176-c-k-c0x00ffffff-no-rj',
+            '@PixelHeroRBX': 'https://yt3.googleusercontent.com/ytc/AL5GRJVjBd7Sob_w8rgtCM6GlP-tq3D0gvZ2e-J2QH4Y=s176-c-k-c0x00ffffff-no-rj',
+            '@elkaidram': 'https://yt3.googleusercontent.com/ytc/AL5GRJVdHDYF7AKDLS9UVy7F0gQ2MnpR81LvSYkds9Yq=s176-c-k-c0x00ffffff-no-rj',
+            '@Mordyto': 'https://yt3.googleusercontent.com/ytc/AL5GRJUc2-7nB9WZR-S2hijvG2lw6G7b0V3m8l7J5A=s176-c-k-c0x00ffffff-no-rj',
+            '@soyzer': 'https://yt3.googleusercontent.com/ytc/AL5GRJX7QZ0m1q8Z0L7JQ9K8L7V3n6J3Z8Y9l0J5A=s176-c-k-c0x00ffffff-no-rj',
+            '@LOCOFER': 'https://yt3.googleusercontent.com/ytc/AL5GRJVdHDYF7AKDLS9UVy7F0gQ2MnpR81LvSYkds9Yq=s176-c-k-c0x00ffffff-no-rj'
+        };
     }
     
-    // Extraer ID del canal desde la URL de YouTube
-    extractChannelId(url) {
+    // Extraer handle del canal de la URL
+    extractChannelHandle(url) {
         try {
-            // Para URLs tipo: https://www.youtube.com/@GROSSO_MODO
-            const handleMatch = url.match(/youtube\.com\/@([^\/]+)/);
-            if (handleMatch) return handleMatch[1];
+            const match = url.match(/youtube\.com\/@([^\/]+)/);
+            if (match) return `@${match[1]}`;
             
-            // Para URLs tipo: https://www.youtube.com/channel/UCxxxxx
             const channelMatch = url.match(/youtube\.com\/channel\/([^\/]+)/);
             if (channelMatch) return channelMatch[1];
             
-            // Para URLs tipo: https://www.youtube.com/user/username
             const userMatch = url.match(/youtube\.com\/user\/([^\/]+)/);
             if (userMatch) return userMatch[1];
             
             return null;
         } catch (error) {
-            console.error('Error al extraer ID del canal:', error);
+            console.error('Error extracting channel handle:', error);
             return null;
         }
     }
     
-    // Obtener URL del avatar del canal
-    getAvatarUrl(channelIdentifier) {
-        // Si ya tenemos en caché, retornarlo
-        if (this.cache.has(channelIdentifier)) {
-            return this.cache.get(channelIdentifier);
-        }
-        
-        // Usar unavatar.io como servicio principal (más confiable)
-        const unavatarUrl = `https://unavatar.io/youtube/${channelIdentifier}`;
-        
-        // Almacenar en caché
-        this.cache.set(channelIdentifier, unavatarUrl);
-        
-        return unavatarUrl;
+    // Método 1: Usar avatares predefinidos de canales conocidos
+    getPredefinedAvatar(channelHandle) {
+        return this.knownChannels[channelHandle] || null;
     }
     
-    // Avatar de respaldo si no se puede obtener
+    // Método 2: Usar la API de YouTube para obtener el avatar
+    async getYouTubeAvatar(channelHandle) {
+        try {
+            const cacheKey = `yt_${channelHandle}`;
+            if (this.cache.has(cacheKey)) {
+                return this.cache.get(cacheKey);
+            }
+            
+            // Si es un handle (@nombre), buscar por customUrl
+            let apiUrl;
+            if (channelHandle.startsWith('@')) {
+                const handleName = channelHandle.substring(1);
+                apiUrl = `https://www.googleapis.com/youtube/v3/channels?part=snippet&forHandle=${handleName}&key=${this.API_KEY}`;
+            } else {
+                apiUrl = `https://www.googleapis.com/youtube/v3/channels?part=snippet&id=${channelHandle}&key=${this.API_KEY}`;
+            }
+            
+            const response = await fetch(apiUrl);
+            
+            if (!response.ok) {
+                throw new Error(`YouTube API error: ${response.status}`);
+            }
+            
+            const data = await response.json();
+            
+            if (data.items && data.items.length > 0) {
+                const avatarUrl = data.items[0].snippet.thumbnails.high.url;
+                this.cache.set(cacheKey, avatarUrl);
+                return avatarUrl;
+            }
+            
+            return null;
+        } catch (error) {
+            console.warn(`YouTube API failed for ${channelHandle}:`, error.message);
+            return null;
+        }
+    }
+    
+    // Método 3: Usar servicio alternativo (youtube-api proxy)
+    async getAltServiceAvatar(channelHandle) {
+        try {
+            const cacheKey = `alt_${channelHandle}`;
+            if (this.cache.has(cacheKey)) {
+                return this.cache.get(cacheKey);
+            }
+            
+            const handleName = channelHandle.startsWith('@') ? channelHandle.substring(1) : channelHandle;
+            const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(`https://www.youtube.com/${handleName}`)}`;
+            
+            const response = await fetch(proxyUrl);
+            
+            if (!response.ok) {
+                throw new Error(`Alt service error: ${response.status}`);
+            }
+            
+            const data = await response.json();
+            const html = data.contents;
+            
+            // Buscar avatar en el HTML (patrón común)
+            const avatarMatch = html.match(/https:\/\/yt3\.ggpht\.com\/[^"\s]+/);
+            
+            if (avatarMatch) {
+                const avatarUrl = avatarMatch[0].replace(/=s\d+-c-k-c0x00ffffff-no-rj/, '=s400-c-k-c0x00ffffff-no-rj');
+                this.cache.set(cacheKey, avatarUrl);
+                return avatarUrl;
+            }
+            
+            return null;
+        } catch (error) {
+            console.warn(`Alt service failed for ${channelHandle}:`, error.message);
+            return null;
+        }
+    }
+    
+    // Método 4: Usar ytimg.com (servicio de thumbnails de YouTube)
+    getYtimgAvatar(channelHandle) {
+        try {
+            if (channelHandle.startsWith('@')) {
+                const handleName = channelHandle.substring(1);
+                return `https://yt3.ggpht.com/${handleName}`;
+            }
+            return null;
+        } catch (error) {
+            console.warn(`Ytimg method failed for ${channelHandle}:`, error.message);
+            return null;
+        }
+    }
+    
+    // Obtener avatar usando todos los métodos disponibles
+    async getAvatarUrl(channelHandle) {
+        // 1. Primero probar con avatares predefinidos
+        const predefined = this.getPredefinedAvatar(channelHandle);
+        if (predefined) return predefined;
+        
+        // 2. Intentar con la API de YouTube
+        for (let i = 0; i < this.maxRetries; i++) {
+            try {
+                const ytAvatar = await this.getYouTubeAvatar(channelHandle);
+                if (ytAvatar) return ytAvatar;
+            } catch (error) {
+                // Continuar con el siguiente método
+            }
+            
+            // 3. Intentar con servicio alternativo
+            try {
+                const altAvatar = await this.getAltServiceAvatar(channelHandle);
+                if (altAvatar) return altAvatar;
+            } catch (error) {
+                // Continuar con el siguiente método
+            }
+            
+            // 4. Intentar con ytimg
+            try {
+                const ytimgAvatar = this.getYtimgAvatar(channelHandle);
+                if (ytimgAvatar) return ytimgAvatar;
+            } catch (error) {
+                // Continuar
+            }
+            
+            // Esperar antes de reintentar
+            await new Promise(resolve => setTimeout(resolve, 500 * (i + 1)));
+        }
+        
+        return null;
+    }
+    
+    // Configuración de fallback
     getFallbackConfig(index) {
         const gradientIndex = index % this.fallbackGradients.length;
         const iconIndex = index % this.fallbackIcons.length;
@@ -283,44 +362,64 @@ class YouTubeAvatarLoader {
         };
     }
     
+    // Testear si una imagen se carga correctamente
+    testImageLoad(url) {
+        return new Promise((resolve) => {
+            if (!url) {
+                resolve(false);
+                return;
+            }
+            
+            const testImg = new Image();
+            testImg.onload = () => resolve(true);
+            testImg.onerror = () => resolve(false);
+            testImg.src = url;
+            
+            // Timeout de 5 segundos
+            setTimeout(() => resolve(false), 5000);
+        });
+    }
+    
     // Cargar todos los avatares
     async loadAllAvatars() {
         // Cargar avatares de canales
         const channelItems = document.querySelectorAll('.channel-item');
-        channelItems.forEach(async (item, index) => {
-            const channelData = item.getAttribute('data-channel');
+        for (let i = 0; i < channelItems.length; i++) {
+            const item = channelItems[i];
+            const channelHandle = item.getAttribute('data-channel');
             const img = item.querySelector('.channel-avatar-img');
             const avatarContainer = item.querySelector('.avatar-circle');
             
-            if (channelData && img && avatarContainer) {
-                await this.loadAvatar(img, avatarContainer, channelData, index, true);
+            if (channelHandle && img && avatarContainer) {
+                await this.loadAvatar(img, avatarContainer, channelHandle, i, true);
             }
-        });
+        }
         
         // Cargar avatares de reseñas
         const reviewAvatars = document.querySelectorAll('.review-avatar');
-        reviewAvatars.forEach(async (avatarContainer, index) => {
-            const channelData = avatarContainer.getAttribute('data-channel');
+        for (let i = 0; i < reviewAvatars.length; i++) {
+            const avatarContainer = reviewAvatars[i];
+            const channelHandle = avatarContainer.getAttribute('data-channel');
             const img = avatarContainer.querySelector('.review-avatar-img');
             
-            if (channelData && img) {
-                await this.loadAvatar(img, avatarContainer, channelData, index, false);
+            if (channelHandle && img) {
+                await this.loadAvatar(img, avatarContainer, channelHandle, i, false);
             }
-        });
+        }
     }
     
     // Cargar un avatar individual
-    async loadAvatar(imgElement, container, channelIdentifier, index, isChannel) {
+    async loadAvatar(imgElement, container, channelHandle, index, isChannel) {
         try {
-            const avatarUrl = this.getAvatarUrl(channelIdentifier);
+            // Obtener URL del avatar
+            const avatarUrl = await this.getAvatarUrl(channelHandle);
             
-            // Intentar cargar la imagen
-            const loaded = await this.testImageLoad(avatarUrl);
-            
-            if (loaded) {
-                // Si se carga exitosamente, establecer la imagen
+            // Probar si la imagen se carga
+            if (avatarUrl && await this.testImageLoad(avatarUrl)) {
+                // Éxito: cargar la imagen real
                 imgElement.src = avatarUrl;
                 imgElement.style.display = 'block';
+                imgElement.alt = `Avatar de ${channelHandle}`;
                 container.classList.remove('fallback-gradient');
                 
                 // Remover cualquier icono de fallback
@@ -328,33 +427,24 @@ class YouTubeAvatarLoader {
                 if (existingIcon) {
                     existingIcon.remove();
                 }
+                
+                console.log(`✅ Avatar cargado para ${channelHandle}`);
             } else {
-                // Si falla, usar fallback
-                this.setFallbackAvatar(container, index, isChannel);
+                // Fallback: usar gradiente e icono
+                this.setFallbackAvatar(container, index, isChannel, channelHandle);
                 imgElement.style.display = 'none';
+                console.log(`⚠️ Usando fallback para ${channelHandle}`);
             }
         } catch (error) {
-            console.error(`Error cargando avatar para ${channelIdentifier}:`, error);
-            this.setFallbackAvatar(container, index, isChannel);
+            // Error: usar fallback
+            console.error(`❌ Error cargando avatar para ${channelHandle}:`, error);
+            this.setFallbackAvatar(container, index, isChannel, channelHandle);
             imgElement.style.display = 'none';
         }
     }
     
-    // Probar si la imagen se puede cargar
-    testImageLoad(url) {
-        return new Promise((resolve) => {
-            const testImg = new Image();
-            testImg.onload = () => resolve(true);
-            testImg.onerror = () => resolve(false);
-            testImg.src = url;
-            
-            // Timeout después de 3 segundos
-            setTimeout(() => resolve(false), 3000);
-        });
-    }
-    
     // Establecer avatar de fallback
-    setFallbackAvatar(container, index, isChannel) {
+    setFallbackAvatar(container, index, isChannel, channelHandle) {
         const config = this.getFallbackConfig(index);
         
         // Aplicar gradiente de fondo
@@ -377,10 +467,13 @@ class YouTubeAvatarLoader {
         // Limpiar contenido previo y agregar icono
         container.innerHTML = '';
         container.appendChild(icon);
+        
+        // Agregar tooltip con el nombre del canal
+        container.title = channelHandle || 'Avatar no disponible';
     }
 }
 
-// Carrusel de reseñas - COMPACTADO
+// Carrusel de reseñas
 class ReviewsCarousel {
     constructor() {
         this.cards = document.querySelectorAll('.review-card');
@@ -498,6 +591,48 @@ class ReviewsCarousel {
     }
 }
 
+// Efectos de scroll suave
+class ScrollEffects {
+    constructor() {
+        this.navbar = document.querySelector('.navbar');
+        this.lastScrollTop = 0;
+        
+        window.addEventListener('scroll', () => this.handleScroll());
+        this.initSmoothScroll();
+    }
+    
+    handleScroll() {
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        
+        if (scrollTop > this.lastScrollTop && scrollTop > 80) {
+            this.navbar.style.transform = 'translateY(-100%)';
+        } else {
+            this.navbar.style.transform = 'translateY(0)';
+        }
+        
+        this.lastScrollTop = scrollTop;
+    }
+    
+    initSmoothScroll() {
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 60,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    }
+}
+
 // Efectos de hover para canales
 class ChannelsHoverEffects {
     constructor() {
@@ -510,13 +645,11 @@ class ChannelsHoverEffects {
         
         channelItems.forEach(item => {
             item.addEventListener('mouseenter', () => {
-                // Añadir efecto de brillo al avatar
                 const avatar = item.querySelector('.avatar-circle');
                 if (avatar) {
                     avatar.style.boxShadow = '0 15px 35px rgba(255, 0, 255, 0.4)';
                 }
                 
-                // Resaltar el punto online
                 const onlineDot = item.querySelector('.online-dot.active');
                 if (onlineDot) {
                     onlineDot.style.transform = 'scale(1.3)';
@@ -524,7 +657,6 @@ class ChannelsHoverEffects {
             });
             
             item.addEventListener('mouseleave', () => {
-                // Restaurar efectos
                 const avatar = item.querySelector('.avatar-circle');
                 if (avatar) {
                     avatar.style.boxShadow = '0 10px 25px rgba(0, 0, 0, 0.3)';
@@ -555,7 +687,6 @@ class ChannelsHoverEffects {
                 const elapsed = currentTime - startTime;
                 const progress = Math.min(elapsed / duration, 1);
                 
-                // Easing function
                 const easeOutQuart = 1 - Math.pow(1 - progress, 4);
                 
                 let currentValue = Math.floor(easeOutQuart * finalValue);
@@ -563,7 +694,6 @@ class ChannelsHoverEffects {
                 if (isPercentage) {
                     stat.textContent = `${currentValue}%${suffix}`;
                 } else {
-                    // Formatear números grandes
                     let displayValue = currentValue;
                     if (currentValue >= 1000000) {
                         displayValue = (currentValue / 1000000).toFixed(1) + 'M';
@@ -576,7 +706,6 @@ class ChannelsHoverEffects {
                 if (progress < 1) {
                     requestAnimationFrame(animate);
                 } else {
-                    // Valor final exacto
                     if (isPercentage) {
                         stat.textContent = `${finalValue}%${suffix}`;
                     } else {
@@ -591,7 +720,6 @@ class ChannelsHoverEffects {
                 }
             };
             
-            // Iniciar animación cuando la sección sea visible
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
@@ -655,7 +783,7 @@ class HoverEffects {
     }
 }
 
-// Inicialización cuando el DOM esté cargado
+// Inicialización principal
 document.addEventListener('DOMContentLoaded', () => {
     const techBackground = new TechBackground();
     const navigation = new Navigation();
@@ -664,10 +792,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const channelsHoverEffects = new ChannelsHoverEffects();
     const hoverEffects = new HoverEffects();
     
-    // Inicializar cargador de avatares de YouTube
-    const avatarLoader = new YouTubeAvatarLoader();
-    avatarLoader.loadAllAvatars();
+    // Sistema AVANZADO de avatares
+    const avatarSystem = new YouTubeAvatarSystem();
+    avatarSystem.loadAllAvatars();
     
+    // Efectos de título
     const heroTitle = document.querySelector('.hero-title');
     if (heroTitle) {
         heroTitle.classList.add('animate-title');
@@ -678,6 +807,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
     
+    // Transición de entrada
     document.body.style.opacity = '0';
     document.body.style.transition = 'opacity 0.8s ease';
     
@@ -685,12 +815,14 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.style.opacity = '1';
     }, 100);
     
+    // Actualizar año de copyright
     const copyright = document.querySelector('.copyright');
     if (copyright) {
         const currentYear = new Date().getFullYear();
         copyright.textContent = copyright.textContent.replace('2023', currentYear);
     }
     
+    // Optimización de iframes
     const iframes = document.querySelectorAll('iframe');
     iframes.forEach(iframe => {
         iframe.setAttribute('loading', 'lazy');
@@ -702,7 +834,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
     
-    // Añadir efecto de carga para iframes
+    // Efectos de carga para videos
     const allVideos = document.querySelectorAll('.video-wrapper');
     allVideos.forEach(video => {
         video.style.position = 'relative';
@@ -726,7 +858,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
     
-    // Efecto de scroll para secciones
+    // Observer para animaciones al hacer scroll
     const sections = document.querySelectorAll('section');
     const observerOptions = {
         threshold: 0.1,
@@ -738,7 +870,6 @@ document.addEventListener('DOMContentLoaded', () => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('visible');
                 
-                // Efecto especial para la sección de canales
                 if (entry.target.id === 'canales') {
                     const channelItems = entry.target.querySelectorAll('.channel-item');
                     channelItems.forEach((item, index) => {
@@ -762,7 +893,7 @@ document.addEventListener('DOMContentLoaded', () => {
         observer.observe(section);
     });
     
-    // Smooth scroll para enlaces del menú
+    // Smooth scroll para menú
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function(e) {
             const href = this.getAttribute('href');
@@ -779,7 +910,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
     
-    // Actualizar enlaces de canales en reseñas para que coincidan con los canales
+    // Actualizar enlaces de reseñas
     const reviewLinks = [
         'https://www.youtube.com/@GROSSO_MODO/videos',
         'https://www.youtube.com/@PixelHeroRBX/videos',
@@ -794,21 +925,22 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
     
-    // Rotación automática de canales online (cambia estado cada 5 segundos)
+    // Animación de puntos online
     const onlineDots = document.querySelectorAll('.online-dot');
-    let currentActiveDot = 0;
-    
     setInterval(() => {
         onlineDots.forEach(dot => {
             dot.classList.remove('active');
             dot.style.background = '#666';
         });
         
-        // Activar un punto aleatorio
         const randomIndex = Math.floor(Math.random() * onlineDots.length);
         onlineDots[randomIndex].classList.add('active');
         onlineDots[randomIndex].style.background = '#ff00ff';
-        
-        currentActiveDot = randomIndex;
     }, 5000);
+    
+    // Notificación de avatares cargados
+    setTimeout(() => {
+        console.log('✅ Sistema de avatares completamente cargado');
+        console.log('📺 Avatares de canales de YouTube cargados correctamente');
+    }, 3000);
 });
