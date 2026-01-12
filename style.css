@@ -554,7 +554,7 @@ body {
     box-shadow: 0 20px 35px rgba(255, 0, 255, 0.25);
 }
 
-/* ===== CARRUSEL DE SHORTS - CORREGIDO ===== */
+/* ===== CARRUSEL DE SHORTS - 4 VISIBLES, DESPLAZAMIENTO DE 1 ===== */
 .shorts {
     padding: 100px 0;
     position: relative;
@@ -587,7 +587,7 @@ body {
     padding: 20px 0;
 }
 
-/* Elementos del carrusel de shorts */
+/* Elementos del carrusel de shorts - CORREGIDO PARA 4 VISIBLES */
 .short-item {
     background: var(--card-bg);
     border-radius: 12px;
@@ -596,8 +596,8 @@ body {
     transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
     position: relative;
     aspect-ratio: 9/16;
-    flex: 0 0 calc(25% - 19px); /* 4 elementos por vista (25% - gap) */
-    max-width: calc(25% - 19px);
+    flex: 0 0 calc(25% - 18.75px); /* 4 elementos por vista (25% - gap ajustado) */
+    max-width: calc(25% - 18.75px);
     height: auto;
     max-height: 650px;
     display: flex;
@@ -692,7 +692,7 @@ body {
     opacity: 0.8;
 }
 
-/* ===== CARRUSEL DE CANALES - CORREGIDO ===== */
+/* ===== CARRUSEL DE CANALES - 5 VISIBLES, DESPLAZAMIENTO DE 1 ===== */
 .channels {
     padding: 100px 0;
     background: rgba(26, 10, 31, 0.7);
@@ -728,7 +728,7 @@ body {
     padding: 20px 0;
 }
 
-/* Elementos del carrusel de canales */
+/* Elementos del carrusel de canales - CORREGIDO PARA 5 VISIBLES */
 .channel-item {
     background: var(--card-bg);
     border-radius: 15px;
@@ -1280,9 +1280,17 @@ body {
     letter-spacing: 0.5px;
 }
 
-/* ===== RESPONSIVE - CRÍTICO CORREGIDO ===== */
+/* ===== RESPONSIVE - CORREGIDO PARA DESPLAZAMIENTO DE 1 ===== */
 
-/* Tablet (768px - 1024px) */
+/* Desktop grande (más de 1200px) */
+@media (min-width: 1200px) {
+    .shorts-carousel-container,
+    .channels-carousel-container {
+        max-width: 1400px;
+    }
+}
+
+/* Tablet (1024px - 768px) */
 @media (max-width: 1024px) {
     .hero-content {
         grid-template-columns: 1fr;
@@ -1314,25 +1322,25 @@ body {
         padding: 0 30px;
     }
     
-    /* SHORTS - Tablet: 2 elementos por vista */
+    /* SHORTS - Tablet: 2 elementos visibles, desplazamiento de 1 */
     .shorts-carousel-container,
     .channels-carousel-container {
         padding: 0 50px;
     }
     
     .short-item {
-        flex: 0 0 calc(50% - 13px); /* 2 elementos por vista (50% - gap) */
-        max-width: calc(50% - 13px);
+        flex: 0 0 calc(50% - 12.5px); /* 2 elementos por vista (50% - gap/2) */
+        max-width: calc(50% - 12.5px);
     }
     
-    /* CANALES - Tablet: 2 elementos por vista */
+    /* CANALES - Tablet: 2 elementos visibles, desplazamiento de 1 */
     .channel-item {
-        flex: 0 0 calc(50% - 13px); /* 2 elementos por vista (50% - gap) */
-        max-width: calc(50% - 13px);
+        flex: 0 0 calc(50% - 12.5px); /* 2 elementos por vista (50% - gap/2) */
+        max-width: calc(50% - 12.5px);
     }
 }
 
-/* Móvil (menos de 768px) */
+/* Tablet pequeña / Móvil grande (768px o menos) */
 @media (max-width: 768px) {
     .hamburger {
         display: block;
@@ -1435,7 +1443,7 @@ body {
         height: 260px;
     }
     
-    /* SHORTS - Móvil: 1 elemento por vista */
+    /* SHORTS - Móvil: 1 elemento visible, desplazamiento de 1 */
     .shorts-carousel-container,
     .channels-carousel-container {
         padding: 0 40px;
@@ -1453,7 +1461,7 @@ body {
         max-width: 100%;
     }
     
-    /* CANALES - Móvil: 1 elemento por vista */
+    /* CANALES - Móvil: 1 elemento visible, desplazamiento de 1 */
     .channel-item {
         flex: 0 0 100%; /* 1 elemento por vista */
         max-width: 100%;
@@ -1464,9 +1472,19 @@ body {
         width: 80px;
         height: 80px;
     }
+    
+    /* Ajustar indicadores para móvil */
+    .carousel-indicators {
+        margin-top: 15px;
+    }
+    
+    .indicator {
+        width: 8px;
+        height: 8px;
+    }
 }
 
-/* Móvil pequeño (menos de 480px) */
+/* Móvil pequeño (480px o menos) */
 @media (max-width: 480px) {
     .navbar {
         padding: 5px 0;
@@ -1553,13 +1571,5 @@ body {
         flex-direction: column;
         gap: 15px;
         text-align: center;
-    }
-}
-
-/* Desktop grande (más de 1200px) */
-@media (min-width: 1200px) {
-    .shorts-carousel-container,
-    .channels-carousel-container {
-        max-width: 1400px;
     }
 }
