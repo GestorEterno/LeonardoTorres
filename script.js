@@ -797,7 +797,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const channelsHoverEffects = new ChannelsHoverEffects();
     const hoverEffects = new HoverEffects();
     
-    // Manejar logo del menú - CORREGIDO PARA CIRCULAR MÁS GRANDE
+    // Manejar logo del menú - CORREGIDO PARA RECTANGULAR
     const logoImage = document.querySelector('.logo-image');
     const logoPlaceholder = document.querySelector('.logo-placeholder');
     
