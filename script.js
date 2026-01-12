@@ -313,7 +313,7 @@ class ShortsCarousel {
         this.prevBtn.addEventListener('click', () => this.move(-1));
         this.nextBtn.addEventListener('click', () => this.move(1));
         
-        this.indicators.forEach((indicator, index) => {
+        this.indicators.forEach((indicator, index) {
             indicator.addEventListener('click', () => this.goToPosition(index));
         });
         
