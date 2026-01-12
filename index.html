@@ -222,182 +222,288 @@
         </div>
     </section>
     
-    <!-- Sección de Shorts -->
+    <!-- Sección de Shorts - CARRUSEL HORIZONTAL -->
     <section class="shorts" id="shorts">
         <div class="container">
             <h2 class="section-title">SHORTS <span class="gradient-text">VERTICALES</span></h2>
             <p class="section-subtitle">Contenido optimizado para TikTok/Reels/Shorts en formato 9:16</p>
             
-            <!-- Grid de 4 shorts -->
-            <div class="shorts-grid">
-                <!-- Short 1 -->
-                <div class="short-item">
-                    <div class="short-badge">Valorant</div>
-                    <div class="video-wrapper short-video">
-                        <iframe 
-                            src="https://www.youtube.com/embed/4D11x6A2nw4" 
-                            allow="autoplay; encrypted-media; fullscreen"
-                            title="Valorant Short">
-                        </iframe>
+            <!-- Contenedor del carrusel -->
+            <div class="shorts-carousel-container">
+                <button class="carousel-btn prev" aria-label="Shorts anteriores">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                
+                <!-- Pista del carrusel con 6 elementos -->
+                <div class="shorts-carousel-track">
+                    <!-- Short 1 -->
+                    <div class="short-item">
+                        <div class="short-badge">Valorant</div>
+                        <div class="video-wrapper short-video">
+                            <iframe 
+                                src="https://www.youtube.com/embed/4D11x6A2nw4" 
+                                allow="autoplay; encrypted-media; fullscreen"
+                                title="Valorant Short">
+                            </iframe>
+                        </div>
+                    </div>
+                    
+                    <!-- Short 2 -->
+                    <div class="short-item">
+                        <div class="short-badge">Valorant</div>
+                        <div class="video-wrapper short-video">
+                            <iframe 
+                                src="https://www.youtube.com/embed/krYxyC0nz9M" 
+                                allow="autoplay; encrypted-media; fullscreen"
+                                title="Roblox Short">
+                            </iframe>
+                        </div>
+                    </div>
+                    
+                    <!-- Short 3 -->
+                    <div class="short-item">
+                        <div class="short-badge">Valorant</div>
+                        <div class="video-wrapper short-video">
+                            <iframe 
+                                src="https://www.youtube.com/embed/8Izl3zGsOYk" 
+                                allow="autoplay; encrypted-media; fullscreen"
+                                title="Gameplay Short">
+                            </iframe>
+                        </div>
+                    </div>
+                    
+                    <!-- Short 4 -->
+                    <div class="short-item">
+                        <div class="short-badge">Roblox</div>
+                        <div class="video-wrapper short-video">
+                            <iframe 
+                                src="https://www.youtube.com/embed/bJP56Z01KJU" 
+                                allow="autoplay; encrypted-media; fullscreen"
+                                title="YouTube Short">
+                            </iframe>
+                        </div>
+                    </div>
+                    
+                    <!-- Short 5 - NUEVO SIN VIDEO -->
+                    <div class="short-item">
+                        <div class="short-badge">Coming Soon</div>
+                        <div class="video-wrapper short-video placeholder">
+                            <div class="short-placeholder">
+                                <i class="fas fa-video"></i>
+                                <span>Short en producción</span>
+                                <p>Próximamente disponible</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Short 6 - NUEVO SIN VIDEO -->
+                    <div class="short-item">
+                        <div class="short-badge">Coming Soon</div>
+                        <div class="video-wrapper short-video placeholder">
+                            <div class="short-placeholder">
+                                <i class="fas fa-film"></i>
+                                <span>Nuevo proyecto</span>
+                                <p>En edición</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 
-                <!-- Short 2 -->
-                <div class="short-item">
-                    <div class="short-badge">Valorant</div>
-                    <div class="video-wrapper short-video">
-                        <iframe 
-                            src="https://www.youtube.com/embed/krYxyC0nz9M" 
-                            allow="autoplay; encrypted-media; fullscreen"
-                            title="Roblox Short">
-                        </iframe>
-                    </div>
-                </div>
-                
-                <!-- Short 3 -->
-                <div class="short-item">
-                    <div class="short-badge">Valorant</div>
-                    <div class="video-wrapper short-video">
-                        <iframe 
-                            src="https://www.youtube.com/embed/8Izl3zGsOYk" 
-                            allow="autoplay; encrypted-media; fullscreen"
-                            title="Gameplay Short">
-                        </iframe>
-                    </div>
-                </div>
-                
-                <!-- Short 4 -->
-                <div class="short-item">
-                    <div class="short-badge">Roblox</div>
-                    <div class="video-wrapper short-video">
-                        <iframe 
-                            src="https://www.youtube.com/embed/bJP56Z01KJU" 
-                            allow="autoplay; encrypted-media; fullscreen"
-                            title="YouTube Short">
-                        </iframe>
-                    </div>
-                </div>
+                <button class="carousel-btn next" aria-label="Siguientes shorts">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+            
+            <!-- Indicadores del carrusel -->
+            <div class="carousel-indicators">
+                <span class="indicator active" data-index="0"></span>
+                <span class="indicator" data-index="1"></span>
             </div>
         </div>
     </section>
     
-    <!-- Sección de Canales - 5 SIEMPRE VISIBLES -->
+    <!-- Sección de Canales - CARRUSEL HORIZONTAL -->
     <section class="channels" id="canales">
         <div class="container">
             <h2 class="section-title">CANALES <span class="gradient-text">CON LOS QUE COLABORO</span></h2>
             <p class="section-subtitle">Trabajo directo con estos increíbles creadores de contenido</p>
             
-            <!-- Grid de 5 canales siempre visibles -->
-            <div class="channels-grid">
-                <!-- Canal 1: GROSSO MODO -->
-                <a href="https://www.youtube.com/@GROSSO_MODO" target="_blank" class="channel-item">
-                    <div class="channel-avatar">
-                        <div class="avatar-circle">
-                            <img src="Imagenes/canales/GROSSO MODO.jpg" alt="GROSSO MODO" class="channel-image">
-                            <span class="channel-fallback">GM</span>
-                        </div>
-                        <div class="online-dot active"></div>
-                    </div>
-                    <div class="channel-info">
-                        <h3 class="channel-name">GROSSO MODO</h3>
-                        <div class="channel-subs">
-                            <i class="fas fa-users"></i>
-                            <span>4.2K suscriptores</span>
-                        </div>
-                    </div>
-                    <div class="channel-hover">
-                        <i class="fas fa-external-link-alt"></i>
-                        <span>Ver canal</span>
-                    </div>
-                </a>
+            <!-- Contenedor del carrusel -->
+            <div class="channels-carousel-container">
+                <button class="carousel-btn prev" aria-label="Canales anteriores">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
                 
-                <!-- Canal 2: PixelHeroRBX -->
-                <a href="https://www.youtube.com/@PixelHeroRBX/videos" target="_blank" class="channel-item">
-                    <div class="channel-avatar">
-                        <div class="avatar-circle">
-                            <img src="Imagenes/canales/PixelHero.jpg" alt="PixelHero RBX" class="channel-image">
-                            <span class="channel-fallback">PH</span>
+                <!-- Pista del carrusel con 7 elementos -->
+                <div class="channels-carousel-track">
+                    <!-- Canal 1: GROSSO MODO -->
+                    <a href="https://www.youtube.com/@GROSSO_MODO" target="_blank" class="channel-item">
+                        <div class="channel-avatar">
+                            <div class="avatar-circle">
+                                <img src="Imagenes/canales/GROSSO MODO.jpg" alt="GROSSO MODO" class="channel-image">
+                                <span class="channel-fallback">GM</span>
+                            </div>
+                            <div class="online-dot active"></div>
                         </div>
-                        <div class="online-dot"></div>
-                    </div>
-                    <div class="channel-info">
-                        <h3 class="channel-name">PixelHero</h3>
-                        <div class="channel-subs">
-                            <i class="fas fa-users"></i>
-                            <span>Canal Nuevo</span>
+                        <div class="channel-info">
+                            <h3 class="channel-name">GROSSO MODO</h3>
+                            <div class="channel-subs">
+                                <i class="fas fa-users"></i>
+                                <span>4.2K suscriptores</span>
+                            </div>
+                        </div>
+                        <div class="channel-hover">
+                            <i class="fas fa-external-link-alt"></i>
+                            <span>Ver canal</span>
+                        </div>
+                    </a>
+                    
+                    <!-- Canal 2: PixelHeroRBX -->
+                    <a href="https://www.youtube.com/@PixelHeroRBX/videos" target="_blank" class="channel-item">
+                        <div class="channel-avatar">
+                            <div class="avatar-circle">
+                                <img src="Imagenes/canales/PixelHero.jpg" alt="PixelHero RBX" class="channel-image">
+                                <span class="channel-fallback">PH</span>
+                            </div>
+                            <div class="online-dot"></div>
+                        </div>
+                        <div class="channel-info">
+                            <h3 class="channel-name">PixelHero</h3>
+                            <div class="channel-subs">
+                                <i class="fas fa-users"></i>
+                                <span>Canal Nuevo</span>
+                            </div>
+                        </div>
+                        <div class="channel-hover">
+                            <i class="fas fa-external-link-alt"></i>
+                            <span>Ver canal</span>
+                        </div>
+                    </a>
+                    
+                    <!-- Canal 3: elkaidram -->
+                    <a href="https://www.youtube.com/@elkaidram" target="_blank" class="channel-item">
+                        <div class="channel-avatar">
+                            <div class="avatar-circle">
+                                <img src="Imagenes/canales/ElKaidram.jpg" alt="ELKAIDRAM" class="channel-image">
+                                <span class="channel-fallback">EK</span>
+                            </div>
+                            <div class="online-dot active"></div>
+                        </div>
+                        <div class="channel-info">
+                            <h3 class="channel-name">ELKAIDRAM</h3>
+                            <div class="channel-subs">
+                                <i class="fas fa-users"></i>
+                                <span>Canal Nuevo</span>
+                            </div>
+                        </div>
+                        <div class="channel-hover">
+                            <i class="fas fa-external-link-alt"></i>
+                            <span>Ver canal</span>
+                        </div>
+                    </a>
+                    
+                    <!-- Canal 4: Mordyto -->
+                    <a href="https://www.youtube.com/@Mordyto/videos" target="_blank" class="channel-item">
+                        <div class="channel-avatar">
+                            <div class="avatar-circle">
+                                <img src="Imagenes/canales/Mordyto.jpg" alt="MORDYTO" class="channel-image">
+                                <span class="channel-fallback">MO</span>
+                            </div>
+                            <div class="online-dot"></div>
+                        </div>
+                        <div class="channel-info">
+                            <h3 class="channel-name">MORDYTO</h3>
+                            <div class="channel-subs">
+                                <i class="fas fa-users"></i>
+                                <span>12K suscriptores</span>
+                            </div>
+                        </div>
+                        <div class="channel-hover">
+                            <i class="fas fa-external-link-alt"></i>
+                            <span>Ver canal</span>
+                        </div>
+                    </a>
+                    
+                    <!-- Canal 5: soyzer -->
+                    <a href="https://www.youtube.com/@soyzer" target="_blank" class="channel-item">
+                        <div class="channel-avatar">
+                            <div class="avatar-circle">
+                                <img src="Imagenes/canales/soyzer.jpg" alt="SOYZER" class="channel-image">
+                                <span class="channel-fallback">SZ</span>
+                            </div>
+                            <div class="online-dot active"></div>
+                        </div>
+                        <div class="channel-info">
+                            <h3 class="channel-name">SOYZER</h3>
+                            <div class="channel-subs">
+                                <i class="fas fa-users"></i>
+                                <span>42K suscriptores</span>
+                            </div>
+                        </div>
+                        <div class="channel-hover">
+                            <i class="fas fa-external-link-alt"></i>
+                            <span>Ver canal</span>
+                        </div>
+                    </a>
+                    
+                    <!-- Canal 6 - NUEVO SIN ENLACE -->
+                    <div class="channel-item placeholder">
+                        <div class="channel-avatar">
+                            <div class="avatar-circle">
+                                <div class="channel-placeholder">
+                                    <i class="fas fa-user-plus"></i>
+                                </div>
+                                <span class="channel-fallback">N1</span>
+                            </div>
+                            <div class="online-dot"></div>
+                        </div>
+                        <div class="channel-info">
+                            <h3 class="channel-name">NUEVO CANAL</h3>
+                            <div class="channel-subs">
+                                <i class="fas fa-users"></i>
+                                <span>Próximamente</span>
+                            </div>
+                        </div>
+                        <div class="channel-hover">
+                            <i class="fas fa-clock"></i>
+                            <span>Disponible pronto</span>
                         </div>
                     </div>
-                    <div class="channel-hover">
-                        <i class="fas fa-external-link-alt"></i>
-                        <span>Ver canal</span>
+                    
+                    <!-- Canal 7 - NUEVO SIN ENLACE -->
+                    <div class="channel-item placeholder">
+                        <div class="channel-avatar">
+                            <div class="avatar-circle">
+                                <div class="channel-placeholder">
+                                    <i class="fas fa-user-plus"></i>
+                                </div>
+                                <span class="channel-fallback">N2</span>
+                            </div>
+                            <div class="online-dot"></div>
+                        </div>
+                        <div class="channel-info">
+                            <h3 class="channel-name">PRÓXIMA COLAB</h3>
+                            <div class="channel-subs">
+                                <i class="fas fa-users"></i>
+                                <span>En negociación</span>
+                            </div>
+                        </div>
+                        <div class="channel-hover">
+                            <i class="fas fa-clock"></i>
+                            <span>Próximamente</span>
+                        </div>
                     </div>
-                </a>
+                </div>
                 
-                <!-- Canal 3: elkaidram -->
-                <a href="https://www.youtube.com/@elkaidram" target="_blank" class="channel-item">
-                    <div class="channel-avatar">
-                        <div class="avatar-circle">
-                            <img src="Imagenes/canales/ElKaidram.jpg" alt="ELKAIDRAM" class="channel-image">
-                            <span class="channel-fallback">EK</span>
-                        </div>
-                        <div class="online-dot active"></div>
-                    </div>
-                    <div class="channel-info">
-                        <h3 class="channel-name">ELKAIDRAM</h3>
-                        <div class="channel-subs">
-                            <i class="fas fa-users"></i>
-                            <span>Canal Nuevo</span>
-                        </div>
-                    </div>
-                    <div class="channel-hover">
-                        <i class="fas fa-external-link-alt"></i>
-                        <span>Ver canal</span>
-                    </div>
-                </a>
-                
-                <!-- Canal 4: Mordyto -->
-                <a href="https://www.youtube.com/@Mordyto/videos" target="_blank" class="channel-item">
-                    <div class="channel-avatar">
-                        <div class="avatar-circle">
-                            <img src="Imagenes/canales/Mordyto.jpg" alt="MORDYTO" class="channel-image">
-                            <span class="channel-fallback">MO</span>
-                        </div>
-                        <div class="online-dot"></div>
-                    </div>
-                    <div class="channel-info">
-                        <h3 class="channel-name">MORDYTO</h3>
-                        <div class="channel-subs">
-                            <i class="fas fa-users"></i>
-                            <span>12K suscriptores</span>
-                        </div>
-                    </div>
-                    <div class="channel-hover">
-                        <i class="fas fa-external-link-alt"></i>
-                        <span>Ver canal</span>
-                    </div>
-                </a>
-                
-                <!-- Canal 5: soyzer -->
-                <a href="https://www.youtube.com/@soyzer" target="_blank" class="channel-item">
-                    <div class="channel-avatar">
-                        <div class="avatar-circle">
-                            <img src="Imagenes/canales/soyzer.jpg" alt="SOYZER" class="channel-image">
-                            <span class="channel-fallback">SZ</span>
-                        </div>
-                        <div class="online-dot active"></div>
-                    </div>
-                    <div class="channel-info">
-                        <h3 class="channel-name">SOYZER</h3>
-                        <div class="channel-subs">
-                            <i class="fas fa-users"></i>
-                            <span>42K suscriptores</span>
-                        </div>
-                    </div>
-                    <div class="channel-hover">
-                        <i class="fas fa-external-link-alt"></i>
-                        <span>Ver canal</span>
-                    </div>
-                </a>
+                <button class="carousel-btn next" aria-label="Siguientes canales">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+            
+            <!-- Indicadores del carrusel -->
+            <div class="carousel-indicators">
+                <span class="indicator active" data-index="0"></span>
+                <span class="indicator" data-index="1"></span>
             </div>
         </div>
     </section>
