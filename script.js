@@ -773,7 +773,7 @@ class HoverEffects {
         
         videos.forEach(video => {
             video.addEventListener('mouseenter', () => {
-                video.style.filter = 'brightness(1.1) contrast(1.05)';
+                video.style.filter = 'brightness(1.05) contrast(1.02)';
             });
             
             video.addEventListener('mouseleave', () => {
@@ -796,6 +796,34 @@ document.addEventListener('DOMContentLoaded', () => {
     
     const channelsHoverEffects = new ChannelsHoverEffects();
     const hoverEffects = new HoverEffects();
+    
+    // Manejar logo del menú
+    const logoImage = document.querySelector('.logo-image');
+    const logoPlaceholder = document.querySelector('.logo-placeholder');
+    
+    if (logoImage) {
+        logoImage.onerror = function() {
+            this.style.display = 'none';
+            if (logoPlaceholder) {
+                logoPlaceholder.style.display = 'flex';
+            }
+        };
+        
+        // Verificar si la imagen se cargó correctamente
+        logoImage.onload = function() {
+            if (logoPlaceholder) {
+                logoPlaceholder.style.display = 'none';
+            }
+        };
+        
+        // Si la imagen tiene un src vacío, mostrar el placeholder
+        if (!logoImage.src || logoImage.src.includes('undefined')) {
+            logoImage.style.display = 'none';
+            if (logoPlaceholder) {
+                logoPlaceholder.style.display = 'flex';
+            }
+        }
+    }
     
     const heroTitle = document.querySelector('.hero-title');
     if (heroTitle) {
