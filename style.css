@@ -74,7 +74,7 @@ body {
     z-index: 1;
 }
 
-/* Estilos del menú de navegación - LOGO CUADRADO/RECTANGULAR SIN BORDE CIRCULAR */
+/* Estilos del menú de navegación - LOGO RECTANGULAR */
 .navbar {
     position: fixed;
     top: 0;
@@ -107,11 +107,10 @@ body {
     position: relative;
 }
 
-/* CORRECCIÓN 1: LOGO RECTANGULAR SIN BORDE CIRCULAR */
+/* LOGO RECTANGULAR SIN BORDE CIRCULAR */
 .logo-image {
     width: 55px;
     height: 55px;
-    /* ELIMINADO: border-radius: 50%; border: 3px solid var(--accent-color); */
     border-radius: 8px; /* Esquinas ligeramente redondeadas */
     object-fit: cover;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
@@ -125,7 +124,6 @@ body {
     box-shadow: 0 6px 18px rgba(255, 0, 255, 0.3);
 }
 
-/* CORRECCIÓN 2: PLACEHOLDER RECTANGULAR SIN BORDE CIRCULAR */
 .logo-placeholder {
     display: none;
     width: 55px;
@@ -302,7 +300,7 @@ body {
     height: 100%;
 }
 
-/* Estilos del hero section - REDUCIDO ESPACIO */
+/* Estilos del hero section */
 .hero {
     padding: 100px 0 70px;
     position: relative;
@@ -471,18 +469,15 @@ body {
     font-weight: 600;
 }
 
-/* CORRECCIÓN CRÍTICA: SIN ZOOM EN SHORTS */
 .video-wrapper {
     position: relative;
     padding-bottom: 56.25%; /* 16:9 aspect ratio */
     height: 0;
     overflow: hidden;
-    /* Mejorar rendimiento */
     transform: translateZ(0);
     -webkit-transform: translateZ(0);
 }
 
-/* CORRECCIÓN: Sin zoom en shorts - solo efectos sutiles */
 .video-wrapper iframe {
     position: absolute;
     top: 0;
@@ -492,7 +487,6 @@ body {
     border: none;
     transition: filter 0.5s var(--ease-smooth);
     will-change: filter;
-    /* Optimizaciones de rendimiento */
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
     transform: translateZ(0) scale(1);
@@ -500,10 +494,10 @@ body {
 }
 
 .video-wrapper:hover iframe {
-    filter: brightness(1.05) contrast(1.02); /* Efecto sutil sin zoom */
+    filter: brightness(1.05) contrast(1.02);
 }
 
-/* Hero video específico - sin overlay */
+/* Hero video específico */
 .hero-video .video-overlay {
     display: none;
 }
@@ -512,7 +506,7 @@ body {
     display: none;
 }
 
-/* Estilos de características - REDUCIDO ESPACIO */
+/* Estilos de características */
 .features {
     padding: 70px 0;
 }
@@ -540,21 +534,23 @@ body {
     gap: 25px;
 }
 
-/* CORRECCIÓN 3: ANIMACIÓN PERFECTA EN FEATURE CARDS (REFERENCIA) */
+/* ANIMACIÓN BASE PERFECTA QUE DEBE SER COPIADA EN TODOS LOS ELEMENTOS */
 .feature-card {
     background: var(--card-bg);
     border-radius: 15px;
     padding: 25px;
     text-align: center;
     border: 1px solid var(--card-border);
-    transition: all 0.5s var(--ease-smooth); /* Transición unificada */
+    transition: all 0.5s var(--ease-smooth);
     position: relative;
     overflow: hidden;
     will-change: transform, box-shadow;
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
 }
 
 .feature-card:hover {
-    transform: translateY(-8px);
+    transform: translateY(-8px) translateZ(0);
     box-shadow: 0 15px 30px rgba(255, 0, 255, 0.2);
 }
 
@@ -581,7 +577,7 @@ body {
     font-size: 0.9rem;
 }
 
-/* Estilos del portafolio - 2 COLUMNAS - REDUCIDO ESPACIO */
+/* Estilos del portafolio */
 .portfolio {
     padding: 70px 0;
 }
@@ -592,23 +588,25 @@ body {
     gap: 30px;
 }
 
-/* CORRECCIÓN 4: ANIMACIÓN IDÉNTICA A FEATURE CARDS */
+/* CORRECCIÓN CRÍTICA: ANIMACIÓN IDÉNTICA A FEATURE CARDS */
 .portfolio-item {
     background: var(--card-bg);
     border-radius: 15px;
     overflow: hidden;
     border: 1px solid var(--card-border);
-    transition: all 0.5s var(--ease-smooth); /* MISMO TIMING */
+    transition: all 0.5s var(--ease-smooth);
     position: relative;
-    will-change: transform, box-shadow; /* MISMA OPTIMIZACIÓN */
+    will-change: transform, box-shadow;
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
 }
 
 .portfolio-item:hover {
-    transform: translateY(-8px); /* MISMA TRANSFORMACIÓN */
-    box-shadow: 0 15px 30px rgba(255, 0, 255, 0.2); /* MISMA SOMBRA */
+    transform: translateY(-8px) translateZ(0);
+    box-shadow: 0 15px 30px rgba(255, 0, 255, 0.2);
 }
 
-/* ===== CARRUSEL DE SHORTS - 4 VISIBLES, DESPLAZAMIENTO DE 1 ===== */
+/* ===== CARRUSEL DE SHORTS ===== */
 .shorts {
     padding: 70px 0 50px;
     position: relative;
@@ -641,7 +639,7 @@ body {
     padding: 15px 0;
 }
 
-/* Elementos del carrusel de shorts - CORREGIDO PARA 4 VISIBLES */
+/* Elementos del carrusel de shorts */
 .short-item {
     background: transparent;
     border-radius: 12px;
@@ -657,13 +655,6 @@ body {
     will-change: transform;
     transform: translateZ(0);
     -webkit-transform: translateZ(0);
-    transition: all 0.5s var(--ease-smooth); /* MISMO TIMING */
-}
-
-/* CORRECCIÓN 5: ANIMACIÓN IDÉNTICA A FEATURE CARDS */
-.short-item:hover {
-    transform: translateY(-8px); /* MISMA TRANSFORMACIÓN (sin translateZ) */
-    box-shadow: 0 15px 30px rgba(255, 0, 255, 0.2); /* MISMA SOMBRA */
 }
 
 /* Contenedor interno para el contenido del short */
@@ -675,13 +666,17 @@ body {
     overflow: hidden;
     border: 1px solid var(--card-border);
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-    transition: all 0.5s var(--ease-smooth); /* MISMO TIMING */
+    transition: all 0.5s var(--ease-smooth);
     position: relative;
-    will-change: transform, box-shadow; /* MISMA OPTIMIZACIÓN */
+    will-change: transform, box-shadow;
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
 }
 
+/* CORRECCIÓN CRÍTICA: ANIMACIÓN IDÉNTICA A FEATURE CARDS */
 .short-item:hover .short-item-content {
-    box-shadow: 0 20px 40px rgba(255, 0, 255, 0.25);
+    transform: translateY(-8px) translateZ(0);
+    box-shadow: 0 15px 30px rgba(255, 0, 255, 0.2);
     border-color: rgba(255, 0, 255, 0.4);
 }
 
@@ -701,7 +696,7 @@ body {
     box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
 }
 
-/* Contenedor del video - ocupando todo el espacio */
+/* Contenedor del video */
 .short-item .short-video {
     flex: 1;
     position: relative;
@@ -711,7 +706,6 @@ body {
     overflow: hidden;
 }
 
-/* CORRECCIÓN: Sin zoom en shorts - solo efectos sutiles */
 .short-item iframe {
     position: absolute;
     top: 0;
@@ -772,7 +766,7 @@ body {
     opacity: 0.8;
 }
 
-/* ===== CARRUSEL DE CANALES - 5 VISIBLES, DESPLAZAMIENTO DE 1 ===== */
+/* ===== CARRUSEL DE CANALES ===== */
 .channels {
     padding: 70px 0;
     background: rgba(26, 10, 31, 0.7);
@@ -808,7 +802,7 @@ body {
     padding: 15px 0;
 }
 
-/* Elementos del carrusel de canales - CORREGIDO PARA 5 VISIBLES */
+/* Elementos del carrusel de canales */
 .channel-item {
     background: var(--card-bg);
     border-radius: 15px;
@@ -825,10 +819,12 @@ body {
     will-change: transform, box-shadow;
     flex: 0 0 calc(20% - 16px);
     max-width: calc(20% - 16px);
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
 }
 
 .channel-item:hover {
-    transform: translateY(-8px);
+    transform: translateY(-8px) translateZ(0);
     box-shadow: 0 15px 30px rgba(255, 0, 255, 0.2);
     border-color: rgba(255, 0, 255, 0.4);
 }
@@ -1041,7 +1037,7 @@ body {
     right: 0;
 }
 
-/* Indicadores del carrusel - CORREGIDO PARA INTEGRARSE CON LA LUZ */
+/* Indicadores del carrusel */
 .carousel-indicators {
     display: flex;
     justify-content: center;
@@ -1051,7 +1047,6 @@ body {
     z-index: 5;
 }
 
-/* Indicadores específicos para shorts - MÁS CERCA Y MEJOR INTEGRADOS */
 .shorts-indicators {
     margin-top: 5px;
     padding-top: 15px;
@@ -1090,7 +1085,7 @@ body {
     transform: scale(1.1);
 }
 
-/* ===== CARRUSEL DE RESEÑAS COMPACTADO - REDUCIDO ESPACIO ===== */
+/* ===== CARRUSEL DE RESEÑAS ===== */
 .reviews {
     padding: 70px 0;
     background: rgba(26, 10, 31, 0.6);
@@ -1205,7 +1200,7 @@ body {
     padding: 5px 0;
 }
 
-/* Controles del carrusel mejorados */
+/* Controles del carrusel */
 .carousel-controls {
     display: flex;
     justify-content: space-between;
@@ -1270,7 +1265,7 @@ body {
     transform: scale(1.1);
 }
 
-/* Estilos de la sección de contacto - REDUCIDO ESPACIO */
+/* Estilos de la sección de contacto */
 .contact {
     padding: 70px 0;
     text-align: center;
@@ -1381,7 +1376,7 @@ body {
     letter-spacing: 0.5px;
 }
 
-/* ===== RESPONSIVE - CORREGIDO PARA DESPLAZAMIENTO DE 1 ===== */
+/* ===== RESPONSIVE ===== */
 
 /* Desktop grande (más de 1200px) */
 @media (min-width: 1200px) {
@@ -1425,7 +1420,7 @@ body {
         padding: 0 30px;
     }
     
-    /* SHORTS - Tablet: 2 elementos visibles, desplazamiento de 1 */
+    /* SHORTS - Tablet: 2 elementos visibles */
     .shorts-carousel-container,
     .channels-carousel-container {
         padding: 0 50px;
@@ -1436,7 +1431,7 @@ body {
         max-width: calc(50% - 10px);
     }
     
-    /* CANALES - Tablet: 2 elementos visibles, desplazamiento de 1 */
+    /* CANALES - Tablet: 2 elementos visibles */
     .channel-item {
         flex: 0 0 calc(50% - 10px);
         max-width: calc(50% - 10px);
@@ -1568,7 +1563,7 @@ body {
         height: 220px;
     }
     
-    /* SHORTS - Móvil: 1 elemento visible, desplazamiento de 1 */
+    /* SHORTS - Móvil: 1 elemento visible */
     .shorts-carousel-container,
     .channels-carousel-container {
         padding: 0 40px;
@@ -1586,7 +1581,7 @@ body {
         max-width: 100%;
     }
     
-    /* CANALES - Móvil: 1 elemento visible, desplazamiento de 1 */
+    /* CANALES - Móvil: 1 elemento visible */
     .channel-item {
         flex: 0 0 100%;
         max-width: 100%;
