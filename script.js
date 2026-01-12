@@ -289,7 +289,7 @@ class ScrollEffects {
     }
 }
 
-// ===== CARRUSEL DE SHORTS - CORREGIDO PERFECTAMENTE =====
+// ===== CARRUSEL DE SHORTS - 4 VISIBLES, DESPLAZAMIENTO DE 1 =====
 class ShortsCarousel {
     constructor() {
         this.track = document.querySelector('.shorts-carousel-track');
@@ -298,10 +298,11 @@ class ShortsCarousel {
         this.nextBtn = document.querySelector('.shorts .carousel-btn.next');
         this.indicators = document.querySelectorAll('.shorts .indicator');
         
-        this.currentIndex = 0;
-        this.itemsPerView = 4; // Desktop: 4 elementos
+        this.currentPosition = 0;
+        this.itemsPerView = 4; // Desktop: 4 elementos visibles
         this.totalItems = this.items.length;
-        this.totalPages = Math.ceil(this.totalItems / this.itemsPerView);
+        this.maxPosition = this.totalItems - this.itemsPerView; // Máxima posición (0 a 2)
+        this.gap = 25; // Gap entre elementos en px
         
         this.init();
     }
@@ -311,21 +312,24 @@ class ShortsCarousel {
         this.updateItemsPerView();
         
         // Configurar eventos
-        this.prevBtn.addEventListener('click', () => this.prev());
-        this.nextBtn.addEventListener('click', () => this.next());
+        this.prevBtn.addEventListener('click', () => this.move(-1));
+        this.nextBtn.addEventListener('click', () => this.move(1));
         
         this.indicators.forEach((indicator, index) => {
-            indicator.addEventListener('click', () => this.goToPage(index));
+            indicator.addEventListener('click', () => this.goToPosition(index));
         });
         
         // Evento de resize
         window.addEventListener('resize', () => {
             this.updateItemsPerView();
-            this.goToPage(this.currentIndex);
+            this.updateCarousel();
         });
         
         // Inicializar
         this.updateCarousel();
+        
+        // Agregar soporte táctil
+        this.addTouchSupport();
     }
     
     updateItemsPerView() {
@@ -338,13 +342,18 @@ class ShortsCarousel {
             this.itemsPerView = 1; // Móvil
         }
         
-        this.totalPages = Math.ceil(this.totalItems / this.itemsPerView);
+        this.maxPosition = Math.max(0, this.totalItems - this.itemsPerView);
+        
+        // Ajustar posición actual si es necesario
+        if (this.currentPosition > this.maxPosition) {
+            this.currentPosition = this.maxPosition;
+        }
     }
     
     updateCarousel() {
-        // Calcular desplazamiento
-        const itemWidth = this.items[0].offsetWidth + 25; // Ancho + gap
-        const translateX = -(this.currentIndex * this.itemsPerView * itemWidth);
+        // Calcular desplazamiento basado en un solo elemento
+        const itemWidth = this.items[0].offsetWidth;
+        const translateX = -(this.currentPosition * (itemWidth + this.gap));
         
         // Aplicar transformación
         this.track.style.transform = `translateX(${translateX}px)`;
@@ -358,38 +367,69 @@ class ShortsCarousel {
     
     updateIndicators() {
         this.indicators.forEach((indicator, index) => {
-            indicator.classList.toggle('active', index === this.currentIndex);
+            // Mapear posición a indicador (0, 1, 2 posiciones -> 0, 1, 2 indicadores)
+            indicator.classList.toggle('active', index === this.currentPosition);
         });
     }
     
     updateButtons() {
-        this.prevBtn.disabled = this.currentIndex === 0;
-        this.nextBtn.disabled = this.currentIndex >= this.totalPages - 1;
+        this.prevBtn.disabled = this.currentPosition === 0;
+        this.nextBtn.disabled = this.currentPosition >= this.maxPosition;
     }
     
-    prev() {
-        if (this.currentIndex > 0) {
-            this.currentIndex--;
+    move(direction) {
+        const newPosition = this.currentPosition + direction;
+        
+        if (newPosition >= 0 && newPosition <= this.maxPosition) {
+            this.currentPosition = newPosition;
             this.updateCarousel();
         }
     }
     
-    next() {
-        if (this.currentIndex < this.totalPages - 1) {
-            this.currentIndex++;
+    goToPosition(position) {
+        if (position >= 0 && position <= this.maxPosition) {
+            this.currentPosition = position;
             this.updateCarousel();
         }
     }
     
-    goToPage(pageIndex) {
-        if (pageIndex >= 0 && pageIndex < this.totalPages) {
-            this.currentIndex = pageIndex;
-            this.updateCarousel();
-        }
+    addTouchSupport() {
+        let startX = 0;
+        let currentX = 0;
+        let isDragging = false;
+        
+        this.track.addEventListener('touchstart', (e) => {
+            startX = e.touches[0].clientX;
+            currentX = startX;
+            isDragging = true;
+        });
+        
+        this.track.addEventListener('touchmove', (e) => {
+            if (!isDragging) return;
+            currentX = e.touches[0].clientX;
+        });
+        
+        this.track.addEventListener('touchend', () => {
+            if (!isDragging) return;
+            isDragging = false;
+            
+            const diff = startX - currentX;
+            const threshold = 50;
+            
+            if (Math.abs(diff) > threshold) {
+                if (diff > 0) {
+                    // Deslizamiento hacia la izquierda = siguiente
+                    this.move(1);
+                } else {
+                    // Deslizamiento hacia la derecha = anterior
+                    this.move(-1);
+                }
+            }
+        });
     }
 }
 
-// ===== CARRUSEL DE CANALES - CORREGIDO PERFECTAMENTE =====
+// ===== CARRUSEL DE CANALES - 5 VISIBLES, DESPLAZAMIENTO DE 1 =====
 class ChannelsCarousel {
     constructor() {
         this.track = document.querySelector('.channels-carousel-track');
@@ -398,10 +438,11 @@ class ChannelsCarousel {
         this.nextBtn = document.querySelector('.channels .carousel-btn.next');
         this.indicators = document.querySelectorAll('.channels .indicator');
         
-        this.currentIndex = 0;
-        this.itemsPerView = 5; // Desktop: 5 elementos
+        this.currentPosition = 0;
+        this.itemsPerView = 5; // Desktop: 5 elementos visibles
         this.totalItems = this.items.length;
-        this.totalPages = Math.ceil(this.totalItems / this.itemsPerView);
+        this.maxPosition = this.totalItems - this.itemsPerView; // Máxima posición (0 a 2)
+        this.gap = 25; // Gap entre elementos en px
         
         this.init();
     }
@@ -411,21 +452,24 @@ class ChannelsCarousel {
         this.updateItemsPerView();
         
         // Configurar eventos
-        this.prevBtn.addEventListener('click', () => this.prev());
-        this.nextBtn.addEventListener('click', () => this.next());
+        this.prevBtn.addEventListener('click', () => this.move(-1));
+        this.nextBtn.addEventListener('click', () => this.move(1));
         
         this.indicators.forEach((indicator, index) => {
-            indicator.addEventListener('click', () => this.goToPage(index));
+            indicator.addEventListener('click', () => this.goToPosition(index));
         });
         
         // Evento de resize
         window.addEventListener('resize', () => {
             this.updateItemsPerView();
-            this.goToPage(this.currentIndex);
+            this.updateCarousel();
         });
         
         // Inicializar
         this.updateCarousel();
+        
+        // Agregar soporte táctil
+        this.addTouchSupport();
     }
     
     updateItemsPerView() {
@@ -438,13 +482,18 @@ class ChannelsCarousel {
             this.itemsPerView = 1; // Móvil
         }
         
-        this.totalPages = Math.ceil(this.totalItems / this.itemsPerView);
+        this.maxPosition = Math.max(0, this.totalItems - this.itemsPerView);
+        
+        // Ajustar posición actual si es necesario
+        if (this.currentPosition > this.maxPosition) {
+            this.currentPosition = this.maxPosition;
+        }
     }
     
     updateCarousel() {
-        // Calcular desplazamiento
-        const itemWidth = this.items[0].offsetWidth + 25; // Ancho + gap
-        const translateX = -(this.currentIndex * this.itemsPerView * itemWidth);
+        // Calcular desplazamiento basado en un solo elemento
+        const itemWidth = this.items[0].offsetWidth;
+        const translateX = -(this.currentPosition * (itemWidth + this.gap));
         
         // Aplicar transformación
         this.track.style.transform = `translateX(${translateX}px)`;
@@ -458,82 +507,49 @@ class ChannelsCarousel {
     
     updateIndicators() {
         this.indicators.forEach((indicator, index) => {
-            indicator.classList.toggle('active', index === this.currentIndex);
+            // Mapear posición a indicador (0, 1, 2 posiciones -> 0, 1, 2 indicadores)
+            indicator.classList.toggle('active', index === this.currentPosition);
         });
     }
     
     updateButtons() {
-        this.prevBtn.disabled = this.currentIndex === 0;
-        this.nextBtn.disabled = this.currentIndex >= this.totalPages - 1;
+        this.prevBtn.disabled = this.currentPosition === 0;
+        this.nextBtn.disabled = this.currentPosition >= this.maxPosition;
     }
     
-    prev() {
-        if (this.currentIndex > 0) {
-            this.currentIndex--;
-            this.updateCarousel();
-        }
-    }
-    
-    next() {
-        if (this.currentIndex < this.totalPages - 1) {
-            this.currentIndex++;
-            this.updateCarousel();
-        }
-    }
-    
-    goToPage(pageIndex) {
-        if (pageIndex >= 0 && pageIndex < this.totalPages) {
-            this.currentIndex = pageIndex;
-            this.updateCarousel();
-        }
-    }
-}
-
-// ===== SOPORTE TÁCTIL PARA CARRUSELES =====
-class TouchSupport {
-    constructor() {
-        this.shortsTrack = document.querySelector('.shorts-carousel-track');
-        this.channelsTrack = document.querySelector('.channels-carousel-track');
+    move(direction) {
+        const newPosition = this.currentPosition + direction;
         
-        this.shortsCarousel = null;
-        this.channelsCarousel = null;
-        
-        this.init();
+        if (newPosition >= 0 && newPosition <= this.maxPosition) {
+            this.currentPosition = newPosition;
+            this.updateCarousel();
+        }
     }
     
-    init() {
-        // Esperar a que los carruseles se inicialicen
-        setTimeout(() => {
-            this.shortsCarousel = window.shortsCarousel;
-            this.channelsCarousel = window.channelsCarousel;
-            
-            if (this.shortsTrack && this.shortsCarousel) {
-                this.addTouchSupport(this.shortsTrack, this.shortsCarousel);
-            }
-            
-            if (this.channelsTrack && this.channelsCarousel) {
-                this.addTouchSupport(this.channelsTrack, this.channelsCarousel);
-            }
-        }, 100);
+    goToPosition(position) {
+        if (position >= 0 && position <= this.maxPosition) {
+            this.currentPosition = position;
+            this.updateCarousel();
+        }
     }
     
-    addTouchSupport(track, carousel) {
+    addTouchSupport() {
         let startX = 0;
         let currentX = 0;
         let isDragging = false;
         
-        track.addEventListener('touchstart', (e) => {
+        this.track.addEventListener('touchstart', (e) => {
             startX = e.touches[0].clientX;
             currentX = startX;
             isDragging = true;
         });
         
-        track.addEventListener('touchmove', (e) => {
+        this.track.addEventListener('touchmove', (e) => {
             if (!isDragging) return;
             currentX = e.touches[0].clientX;
         });
         
-        track.addEventListener('touchend', () => {
+        this.track.addEventListener('touchend', () => {
             if (!isDragging) return;
             isDragging = false;
             
@@ -543,10 +559,10 @@ class TouchSupport {
             if (Math.abs(diff) > threshold) {
                 if (diff > 0) {
                     // Deslizamiento hacia la izquierda = siguiente
-                    carousel.next();
+                    this.move(1);
                 } else {
                     // Deslizamiento hacia la derecha = anterior
-                    carousel.prev();
+                    this.move(-1);
                 }
             }
         });
@@ -777,11 +793,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const shortsCarousel = new ShortsCarousel();
     const channelsCarousel = new ChannelsCarousel();
     const reviewsCarousel = new ReviewsCarousel();
-    const touchSupport = new TouchSupport();
-    
-    // Hacer accesibles globalmente para el soporte táctil
-    window.shortsCarousel = shortsCarousel;
-    window.channelsCarousel = channelsCarousel;
     
     const channelsHoverEffects = new ChannelsHoverEffects();
     const hoverEffects = new HoverEffects();
