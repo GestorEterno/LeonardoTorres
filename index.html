@@ -12,7 +12,7 @@
     <!-- Fondo animado -->
     <canvas id="techBackground"></canvas>
     
-    <!-- Menú de navegación MEJORADO -->
+    <!-- Menú de navegación -->
     <nav class="navbar">
         <div class="nav-container">
             <a href="#" class="logo">
@@ -20,51 +20,7 @@
                 <span class="logo-subtitle">EDITOR PROFESIONAL</span>
             </a>
             
-            <!-- Botón hamburguesa a la derecha -->
-            <div class="hamburger right-align">
-                <span class="bar"></span>
-                <span class="bar"></span>
-                <span class="bar"></span>
-            </div>
-            
-            <!-- Menú lateral derecho -->
-            <div class="nav-overlay"></div>
-            <div class="nav-menu-mobile">
-                <div class="mobile-menu-header">
-                    <div class="mobile-logo">
-                        <span>LEONARDO TORRES</span>
-                        <small>EDITOR PROFESIONAL</small>
-                    </div>
-                    <button class="close-menu">&times;</button>
-                </div>
-                <ul class="mobile-nav-list">
-                    <li><a href="#inicio" class="nav-link">INICIO</a></li>
-                    <li><a href="#servicios" class="nav-link">SERVICIOS</a></li>
-                    <li><a href="#portafolio" class="nav-link">PORTAFOLIO</a></li>
-                    <li><a href="#shorts" class="nav-link">SHORTS</a></li>
-                    <li><a href="#canales" class="nav-link">CANALES</a></li>
-                    <li><a href="#reseñas" class="nav-link">RESEÑAS</a></li>
-                    <li><a href="#contacto" class="nav-link">CONTACTO</a></li>
-                </ul>
-                
-                <div class="mobile-social">
-                    <a href="https://youtube.com/@leowito?si=2_TUZERm6OCIiy5T" target="_blank" class="mobile-social-btn">
-                        <i class="fab fa-youtube"></i>
-                    </a>
-                    <a href="https://www.facebook.com/share/1AHrg7XrAT/" target="_blank" class="mobile-social-btn">
-                        <i class="fab fa-facebook-f"></i>
-                    </a>
-                    <a href="https://x.com/LeonardoXtra" target="_blank" class="mobile-social-btn">
-                        <i class="fab fa-twitter"></i>
-                    </a>
-                    <a href="https://www.instagram.com/leonardohanmafit?igsh=MWlmNDFqbjg2dGQ2MA==" target="_blank" class="mobile-social-btn">
-                        <i class="fab fa-instagram"></i>
-                    </a>
-                </div>
-            </div>
-            
-            <!-- Menú escritorio -->
-            <ul class="nav-menu desktop-only">
+            <ul class="nav-menu">
                 <li><a href="#inicio" class="nav-link">INICIO</a></li>
                 <li><a href="#servicios" class="nav-link">SERVICIOS</a></li>
                 <li><a href="#portafolio" class="nav-link">PORTAFOLIO</a></li>
@@ -73,6 +29,12 @@
                 <li><a href="#reseñas" class="nav-link">RESEÑAS</a></li>
                 <li><a href="#contacto" class="nav-link">CONTACTO</a></li>
             </ul>
+            
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
         </div>
     </nav>
     
@@ -90,16 +52,10 @@
                         Especializado en edición de video para gaming, documentales 
                         y contenido creativo de alta calidad.
                     </p>
-                    <div class="hero-buttons">
-                        <a href="#contacto" class="cta-button">
-                            <span>CONTÁCTAME</span>
-                            <i class="fas fa-chevron-right"></i>
-                        </a>
-                        <a href="#portafolio" class="cta-button portfolio-btn">
-                            <span>VER PORTAFOLIO</span>
-                            <i class="fas fa-video"></i>
-                        </a>
-                    </div>
+                    <a href="#contacto" class="cta-button">
+                        <span>CONTÁCTAME</span>
+                        <i class="fas fa-chevron-right"></i>
+                    </a>
                 </div>
                 
                 <div class="hero-video">
@@ -122,13 +78,12 @@
         </div>
     </section>
     
-    <!-- Sección de características - CARRUSEL EN MÓVIL -->
+    <!-- Sección de características -->
     <section class="features" id="servicios">
         <div class="container">
             <h2 class="section-title">CALIDAD PROFESIONAL EN <span class="gradient-text">CADA PROYECTO</span></h2>
             
-            <!-- Grid para escritorio -->
-            <div class="features-grid desktop-only">
+            <div class="features-grid">
                 <div class="feature-card">
                     <div class="feature-icon">
                         <i class="fas fa-crown"></i>
@@ -161,86 +116,16 @@
                     <p>Diseño y optimizo pistas de audio para crear una experiencia inmersiva y de alta fidelidad.</p>
                 </div>
             </div>
-            
-            <!-- Carrusel para móvil -->
-            <div class="features-carousel-container mobile-only">
-                <div class="carousel-container">
-                    <div class="carousel-track features-carousel-track">
-                        <!-- Slide 1 -->
-                        <div class="carousel-slide">
-                            <div class="feature-card">
-                                <div class="feature-icon">
-                                    <i class="fas fa-crown"></i>
-                                </div>
-                                <h3>EDICIÓN PREMIUM</h3>
-                                <p>Cada video es tratado con el máximo cuidado y atención a los detalles para garantizar resultados excepcionales.</p>
-                            </div>
-                        </div>
-                        
-                        <!-- Slide 2 -->
-                        <div class="carousel-slide">
-                            <div class="feature-card">
-                                <div class="feature-icon">
-                                    <i class="fas fa-bolt"></i>
-                                </div>
-                                <h3>ENTREGA RÁPIDA</h3>
-                                <p>Optimizo mi flujo de trabajo para ofrecer resultados de alta calidad en plazos ajustados sin comprometer la excelencia.</p>
-                            </div>
-                        </div>
-                        
-                        <!-- Slide 3 -->
-                        <div class="carousel-slide">
-                            <div class="feature-card">
-                                <div class="feature-icon">
-                                    <i class="fas fa-video"></i>
-                                </div>
-                                <h3>EFECTOS VISUALES</h3>
-                                <p>Incorporo efectos y transiciones innovadoras que mejoran la narrativa visual de cada proyecto.</p>
-                            </div>
-                        </div>
-                        
-                        <!-- Slide 4 -->
-                        <div class="carousel-slide">
-                            <div class="feature-card">
-                                <div class="feature-icon">
-                                    <i class="fas fa-headphones"></i>
-                                </div>
-                                <h3>AUDIO PROFESIONAL</h3>
-                                <p>Diseño y optimizo pistas de audio para crear una experiencia inmersiva y de alta fidelidad.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Controles del carrusel -->
-                <div class="carousel-controls">
-                    <button class="carousel-btn prev" aria-label="Anterior">
-                        <i class="fas fa-chevron-left"></i>
-                    </button>
-                    
-                    <div class="carousel-dots">
-                        <span class="dot active" data-index="0"></span>
-                        <span class="dot" data-index="1"></span>
-                        <span class="dot" data-index="2"></span>
-                        <span class="dot" data-index="3"></span>
-                    </div>
-                    
-                    <button class="carousel-btn next" aria-label="Siguiente">
-                        <i class="fas fa-chevron-right"></i>
-                    </button>
-                </div>
-            </div>
         </div>
     </section>
     
-    <!-- Sección de portafolio - CARRUSEL EN MÓVIL -->
+    <!-- Sección de portafolio - 6 VIDEOS EN 3 FILAS DE 2 -->
     <section class="portfolio" id="portafolio">
         <div class="container">
             <h2 class="section-title">PORTAFOLIO <span class="gradient-text">DE TRABAJOS</span></h2>
             <p class="section-subtitle">Una selección de mis proyectos más recientes y destacados</p>
             
-            <!-- Grid para escritorio -->
-            <div class="portfolio-grid desktop-only">
+            <div class="portfolio-grid">
                 <!-- Fila 1 -->
                 <div class="portfolio-item">
                     <div class="video-label">
@@ -249,7 +134,7 @@
                     </div>
                     <div class="video-wrapper">
                         <iframe 
-                            src="https://www.youtube.com/embed/AWvRkUa7wuI" 
+                            src="https://drive.google.com/file/d/1fltOOqM74gEBWLYk9V5MYyvoTJoNWqEO/preview" 
                             allow="autoplay; encrypted-media; fullscreen"
                             title="Roblox - Roba un Brainrot">
                         </iframe>
@@ -328,286 +213,93 @@
                     </div>
                 </div>
             </div>
-            
-            <!-- Carrusel para móvil -->
-            <div class="portfolio-carousel-container mobile-only">
-                <div class="carousel-container">
-                    <div class="carousel-track portfolio-carousel-track">
-                        <!-- Slide 1 -->
-                        <div class="carousel-slide">
-                            <div class="portfolio-item">
-                                <div class="video-label">
-                                    <span class="video-badge">ROBLOX</span>
-                                    <h3 class="video-title">PixelHero</h3>
-                                </div>
-                                <div class="video-wrapper">
-                                    <iframe 
-                                        src="https://www.youtube.com/embed/AWvRkUa7wuI" 
-                                        allow="autoplay; encrypted-media; fullscreen"
-                                        title="Roblox - Roba un Brainrot">
-                                    </iframe>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Slide 2 -->
-                        <div class="carousel-slide">
-                            <div class="portfolio-item">
-                                <div class="video-label">
-                                    <span class="video-badge">GUÍA</span>
-                                    <h3 class="video-title">Video Guía</h3>
-                                </div>
-                                <div class="video-wrapper">
-                                    <iframe 
-                                        src="https://www.youtube.com/embed/FOVkyj1ykHs" 
-                                        allow="autoplay; encrypted-media; fullscreen"
-                                        title="Video Guía">
-                                    </iframe>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Slide 3 -->
-                        <div class="carousel-slide">
-                            <div class="portfolio-item">
-                                <div class="video-label">
-                                    <span class="video-badge">GAMEPLAY</span>
-                                    <h3 class="video-title">ELKAIDRAM Compilation</h3>
-                                </div>
-                                <div class="video-wrapper">
-                                    <iframe 
-                                        src="https://www.youtube.com/embed/L7O-o-ZwEXI" 
-                                        allow="autoplay; encrypted-media; fullscreen"
-                                        title="ELKAIDRAM - Gameplay">
-                                    </iframe>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Slide 4 -->
-                        <div class="carousel-slide">
-                            <div class="portfolio-item">
-                                <div class="video-label">
-                                    <span class="video-badge">MINECRAFT</span>
-                                    <h3 class="video-title">MORDYTO Adventure</h3>
-                                </div>
-                                <div class="video-wrapper">
-                                    <iframe 
-                                        src="https://www.youtube.com/embed/5la0PyjYERc" 
-                                        allow="autoplay; encrypted-media; fullscreen"
-                                        title="MORDYTO - Minecraft">
-                                    </iframe>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Slide 5 -->
-                        <div class="carousel-slide">
-                            <div class="portfolio-item">
-                                <div class="video-label">
-                                    <span class="video-badge">DOCUMENTAL</span>
-                                    <h3 class="video-title">LOCOFER 3 Edit</h3>
-                                </div>
-                                <div class="video-wrapper">
-                                    <iframe 
-                                        src="https://www.youtube.com/embed/pG7w0IOLjAc" 
-                                        allow="autoplay; encrypted-media; fullscreen"
-                                        title="LOCOFER 3 Edit">
-                                    </iframe>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Slide 6 -->
-                        <div class="carousel-slide">
-                            <div class="portfolio-item">
-                                <div class="video-label">
-                                    <span class="video-badge">MINECRAFT</span>
-                                    <h3 class="video-title">Minecraft Adventure</h3>
-                                </div>
-                                <div class="video-wrapper">
-                                    <iframe 
-                                        src="https://www.youtube.com/embed/uoGNqLckIw4" 
-                                        allow="autoplay; encrypted-media; fullscreen"
-                                        title="Minecraft Adventure">
-                                    </iframe>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Controles del carrusel -->
-                <div class="carousel-controls">
-                    <button class="carousel-btn prev" aria-label="Anterior">
-                        <i class="fas fa-chevron-left"></i>
-                    </button>
-                    
-                    <div class="carousel-dots">
-                        <span class="dot active" data-index="0"></span>
-                        <span class="dot" data-index="1"></span>
-                        <span class="dot" data-index="2"></span>
-                        <span class="dot" data-index="3"></span>
-                        <span class="dot" data-index="4"></span>
-                        <span class="dot" data-index="5"></span>
-                    </div>
-                    
-                    <button class="carousel-btn next" aria-label="Siguiente">
-                        <i class="fas fa-chevron-right"></i>
-                    </button>
-                </div>
-            </div>
         </div>
     </section>
     
-    <!-- Sección de Shorts - CARRUSEL EN MÓVIL -->
+    <!-- Sección de Shorts - MODIFICADA PARA TIKTOK -->
     <section class="shorts" id="shorts">
         <div class="container">
             <h2 class="section-title">SHORTS <span class="gradient-text">VERTICALES</span></h2>
             <p class="section-subtitle">Contenido optimizado para TikTok/Reels/Shorts en formato 9:16</p>
             
-            <!-- Grid para escritorio -->
-            <div class="shorts-grid desktop-only">
-                <!-- Short 1 -->
+            <!-- Grid de 4 shorts -->
+            <div class="shorts-grid">
+                <!-- Short 1: TikTok 1 -->
                 <div class="short-item">
-                    <div class="short-badge">Valorant</div>
+                    <div class="short-badge">TIKTOK</div>
                     <div class="video-wrapper short-video">
                         <iframe 
-                            src="https://www.youtube.com/embed/4D11x6A2nw4" 
-                            allow="autoplay; encrypted-media; fullscreen"
-                            title="Valorant Short">
+                            src="https://www.tiktok.com/embed/v2/7345996918543641862" 
+                            allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
+                            title="TikTok Short 1"
+                            scrolling="no"
+                            frameborder="0"
+                            allowfullscreen>
                         </iframe>
                     </div>
                 </div>
                 
-                <!-- Short 2 -->
+                <!-- Short 2: TikTok 2 -->
                 <div class="short-item">
-                    <div class="short-badge">Valorant</div>
+                    <div class="short-badge">TIKTOK</div>
                     <div class="video-wrapper short-video">
                         <iframe 
-                            src="https://www.youtube.com/embed/krYxyC0nz9M" 
-                            allow="autoplay; encrypted-media; fullscreen"
-                            title="Roblox Short">
+                            src="https://www.tiktok.com/embed/v2/7346000456776346885" 
+                            allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
+                            title="TikTok Short 2"
+                            scrolling="no"
+                            frameborder="0"
+                            allowfullscreen>
                         </iframe>
                     </div>
                 </div>
                 
-                <!-- Short 3 -->
+                <!-- Short 3: Repite TikTok 1 -->
                 <div class="short-item">
-                    <div class="short-badge">Valorant</div>
+                    <div class="short-badge">TIKTOK</div>
                     <div class="video-wrapper short-video">
                         <iframe 
-                            src="https://www.youtube.com/embed/8Izl3zGsOYk" 
-                            allow="autoplay; encrypted-media; fullscreen"
-                            title="Gameplay Short">
+                            src="https://www.tiktok.com/embed/v2/7345996918543641862" 
+                            allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
+                            title="TikTok Short 1 (Repetido)"
+                            scrolling="no"
+                            frameborder="0"
+                            allowfullscreen>
                         </iframe>
                     </div>
                 </div>
                 
-                <!-- Short 4 -->
+                <!-- Short 4: Repite TikTok 2 -->
                 <div class="short-item">
-                    <div class="short-badge">Roblox</div>
+                    <div class="short-badge">TIKTOK</div>
                     <div class="video-wrapper short-video">
                         <iframe 
-                            src="https://www.youtube.com/embed/bJP56Z01KJU" 
-                            allow="autoplay; encrypted-media; fullscreen"
-                            title="YouTube Short">
+                            src="https://www.tiktok.com/embed/v2/7346000456776346885" 
+                            allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
+                            title="TikTok Short 2 (Repetido)"
+                            scrolling="no"
+                            frameborder="0"
+                            allowfullscreen>
                         </iframe>
                     </div>
                 </div>
             </div>
             
-            <!-- Carrusel para móvil -->
-            <div class="shorts-carousel-container mobile-only">
-                <div class="carousel-container">
-                    <div class="carousel-track shorts-carousel-track">
-                        <!-- Slide 1 -->
-                        <div class="carousel-slide">
-                            <div class="short-item">
-                                <div class="short-badge">Valorant</div>
-                                <div class="video-wrapper short-video">
-                                    <iframe 
-                                        src="https://www.youtube.com/embed/4D11x6A2nw4" 
-                                        allow="autoplay; encrypted-media; fullscreen"
-                                        title="Valorant Short">
-                                    </iframe>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Slide 2 -->
-                        <div class="carousel-slide">
-                            <div class="short-item">
-                                <div class="short-badge">Valorant</div>
-                                <div class="video-wrapper short-video">
-                                    <iframe 
-                                        src="https://www.youtube.com/embed/krYxyC0nz9M" 
-                                        allow="autoplay; encrypted-media; fullscreen"
-                                        title="Roblox Short">
-                                    </iframe>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Slide 3 -->
-                        <div class="carousel-slide">
-                            <div class="short-item">
-                                <div class="short-badge">Valorant</div>
-                                <div class="video-wrapper short-video">
-                                    <iframe 
-                                        src="https://www.youtube.com/embed/8Izl3zGsOYk" 
-                                        allow="autoplay; encrypted-media; fullscreen"
-                                        title="Gameplay Short">
-                                    </iframe>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Slide 4 -->
-                        <div class="carousel-slide">
-                            <div class="short-item">
-                                <div class="short-badge">Roblox</div>
-                                <div class="video-wrapper short-video">
-                                    <iframe 
-                                        src="https://www.youtube.com/embed/bJP56Z01KJU" 
-                                        allow="autoplay; encrypted-media; fullscreen"
-                                        title="YouTube Short">
-                                    </iframe>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Controles del carrusel -->
-                <div class="carousel-controls">
-                    <button class="carousel-btn prev" aria-label="Anterior">
-                        <i class="fas fa-chevron-left"></i>
-                    </button>
-                    
-                    <div class="carousel-dots">
-                        <span class="dot active" data-index="0"></span>
-                        <span class="dot" data-index="1"></span>
-                        <span class="dot" data-index="2"></span>
-                        <span class="dot" data-index="3"></span>
-                    </div>
-                    
-                    <button class="carousel-btn next" aria-label="Siguiente">
-                        <i class="fas fa-chevron-right"></i>
-                    </button>
-                </div>
+            <!-- Nota sobre TikTok -->
+            <div class="shorts-note">
+                <p><i class="fas fa-info-circle"></i> Nota: Los videos de TikTok pueden requerir interacción del usuario para reproducirse debido a políticas de autoplay.</p>
             </div>
         </div>
     </section>
     
-    <!-- Sección de Canales - CARRUSEL EN MÓVIL -->
+    <!-- Sección de Canales - 5 SIEMPRE VISIBLES -->
     <section class="channels" id="canales">
         <div class="container">
             <h2 class="section-title">CANALES <span class="gradient-text">CON LOS QUE COLABORO</span></h2>
             <p class="section-subtitle">Trabajo directo con estos increíbles creadores de contenido</p>
             
-            <!-- Grid para escritorio -->
-            <div class="channels-grid desktop-only">
+            <!-- Grid de 5 canales siempre visibles -->
+            <div class="channels-grid">
                 <!-- Canal 1: GROSSO MODO -->
                 <a href="https://www.youtube.com/@GROSSO_MODO" target="_blank" class="channel-item">
                     <div class="channel-avatar">
@@ -718,140 +410,16 @@
                     </div>
                 </a>
             </div>
-            
-            <!-- Carrusel para móvil -->
-            <div class="channels-carousel-container mobile-only">
-                <div class="carousel-container">
-                    <div class="carousel-track channels-carousel-track">
-                        <!-- Slide 1 (2 canales por slide) -->
-                        <div class="carousel-slide">
-                            <div class="channels-slide-inner">
-                                <a href="https://www.youtube.com/@GROSSO_MODO" target="_blank" class="channel-item">
-                                    <div class="channel-avatar">
-                                        <div class="avatar-circle">
-                                            <img src="Imagenes/canales/GROSSO MODO.jpg" alt="GROSSO MODO" class="channel-image">
-                                            <span class="channel-fallback">GM</span>
-                                        </div>
-                                        <div class="online-dot active"></div>
-                                    </div>
-                                    <div class="channel-info">
-                                        <h3 class="channel-name">GROSSO MODO</h3>
-                                        <div class="channel-subs">
-                                            <i class="fas fa-users"></i>
-                                            <span>4.2K suscriptores</span>
-                                        </div>
-                                    </div>
-                                </a>
-                                
-                                <a href="https://www.youtube.com/@PixelHeroRBX/videos" target="_blank" class="channel-item">
-                                    <div class="channel-avatar">
-                                        <div class="avatar-circle">
-                                            <img src="Imagenes/canales/PixelHero.jpg" alt="PixelHero RBX" class="channel-image">
-                                            <span class="channel-fallback">PH</span>
-                                        </div>
-                                        <div class="online-dot"></div>
-                                    </div>
-                                    <div class="channel-info">
-                                        <h3 class="channel-name">PixelHero</h3>
-                                        <div class="channel-subs">
-                                            <i class="fas fa-users"></i>
-                                            <span>Canal Nuevo</span>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-                        
-                        <!-- Slide 2 -->
-                        <div class="carousel-slide">
-                            <div class="channels-slide-inner">
-                                <a href="https://www.youtube.com/@elkaidram" target="_blank" class="channel-item">
-                                    <div class="channel-avatar">
-                                        <div class="avatar-circle">
-                                            <img src="Imagenes/canales/ElKaidram.jpg" alt="ELKAIDRAM" class="channel-image">
-                                            <span class="channel-fallback">EK</span>
-                                        </div>
-                                        <div class="online-dot active"></div>
-                                    </div>
-                                    <div class="channel-info">
-                                        <h3 class="channel-name">ELKAIDRAM</h3>
-                                        <div class="channel-subs">
-                                            <i class="fas fa-users"></i>
-                                            <span>Canal Nuevo</span>
-                                        </div>
-                                    </div>
-                                </a>
-                                
-                                <a href="https://www.youtube.com/@Mordyto/videos" target="_blank" class="channel-item">
-                                    <div class="channel-avatar">
-                                        <div class="avatar-circle">
-                                            <img src="Imagenes/canales/Mordyto.jpg" alt="MORDYTO" class="channel-image">
-                                            <span class="channel-fallback">MO</span>
-                                        </div>
-                                        <div class="online-dot"></div>
-                                    </div>
-                                    <div class="channel-info">
-                                        <h3 class="channel-name">MORDYTO</h3>
-                                        <div class="channel-subs">
-                                            <i class="fas fa-users"></i>
-                                            <span>12K suscriptores</span>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-                        
-                        <!-- Slide 3 -->
-                        <div class="carousel-slide">
-                            <div class="channels-slide-inner">
-                                <a href="https://www.youtube.com/@soyzer" target="_blank" class="channel-item single-item">
-                                    <div class="channel-avatar">
-                                        <div class="avatar-circle">
-                                            <img src="Imagenes/canales/soyzer.jpg" alt="SOYZER" class="channel-image">
-                                            <span class="channel-fallback">SZ</span>
-                                        </div>
-                                        <div class="online-dot active"></div>
-                                    </div>
-                                    <div class="channel-info">
-                                        <h3 class="channel-name">SOYZER</h3>
-                                        <div class="channel-subs">
-                                            <i class="fas fa-users"></i>
-                                            <span>42K suscriptores</span>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Controles del carrusel -->
-                <div class="carousel-controls">
-                    <button class="carousel-btn prev" aria-label="Anterior">
-                        <i class="fas fa-chevron-left"></i>
-                    </button>
-                    
-                    <div class="carousel-dots">
-                        <span class="dot active" data-index="0"></span>
-                        <span class="dot" data-index="1"></span>
-                        <span class="dot" data-index="2"></span>
-                    </div>
-                    
-                    <button class="carousel-btn next" aria-label="Siguiente">
-                        <i class="fas fa-chevron-right"></i>
-                    </button>
-                </div>
-            </div>
         </div>
     </section>
     
-    <!-- Sección de Reseñas - MANTENER ESTRUCTURA EXISTENTE -->
+    <!-- Sección de Reseñas - NUEVA ESTRUCTURA COMPACTA -->
     <section class="reviews" id="reseñas">
         <div class="container">
             <h2 class="section-title">RESEÑAS <span class="gradient-text">DE CLIENTES</span></h2>
             <p class="section-subtitle">Lo que dicen los creadores con los que he trabajado</p>
             
-            <!-- Contenedor del carrusel -->
+            <!-- Contenedor del carrusel COMPACTADO -->
             <div class="reviews-carousel-container">
                 <div class="reviews-carousel-track">
                     <!-- Tarjeta 1 - GROSSO MODO -->
@@ -888,7 +456,7 @@
                             </div>
                         </div>
                         <p class="review-text">
-                            "Leonardo transformó completamente mi contenido de Roblox. Su atención al detalle en efectos visuales es impresionante y la entrega siempre es puntual."
+                            "Leonardo transformó completamente nuestro contenido de gaming. Su atención al detalle en efectos visuales es impresionante y la entrega siempre es puntual."
                         </p>
                     </div>
                     
@@ -926,7 +494,7 @@
                             </div>
                         </div>
                         <p class="review-text">
-                            "La rapidez de entrega sin sacrificar calidad es increíble. Edita los videos con efectos complejos en tiempo récord. Muy profesional."
+                            "La rapidez de entrega sin sacrificar calidad es increíble. Editó un documental de 30 minutos con efectos complejos en tiempo récord. Muy profesional."
                         </p>
                     </div>
                     
@@ -945,7 +513,7 @@
                             </div>
                         </div>
                         <p class="review-text">
-                            "Trabajé en varios videos con Leonardo y su edición siempre eleva el contenido a otro nivel. Muy profesional y creativo. Los efectos de transición son increíbles."
+                            "Trabajé en varios proyectos de gaming con Leonardo y su edición siempre eleva el contenido. Muy profesional y creativo. Los efectos de transición son increíbles."
                         </p>
                     </div>
                 </div>
@@ -980,11 +548,9 @@
                 <p class="contact-description">
                     Trabajemos juntos para crear videos que cautiven a tu audiencia y destaquen tu creatividad.
                 </p>
-                <a href="https://x.com/LeonardoXtra" 
-                   target="_blank" 
-                   class="cta-button large twitter-btn">
-                    <span>ESCRÍBEME EN X</span>
-                    <i class="fab fa-twitter"></i>
+                <a href="mailto:contacto@leonardotorres.com" class="cta-button large">
+                    <span>CONTÁCTAME AHORA</span>
+                    <i class="fas fa-paper-plane"></i>
                 </a>
             </div>
         </div>
