@@ -74,7 +74,7 @@ body {
     z-index: 1;
 }
 
-/* Estilos del menú de navegación - COMPACTO CON LOGO CIRCULAR GRANDE */
+/* Estilos del menú de navegación - LOGO CUADRADO/RECTANGULAR SIN BORDE CIRCULAR */
 .navbar {
     position: fixed;
     top: 0;
@@ -107,35 +107,38 @@ body {
     position: relative;
 }
 
+/* CORRECCIÓN 1: LOGO RECTANGULAR SIN BORDE CIRCULAR */
 .logo-image {
     width: 55px;
     height: 55px;
-    border-radius: 50%;
+    /* ELIMINADO: border-radius: 50%; border: 3px solid var(--accent-color); */
+    border-radius: 8px; /* Esquinas ligeramente redondeadas */
     object-fit: cover;
-    border: 3px solid var(--accent-color);
-    box-shadow: 0 0 15px rgba(255, 0, 255, 0.4);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     transition: all 0.4s var(--ease-smooth);
     flex-shrink: 0;
+    border: 1px solid rgba(255, 0, 255, 0.1);
 }
 
 .logo:hover .logo-image {
-    transform: rotate(10deg) scale(1.05);
-    box-shadow: 0 0 20px rgba(255, 0, 255, 0.7);
+    transform: scale(1.05);
+    box-shadow: 0 6px 18px rgba(255, 0, 255, 0.3);
 }
 
+/* CORRECCIÓN 2: PLACEHOLDER RECTANGULAR SIN BORDE CIRCULAR */
 .logo-placeholder {
     display: none;
     width: 55px;
     height: 55px;
     background: var(--accent-gradient);
-    border-radius: 50%;
+    border-radius: 8px; /* Mismo que logo-image */
     align-items: center;
     justify-content: center;
     color: white;
     font-size: 1.5rem;
     flex-shrink: 0;
-    border: 3px solid rgba(255, 0, 255, 0.3);
-    box-shadow: 0 0 15px rgba(255, 0, 255, 0.3);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 0, 255, 0.1);
 }
 
 .logo-text-container {
@@ -537,6 +540,7 @@ body {
     gap: 25px;
 }
 
+/* CORRECCIÓN 3: ANIMACIÓN PERFECTA EN FEATURE CARDS (REFERENCIA) */
 .feature-card {
     background: var(--card-bg);
     border-radius: 15px;
@@ -588,19 +592,20 @@ body {
     gap: 30px;
 }
 
+/* CORRECCIÓN 4: ANIMACIÓN IDÉNTICA A FEATURE CARDS */
 .portfolio-item {
     background: var(--card-bg);
     border-radius: 15px;
     overflow: hidden;
     border: 1px solid var(--card-border);
-    transition: all 0.5s var(--ease-smooth); /* Transición unificada */
+    transition: all 0.5s var(--ease-smooth); /* MISMO TIMING */
     position: relative;
-    will-change: transform, box-shadow;
+    will-change: transform, box-shadow; /* MISMA OPTIMIZACIÓN */
 }
 
 .portfolio-item:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 15px 30px rgba(255, 0, 255, 0.2);
+    transform: translateY(-8px); /* MISMA TRANSFORMACIÓN */
+    box-shadow: 0 15px 30px rgba(255, 0, 255, 0.2); /* MISMA SOMBRA */
 }
 
 /* ===== CARRUSEL DE SHORTS - 4 VISIBLES, DESPLAZAMIENTO DE 1 ===== */
@@ -652,11 +657,13 @@ body {
     will-change: transform;
     transform: translateZ(0);
     -webkit-transform: translateZ(0);
-    transition: all 0.5s var(--ease-smooth);
+    transition: all 0.5s var(--ease-smooth); /* MISMO TIMING */
 }
 
+/* CORRECCIÓN 5: ANIMACIÓN IDÉNTICA A FEATURE CARDS */
 .short-item:hover {
-    transform: translateY(-8px) translateZ(0);
+    transform: translateY(-8px); /* MISMA TRANSFORMACIÓN (sin translateZ) */
+    box-shadow: 0 15px 30px rgba(255, 0, 255, 0.2); /* MISMA SOMBRA */
 }
 
 /* Contenedor interno para el contenido del short */
@@ -668,8 +675,9 @@ body {
     overflow: hidden;
     border: 1px solid var(--card-border);
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-    transition: all 0.5s var(--ease-smooth);
+    transition: all 0.5s var(--ease-smooth); /* MISMO TIMING */
     position: relative;
+    will-change: transform, box-shadow; /* MISMA OPTIMIZACIÓN */
 }
 
 .short-item:hover .short-item-content {
