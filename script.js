@@ -1,4 +1,4 @@
-// Animación del fondo tecnológico - Red Neuronal Morado/Rosa
+// Animación del fondo tecnológico - VERSIÓN CORREGIDA PERFECTA
 class TechBackground {
     constructor() {
         this.canvas = document.getElementById('techBackground');
@@ -47,7 +47,8 @@ class TechBackground {
                 color: `rgba(255, 0, 255, ${Math.random() * 0.4 + 0.1})`,
                 originalX: null,
                 originalY: null,
-                oscillation: Math.random() * Math.PI * 2
+                oscillation: Math.random() * Math.PI * 2,
+                trailPositions: [] // Para rastros controlados
             });
         }
     }
@@ -58,7 +59,33 @@ class TechBackground {
         this.mouse.y = e.clientY - rect.top;
     }
     
+    clearCanvas() {
+        // En lugar de pintar un rectángulo transparente que causa acumulación,
+        // usamos un gradiente radial que cubre todo pero deja el fondo oscuro visible
+        const gradient = this.ctx.createRadialGradient(
+            this.canvas.width / 2, 
+            this.canvas.height / 2, 
+            0,
+            this.canvas.width / 2, 
+            this.canvas.height / 2, 
+            Math.max(this.canvas.width, this.canvas.height) / 1.5
+        );
+        
+        gradient.addColorStop(0, 'rgba(10, 10, 26, 0.15)'); // Muy transparente
+        gradient.addColorStop(0.5, 'rgba(10, 10, 26, 0.25)');
+        gradient.addColorStop(1, 'rgba(10, 10, 26, 0.4)');
+        
+        this.ctx.fillStyle = gradient;
+        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+        
+        // Añadimos un fondo base sólido muy sutil para evitar huecos negros
+        this.ctx.fillStyle = 'rgba(10, 10, 26, 0.02)';
+        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+    }
+    
     drawParticles() {
+        const currentTime = Date.now();
+        
         // Dibujar conexiones primero
         for (let i = 0; i < this.particles.length; i++) {
             for (let j = i + 1; j < this.particles.length; j++) {
@@ -78,24 +105,36 @@ class TechBackground {
             }
         }
         
-        // Dibujar partículas
+        // Dibujar partículas con un sistema de rastro controlado
         for (let particle of this.particles) {
+            // Actualizar oscilación
             particle.oscillation += 0.02;
             const oscillationX = Math.sin(particle.oscillation) * 0.3;
             const oscillationY = Math.cos(particle.oscillation * 0.7) * 0.3;
             
+            // Guardar posición actual para el rastro
+            particle.trailPositions.unshift({x: particle.x, y: particle.y, time: currentTime});
+            
+            // Mantener solo las últimas 3 posiciones para el rastro
+            if (particle.trailPositions.length > 3) {
+                particle.trailPositions.pop();
+            }
+            
+            // Actualizar posición principal
             particle.x += particle.speedX + oscillationX;
             particle.y += particle.speedY + oscillationY;
             
+            // REBOTE MEJORADO: Suave pero sin quedar atrapado
             if (particle.x < 0 || particle.x > this.canvas.width) {
-                particle.speedX *= -0.98;
-                particle.x = Math.max(0, Math.min(this.canvas.width, particle.x));
+                particle.speedX *= -0.95; // Rebote suave
+                particle.x = Math.max(1, Math.min(this.canvas.width - 1, particle.x));
             }
             if (particle.y < 0 || particle.y > this.canvas.height) {
-                particle.speedY *= -0.98;
-                particle.y = Math.max(0, Math.min(this.canvas.height, particle.y));
+                particle.speedY *= -0.95;
+                particle.y = Math.max(1, Math.min(this.canvas.height - 1, particle.y));
             }
             
+            // Interacción con el mouse
             if (this.mouse.x && this.mouse.y) {
                 const dx = particle.x - this.mouse.x;
                 const dy = particle.y - this.mouse.y;
@@ -110,6 +149,24 @@ class TechBackground {
                 }
             }
             
+            // DIBUJAR RASTRO (muy sutil)
+            for (let i = 0; i < particle.trailPositions.length; i++) {
+                const trail = particle.trailPositions[i];
+                const age = currentTime - trail.time;
+                const fade = Math.max(0, 1 - (age / 200)); // Se desvanecen en 200ms
+                
+                if (fade > 0) {
+                    const trailSize = particle.size * (0.5 - i * 0.15);
+                    const trailOpacity = 0.1 * fade;
+                    
+                    this.ctx.beginPath();
+                    this.ctx.fillStyle = `rgba(255, 0, 255, ${trailOpacity})`;
+                    this.ctx.arc(trail.x, trail.y, trailSize, 0, Math.PI * 2);
+                    this.ctx.fill();
+                }
+            }
+            
+            // DIBUJAR PARTÍCULA PRINCIPAL (igual que antes)
             const gradient = this.ctx.createRadialGradient(
                 particle.x, particle.y, 0,
                 particle.x, particle.y, particle.size * 2
@@ -127,6 +184,7 @@ class TechBackground {
             this.ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
             this.ctx.fill();
             
+            // Punto de luz pequeño (sin dejar rastro)
             this.ctx.beginPath();
             this.ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
             this.ctx.arc(
@@ -141,13 +199,40 @@ class TechBackground {
     }
     
     animate() {
-        const gradient = this.ctx.createLinearGradient(0, 0, 0, this.canvas.height);
-        gradient.addColorStop(0, 'rgba(10, 10, 26, 0.1)');
-        gradient.addColorStop(1, 'rgba(26, 10, 31, 0.2)');
+        // LIMPIEZA MEJORADA: No usa transparencia acumulativa
+        // Usa un método de limpieza que no crea huecos negros
+        this.clearCanvas();
         
-        this.ctx.fillStyle = gradient;
+        // Efectos de luz de fondo estáticos (una sola capa)
+        const light1 = this.ctx.createRadialGradient(
+            this.canvas.width * 0.2, 
+            this.canvas.height * 0.5, 
+            0,
+            this.canvas.width * 0.2, 
+            this.canvas.height * 0.5, 
+            this.canvas.width * 0.4
+        );
+        light1.addColorStop(0, 'rgba(156, 39, 176, 0.05)');
+        light1.addColorStop(1, 'transparent');
+        
+        this.ctx.fillStyle = light1;
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
         
+        const light2 = this.ctx.createRadialGradient(
+            this.canvas.width * 0.8, 
+            this.canvas.height * 0.2, 
+            0,
+            this.canvas.width * 0.8, 
+            this.canvas.height * 0.2, 
+            this.canvas.width * 0.3
+        );
+        light2.addColorStop(0, 'rgba(255, 0, 255, 0.03)');
+        light2.addColorStop(1, 'transparent');
+        
+        this.ctx.fillStyle = light2;
+        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+        
+        // Dibujar partículas y conexiones
         this.drawParticles();
         
         requestAnimationFrame(() => this.animate());
@@ -443,57 +528,6 @@ class HoverEffects {
     }
 }
 
-// Función para manejar iframes de TikTok
-class TikTokHandler {
-    constructor() {
-        this.initTikTokEmbeds();
-    }
-    
-    initTikTokEmbeds() {
-        // Añadir script de TikTok si no existe
-        if (!document.querySelector('script[src*="tiktok.com/embed.js"]')) {
-            const script = document.createElement('script');
-            script.src = 'https://www.tiktok.com/embed.js';
-            script.async = true;
-            document.body.appendChild(script);
-        }
-        
-        // Añadir eventos a los iframes de TikTok
-        const tiktokIframes = document.querySelectorAll('iframe[src*="tiktok.com"]');
-        
-        tiktokIframes.forEach(iframe => {
-            // Añadir indicador de carga
-            const loading = document.createElement('div');
-            loading.className = 'tiktok-loading';
-            loading.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-            loading.style.position = 'absolute';
-            loading.style.top = '50%';
-            loading.style.left = '50%';
-            loading.style.transform = 'translate(-50%, -50%)';
-            loading.style.color = 'var(--accent-color)';
-            loading.style.fontSize = '1.5rem';
-            loading.style.zIndex = '5';
-            iframe.parentElement.appendChild(loading);
-            
-            // Ocultar indicador cuando cargue
-            iframe.addEventListener('load', () => {
-                loading.style.display = 'none';
-            });
-            
-            // Manejar errores
-            iframe.addEventListener('error', () => {
-                loading.innerHTML = '<i class="fas fa-exclamation-triangle"></i>';
-                loading.style.color = '#ff3333';
-                
-                // Mostrar mensaje de error después de 3 segundos
-                setTimeout(() => {
-                    loading.innerHTML = '<div style="text-align: center;"><i class="fas fa-exclamation-triangle"></i><p style="font-size: 0.8rem; margin-top: 5px;">Error cargando TikTok<br><small>Intenta recargar la página</small></p></div>';
-                }, 3000);
-            });
-        });
-    }
-}
-
 // Inicialización cuando el DOM esté cargado
 document.addEventListener('DOMContentLoaded', () => {
     const techBackground = new TechBackground();
@@ -502,7 +536,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const reviewsCarousel = new ReviewsCarousel();
     const channelsHoverEffects = new ChannelsHoverEffects();
     const hoverEffects = new HoverEffects();
-    const tiktokHandler = new TikTokHandler();
     
     const heroTitle = document.querySelector('.hero-title');
     if (heroTitle) {
@@ -511,6 +544,15 @@ document.addEventListener('DOMContentLoaded', () => {
         const gradientSpans = heroTitle.querySelectorAll('.gradient-text');
         gradientSpans.forEach((span, index) => {
             span.style.animationDelay = `${0.3 + (index * 0.2)}s`;
+        });
+        
+        // Animación para los botones del hero
+        const heroButtons = document.querySelectorAll('.hero-buttons .cta-button');
+        heroButtons.forEach((button, index) => {
+            button.style.opacity = '0';
+            button.style.transform = 'translateY(20px)';
+            button.style.animation = 'fadeInUp 1s ease forwards';
+            button.style.animationDelay = `${1.1 + (index * 0.2)}s`;
         });
     }
     
@@ -588,23 +630,6 @@ document.addEventListener('DOMContentLoaded', () => {
                                 item.style.transform = 'translateY(0)';
                             }, 100);
                         }, index * 100);
-                    });
-                }
-                
-                // Efecto especial para la sección de shorts
-                if (entry.target.id === 'shorts') {
-                    const shortItems = entry.target.querySelectorAll('.short-item');
-                    shortItems.forEach((item, index) => {
-                        setTimeout(() => {
-                            item.style.opacity = '0';
-                            item.style.transform = 'translateY(30px) scale(0.95)';
-                            item.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-                            
-                            setTimeout(() => {
-                                item.style.opacity = '1';
-                                item.style.transform = 'translateY(0) scale(1)';
-                            }, 100);
-                        }, index * 150);
                     });
                 }
             }
@@ -694,27 +719,4 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         };
     });
-    
-    // Función para convertir enlaces de TikTok a formato embed
-    function convertTikTokLinks() {
-        // Estos son los IDs de los videos de TikTok
-        // Se pueden actualizar fácilmente cuando tengas nuevos enlaces
-        const tiktokVideoIds = [
-            '7345996918543641862', // Video 1
-            '7346000456776346885', // Video 2
-            '7345996918543641862', // Repetir Video 1
-            '7346000456776346885'  // Repetir Video 2
-        ];
-        
-        const shortIframes = document.querySelectorAll('.short-item iframe');
-        shortIframes.forEach((iframe, index) => {
-            if (index < tiktokVideoIds.length && tiktokVideoIds[index]) {
-                // Actualizar el src con el formato correcto de TikTok
-                iframe.src = `https://www.tiktok.com/embed/v2/${tiktokVideoIds[index]}?lang=es`;
-            }
-        });
-    }
-    
-    // Llamar la función para actualizar los iframes de TikTok
-    convertTikTokLinks();
 });
