@@ -302,7 +302,7 @@ class ShortsCarousel {
         this.itemsPerView = 4; // Desktop: 4 elementos visibles
         this.totalItems = this.items.length;
         this.maxPosition = this.totalItems - this.itemsPerView; // Máxima posición (0 a 2)
-        this.gap = 25; // Gap entre elementos en px
+        this.gap = 20; // Gap entre elementos en px
         
         this.init();
     }
@@ -442,7 +442,7 @@ class ChannelsCarousel {
         this.itemsPerView = 5; // Desktop: 5 elementos visibles
         this.totalItems = this.items.length;
         this.maxPosition = this.totalItems - this.itemsPerView; // Máxima posición (0 a 2)
-        this.gap = 25; // Gap entre elementos en px
+        this.gap = 20; // Gap entre elementos en px
         
         this.init();
     }
@@ -797,7 +797,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const channelsHoverEffects = new ChannelsHoverEffects();
     const hoverEffects = new HoverEffects();
     
-    // Manejar logo del menú
+    // Manejar logo del menú - CORREGIDO PARA CIRCULAR MÁS GRANDE
     const logoImage = document.querySelector('.logo-image');
     const logoPlaceholder = document.querySelector('.logo-placeholder');
     
@@ -817,13 +817,23 @@ document.addEventListener('DOMContentLoaded', () => {
         };
         
         // Si la imagen tiene un src vacío, mostrar el placeholder
-        if (!logoImage.src || logoImage.src.includes('undefined')) {
+        if (!logoImage.src || logoImage.src.includes('undefined') || logoImage.src === window.location.href) {
             logoImage.style.display = 'none';
             if (logoPlaceholder) {
                 logoPlaceholder.style.display = 'flex';
             }
         }
     }
+    
+    // Forzar que el placeholder se muestre si no hay imagen
+    setTimeout(() => {
+        if (logoImage && (logoImage.naturalWidth === 0 || logoImage.complete === false)) {
+            logoImage.style.display = 'none';
+            if (logoPlaceholder) {
+                logoPlaceholder.style.display = 'flex';
+            }
+        }
+    }, 500);
     
     const heroTitle = document.querySelector('.hero-title');
     if (heroTitle) {
@@ -937,7 +947,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const target = document.querySelector(href);
             if (target) {
                 window.scrollTo({
-                    top: target.offsetTop - 80,
+                    top: target.offsetTop - 70,
                     behavior: 'smooth'
                 });
             }
@@ -1008,4 +1018,13 @@ document.addEventListener('DOMContentLoaded', () => {
         if (shortsCarousel.updateCarousel) shortsCarousel.updateCarousel();
         if (channelsCarousel.updateCarousel) channelsCarousel.updateCarousel();
     }, 500);
+    
+    // Añadir clase al body cuando se hace scroll para efectos
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 100) {
+            document.body.classList.add('scrolled');
+        } else {
+            document.body.classList.remove('scrolled');
+        }
+    });
 });
