@@ -1,4 +1,4 @@
-// Animación del fondo tecnológico - VERSIÓN CORREGIDA PERFECTA
+// Animación del fondo tecnológico
 class TechBackground {
     constructor() {
         this.canvas = document.getElementById('techBackground');
@@ -48,7 +48,7 @@ class TechBackground {
                 originalX: null,
                 originalY: null,
                 oscillation: Math.random() * Math.PI * 2,
-                trailPositions: [] // Para rastros controlados
+                trailPositions: []
             });
         }
     }
@@ -299,19 +299,17 @@ class ShortsCarousel {
         this.indicators = document.querySelectorAll('.shorts .indicator');
         
         this.currentPosition = 0;
-        this.itemsPerView = 4; // Desktop: 4 elementos visibles
+        this.itemsPerView = 4;
         this.totalItems = this.items.length;
-        this.maxPosition = this.totalItems - this.itemsPerView; // Máxima posición (0 a 2)
-        this.gap = 20; // Gap entre elementos en px
+        this.maxPosition = this.totalItems - this.itemsPerView;
+        this.gap = 20;
         
         this.init();
     }
     
     init() {
-        // Calcular elementos por vista basado en el ancho de la pantalla
         this.updateItemsPerView();
         
-        // Configurar eventos
         this.prevBtn.addEventListener('click', () => this.move(-1));
         this.nextBtn.addEventListener('click', () => this.move(1));
         
@@ -319,55 +317,43 @@ class ShortsCarousel {
             indicator.addEventListener('click', () => this.goToPosition(index));
         });
         
-        // Evento de resize
         window.addEventListener('resize', () => {
             this.updateItemsPerView();
             this.updateCarousel();
         });
         
-        // Inicializar
         this.updateCarousel();
-        
-        // Agregar soporte táctil
         this.addTouchSupport();
     }
     
     updateItemsPerView() {
         const width = window.innerWidth;
         if (width >= 1024) {
-            this.itemsPerView = 4; // Desktop
+            this.itemsPerView = 4;
         } else if (width >= 768) {
-            this.itemsPerView = 2; // Tablet
+            this.itemsPerView = 2;
         } else {
-            this.itemsPerView = 1; // Móvil
+            this.itemsPerView = 1;
         }
         
         this.maxPosition = Math.max(0, this.totalItems - this.itemsPerView);
         
-        // Ajustar posición actual si es necesario
         if (this.currentPosition > this.maxPosition) {
             this.currentPosition = this.maxPosition;
         }
     }
     
     updateCarousel() {
-        // Calcular desplazamiento basado en un solo elemento
         const itemWidth = this.items[0].offsetWidth;
         const translateX = -(this.currentPosition * (itemWidth + this.gap));
         
-        // Aplicar transformación
         this.track.style.transform = `translateX(${translateX}px)`;
-        
-        // Actualizar indicadores
         this.updateIndicators();
-        
-        // Actualizar estado de botones
         this.updateButtons();
     }
     
     updateIndicators() {
         this.indicators.forEach((indicator, index) => {
-            // Mapear posición a indicador (0, 1, 2 posiciones -> 0, 1, 2 indicadores)
             indicator.classList.toggle('active', index === this.currentPosition);
         });
     }
@@ -418,10 +404,8 @@ class ShortsCarousel {
             
             if (Math.abs(diff) > threshold) {
                 if (diff > 0) {
-                    // Deslizamiento hacia la izquierda = siguiente
                     this.move(1);
                 } else {
-                    // Deslizamiento hacia la derecha = anterior
                     this.move(-1);
                 }
             }
@@ -439,19 +423,17 @@ class ChannelsCarousel {
         this.indicators = document.querySelectorAll('.channels .indicator');
         
         this.currentPosition = 0;
-        this.itemsPerView = 5; // Desktop: 5 elementos visibles
+        this.itemsPerView = 5;
         this.totalItems = this.items.length;
-        this.maxPosition = this.totalItems - this.itemsPerView; // Máxima posición (0 a 2)
-        this.gap = 20; // Gap entre elementos en px
+        this.maxPosition = this.totalItems - this.itemsPerView;
+        this.gap = 20;
         
         this.init();
     }
     
     init() {
-        // Calcular elementos por vista basado en el ancho de la pantalla
         this.updateItemsPerView();
         
-        // Configurar eventos
         this.prevBtn.addEventListener('click', () => this.move(-1));
         this.nextBtn.addEventListener('click', () => this.move(1));
         
@@ -459,55 +441,43 @@ class ChannelsCarousel {
             indicator.addEventListener('click', () => this.goToPosition(index));
         });
         
-        // Evento de resize
         window.addEventListener('resize', () => {
             this.updateItemsPerView();
             this.updateCarousel();
         });
         
-        // Inicializar
         this.updateCarousel();
-        
-        // Agregar soporte táctil
         this.addTouchSupport();
     }
     
     updateItemsPerView() {
         const width = window.innerWidth;
         if (width >= 1024) {
-            this.itemsPerView = 5; // Desktop
+            this.itemsPerView = 5;
         } else if (width >= 768) {
-            this.itemsPerView = 2; // Tablet
+            this.itemsPerView = 2;
         } else {
-            this.itemsPerView = 1; // Móvil
+            this.itemsPerView = 1;
         }
         
         this.maxPosition = Math.max(0, this.totalItems - this.itemsPerView);
         
-        // Ajustar posición actual si es necesario
         if (this.currentPosition > this.maxPosition) {
             this.currentPosition = this.maxPosition;
         }
     }
     
     updateCarousel() {
-        // Calcular desplazamiento basado en un solo elemento
         const itemWidth = this.items[0].offsetWidth;
         const translateX = -(this.currentPosition * (itemWidth + this.gap));
         
-        // Aplicar transformación
         this.track.style.transform = `translateX(${translateX}px)`;
-        
-        // Actualizar indicadores
         this.updateIndicators();
-        
-        // Actualizar estado de botones
         this.updateButtons();
     }
     
     updateIndicators() {
         this.indicators.forEach((indicator, index) => {
-            // Mapear posición a indicador (0, 1, 2 posiciones -> 0, 1, 2 indicadores)
             indicator.classList.toggle('active', index === this.currentPosition);
         });
     }
@@ -558,10 +528,8 @@ class ChannelsCarousel {
             
             if (Math.abs(diff) > threshold) {
                 if (diff > 0) {
-                    // Deslizamiento hacia la izquierda = siguiente
                     this.move(1);
                 } else {
-                    // Deslizamiento hacia la derecha = anterior
                     this.move(-1);
                 }
             }
@@ -569,7 +537,7 @@ class ChannelsCarousel {
     }
 }
 
-// Carrusel de reseñas - INFINITO CON TIEMPO DOBLE
+// Carrusel de reseñas
 class ReviewsCarousel {
     constructor() {
         this.cards = document.querySelectorAll('.review-card');
@@ -797,7 +765,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const channelsHoverEffects = new ChannelsHoverEffects();
     const hoverEffects = new HoverEffects();
     
-    // Manejar logo del menú - CORREGIDO PARA RECTANGULAR
+    // Manejar logo del menú
     const logoImage = document.querySelector('.logo-image');
     const logoPlaceholder = document.querySelector('.logo-placeholder');
     
@@ -809,14 +777,12 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         };
         
-        // Verificar si la imagen se cargó correctamente
         logoImage.onload = function() {
             if (logoPlaceholder) {
                 logoPlaceholder.style.display = 'none';
             }
         };
         
-        // Si la imagen tiene un src vacío, mostrar el placeholder
         if (!logoImage.src || logoImage.src.includes('undefined') || logoImage.src === window.location.href) {
             logoImage.style.display = 'none';
             if (logoPlaceholder) {
@@ -825,7 +791,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
     
-    // Forzar que el placeholder se muestre si no hay imagen
     setTimeout(() => {
         if (logoImage && (logoImage.naturalWidth === 0 || logoImage.complete === false)) {
             logoImage.style.display = 'none';
@@ -844,7 +809,6 @@ document.addEventListener('DOMContentLoaded', () => {
             span.style.animationDelay = `${0.3 + (index * 0.2)}s`;
         });
         
-        // Animación para los botones del hero
         const heroButtons = document.querySelectorAll('.hero-buttons .cta-button');
         heroButtons.forEach((button, index) => {
             button.style.opacity = '0';
@@ -878,7 +842,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
     
-    // Añadir efecto de carga para iframes
     const allVideos = document.querySelectorAll('.video-wrapper');
     allVideos.forEach(video => {
         video.style.position = 'relative';
@@ -902,7 +865,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
     
-    // Efecto de scroll para secciones
     const sections = document.querySelectorAll('section');
     const observerOptions = {
         threshold: 0.1,
@@ -937,7 +899,6 @@ document.addEventListener('DOMContentLoaded', () => {
         observer.observe(section);
     });
     
-    // Smooth scroll para enlaces del menú
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function(e) {
             const href = this.getAttribute('href');
@@ -954,7 +915,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
     
-    // Actualizar enlaces de canales en reseñas para que coincidan con los canales
     const reviewLinks = [
         'https://www.youtube.com/@GROSSO_MODO/videos',
         'https://www.youtube.com/@PixelHeroRBX/videos',
@@ -969,7 +929,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
     
-    // Rotación automática de canales online
     const onlineDots = document.querySelectorAll('.online-dot');
     
     setInterval(() => {
@@ -983,7 +942,6 @@ document.addEventListener('DOMContentLoaded', () => {
         onlineDots[randomIndex].style.background = '#ff00ff';
     }, 5000);
     
-    // Manejar carga de imágenes de canales
     const channelImages = document.querySelectorAll('.channel-image');
     channelImages.forEach(img => {
         img.onerror = function() {
@@ -998,7 +956,6 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     });
     
-    // Manejar carga de imágenes de reseñas
     const reviewImages = document.querySelectorAll('.review-image');
     reviewImages.forEach(img => {
         img.onerror = function() {
@@ -1013,13 +970,11 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     });
     
-    // Forzar recálculo después de que todo cargue
     setTimeout(() => {
         if (shortsCarousel.updateCarousel) shortsCarousel.updateCarousel();
         if (channelsCarousel.updateCarousel) channelsCarousel.updateCarousel();
     }, 500);
     
-    // Añadir clase al body cuando se hace scroll para efectos
     window.addEventListener('scroll', () => {
         if (window.scrollY > 100) {
             document.body.classList.add('scrolled');
