@@ -60,8 +60,6 @@ class TechBackground {
     }
     
     clearCanvas() {
-        // En lugar de pintar un rectángulo transparente que causa acumulación,
-        // usamos un gradiente radial que cubre todo pero deja el fondo oscuro visible
         const gradient = this.ctx.createRadialGradient(
             this.canvas.width / 2, 
             this.canvas.height / 2, 
@@ -71,14 +69,13 @@ class TechBackground {
             Math.max(this.canvas.width, this.canvas.height) / 1.5
         );
         
-        gradient.addColorStop(0, 'rgba(10, 10, 26, 0.15)'); // Muy transparente
+        gradient.addColorStop(0, 'rgba(10, 10, 26, 0.15)');
         gradient.addColorStop(0.5, 'rgba(10, 10, 26, 0.25)');
         gradient.addColorStop(1, 'rgba(10, 10, 26, 0.4)');
         
         this.ctx.fillStyle = gradient;
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
         
-        // Añadimos un fondo base sólido muy sutil para evitar huecos negros
         this.ctx.fillStyle = 'rgba(10, 10, 26, 0.02)';
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
     }
@@ -107,26 +104,21 @@ class TechBackground {
         
         // Dibujar partículas con un sistema de rastro controlado
         for (let particle of this.particles) {
-            // Actualizar oscilación
             particle.oscillation += 0.02;
             const oscillationX = Math.sin(particle.oscillation) * 0.3;
             const oscillationY = Math.cos(particle.oscillation * 0.7) * 0.3;
             
-            // Guardar posición actual para el rastro
             particle.trailPositions.unshift({x: particle.x, y: particle.y, time: currentTime});
             
-            // Mantener solo las últimas 3 posiciones para el rastro
             if (particle.trailPositions.length > 3) {
                 particle.trailPositions.pop();
             }
             
-            // Actualizar posición principal
             particle.x += particle.speedX + oscillationX;
             particle.y += particle.speedY + oscillationY;
             
-            // REBOTE MEJORADO: Suave pero sin quedar atrapado
             if (particle.x < 0 || particle.x > this.canvas.width) {
-                particle.speedX *= -0.95; // Rebote suave
+                particle.speedX *= -0.95;
                 particle.x = Math.max(1, Math.min(this.canvas.width - 1, particle.x));
             }
             if (particle.y < 0 || particle.y > this.canvas.height) {
@@ -134,7 +126,6 @@ class TechBackground {
                 particle.y = Math.max(1, Math.min(this.canvas.height - 1, particle.y));
             }
             
-            // Interacción con el mouse
             if (this.mouse.x && this.mouse.y) {
                 const dx = particle.x - this.mouse.x;
                 const dy = particle.y - this.mouse.y;
@@ -149,11 +140,10 @@ class TechBackground {
                 }
             }
             
-            // DIBUJAR RASTRO (muy sutil)
             for (let i = 0; i < particle.trailPositions.length; i++) {
                 const trail = particle.trailPositions[i];
                 const age = currentTime - trail.time;
-                const fade = Math.max(0, 1 - (age / 200)); // Se desvanecen en 200ms
+                const fade = Math.max(0, 1 - (age / 200));
                 
                 if (fade > 0) {
                     const trailSize = particle.size * (0.5 - i * 0.15);
@@ -166,7 +156,6 @@ class TechBackground {
                 }
             }
             
-            // DIBUJAR PARTÍCULA PRINCIPAL (igual que antes)
             const gradient = this.ctx.createRadialGradient(
                 particle.x, particle.y, 0,
                 particle.x, particle.y, particle.size * 2
@@ -184,7 +173,6 @@ class TechBackground {
             this.ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
             this.ctx.fill();
             
-            // Punto de luz pequeño (sin dejar rastro)
             this.ctx.beginPath();
             this.ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
             this.ctx.arc(
@@ -199,11 +187,8 @@ class TechBackground {
     }
     
     animate() {
-        // LIMPIEZA MEJORADA: No usa transparencia acumulativa
-        // Usa un método de limpieza que no crea huecos negros
         this.clearCanvas();
         
-        // Efectos de luz de fondo estáticos (una sola capa)
         const light1 = this.ctx.createRadialGradient(
             this.canvas.width * 0.2, 
             this.canvas.height * 0.5, 
@@ -232,7 +217,6 @@ class TechBackground {
         this.ctx.fillStyle = light2;
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
         
-        // Dibujar partículas y conexiones
         this.drawParticles();
         
         requestAnimationFrame(() => this.animate());
@@ -305,215 +289,266 @@ class ScrollEffects {
     }
 }
 
-// Carruseles para Shorts y Canales
-class Carousels {
+// ===== CARRUSEL DE SHORTS - CORREGIDO PERFECTAMENTE =====
+class ShortsCarousel {
     constructor() {
-        this.initShortsCarousel();
-        this.initChannelsCarousel();
-        this.initTouchSupport();
+        this.track = document.querySelector('.shorts-carousel-track');
+        this.items = document.querySelectorAll('.short-item');
+        this.prevBtn = document.querySelector('.shorts .carousel-btn.prev');
+        this.nextBtn = document.querySelector('.shorts .carousel-btn.next');
+        this.indicators = document.querySelectorAll('.shorts .indicator');
+        
+        this.currentIndex = 0;
+        this.itemsPerView = 4; // Desktop: 4 elementos
+        this.totalItems = this.items.length;
+        this.totalPages = Math.ceil(this.totalItems / this.itemsPerView);
+        
+        this.init();
     }
     
-    initShortsCarousel() {
-        const shortsTrack = document.querySelector('.shorts-carousel-track');
-        const shortsItems = document.querySelectorAll('.short-item');
-        const prevBtn = document.querySelector('.shorts .carousel-btn.prev');
-        const nextBtn = document.querySelector('.shorts .carousel-btn.next');
-        const indicators = document.querySelectorAll('.shorts .indicator');
+    init() {
+        // Calcular elementos por vista basado en el ancho de la pantalla
+        this.updateItemsPerView();
         
-        if (!shortsTrack) return;
+        // Configurar eventos
+        this.prevBtn.addEventListener('click', () => this.prev());
+        this.nextBtn.addEventListener('click', () => this.next());
         
-        let currentIndex = 0;
-        let itemsPerView = this.calculateItemsPerView();
-        const totalItems = shortsItems.length;
-        const totalPages = Math.ceil(totalItems / itemsPerView);
-        
-        // Calcular elementos por vista según tamaño de pantalla
-        const calculateItemsPerView = () => {
-            if (window.innerWidth < 768) return 1;
-            if (window.innerWidth < 1024) return 2;
-            return 4;
-        };
-        
-        this.calculateItemsPerView = calculateItemsPerView;
-        
-        // Actualizar indicadores
-        const updateIndicators = () => {
-            indicators.forEach((indicator, index) => {
-                indicator.classList.toggle('active', index === currentIndex);
-            });
-        };
-        
-        // Mover carrusel
-        const moveCarousel = () => {
-            const itemWidth = shortsItems[0].offsetWidth + 25; // width + gap
-            const translateX = -(currentIndex * itemsPerView * itemWidth);
-            shortsTrack.style.transform = `translateX(${translateX}px)`;
-            updateIndicators();
-            
-            // Actualizar estado de botones
-            prevBtn.disabled = currentIndex === 0;
-            nextBtn.disabled = currentIndex >= totalPages - 1;
-        };
-        
-        // Eventos de botones
-        prevBtn?.addEventListener('click', () => {
-            if (currentIndex > 0) {
-                currentIndex--;
-                moveCarousel();
-            }
+        this.indicators.forEach((indicator, index) => {
+            indicator.addEventListener('click', () => this.goToPage(index));
         });
         
-        nextBtn?.addEventListener('click', () => {
-            if (currentIndex < totalPages - 1) {
-                currentIndex++;
-                moveCarousel();
-            }
-        });
-        
-        // Eventos de indicadores
-        indicators.forEach((indicator, index) => {
-            indicator.addEventListener('click', () => {
-                currentIndex = index;
-                moveCarousel();
-            });
-        });
-        
-        // Actualizar en resize
+        // Evento de resize
         window.addEventListener('resize', () => {
-            const newItemsPerView = calculateItemsPerView();
-            if (itemsPerView !== newItemsPerView) {
-                itemsPerView = newItemsPerView;
-                currentIndex = 0; // Reset al cambiar tamaño
-                moveCarousel();
-            }
+            this.updateItemsPerView();
+            this.goToPage(this.currentIndex);
         });
         
         // Inicializar
-        moveCarousel();
+        this.updateCarousel();
     }
     
-    initChannelsCarousel() {
-        const channelsTrack = document.querySelector('.channels-carousel-track');
-        const channelItems = document.querySelectorAll('.channel-item');
-        const prevBtn = document.querySelector('.channels .carousel-btn.prev');
-        const nextBtn = document.querySelector('.channels .carousel-btn.next');
-        const indicators = document.querySelectorAll('.channels .indicator');
+    updateItemsPerView() {
+        const width = window.innerWidth;
+        if (width >= 1024) {
+            this.itemsPerView = 4; // Desktop
+        } else if (width >= 768) {
+            this.itemsPerView = 2; // Tablet
+        } else {
+            this.itemsPerView = 1; // Móvil
+        }
         
-        if (!channelsTrack) return;
+        this.totalPages = Math.ceil(this.totalItems / this.itemsPerView);
+    }
+    
+    updateCarousel() {
+        // Calcular desplazamiento
+        const itemWidth = this.items[0].offsetWidth + 25; // Ancho + gap
+        const translateX = -(this.currentIndex * this.itemsPerView * itemWidth);
         
-        let currentIndex = 0;
-        let itemsPerView = this.calculateChannelsPerView();
-        const totalItems = channelItems.length;
-        const totalPages = Math.ceil(totalItems / itemsPerView);
-        
-        // Calcular elementos por vista según tamaño de pantalla
-        const calculateChannelsPerView = () => {
-            if (window.innerWidth < 768) return 1;
-            if (window.innerWidth < 1024) return 2;
-            return 5;
-        };
-        
-        this.calculateChannelsPerView = calculateChannelsPerView;
+        // Aplicar transformación
+        this.track.style.transform = `translateX(${translateX}px)`;
         
         // Actualizar indicadores
-        const updateIndicators = () => {
-            indicators.forEach((indicator, index) => {
-                indicator.classList.toggle('active', index === currentIndex);
-            });
-        };
+        this.updateIndicators();
         
-        // Mover carrusel
-        const moveCarousel = () => {
-            const itemWidth = channelItems[0].offsetWidth + 25; // width + gap
-            const translateX = -(currentIndex * itemsPerView * itemWidth);
-            channelsTrack.style.transform = `translateX(${translateX}px)`;
-            updateIndicators();
-            
-            // Actualizar estado de botones
-            prevBtn.disabled = currentIndex === 0;
-            nextBtn.disabled = currentIndex >= totalPages - 1;
-        };
+        // Actualizar estado de botones
+        this.updateButtons();
+    }
+    
+    updateIndicators() {
+        this.indicators.forEach((indicator, index) => {
+            indicator.classList.toggle('active', index === this.currentIndex);
+        });
+    }
+    
+    updateButtons() {
+        this.prevBtn.disabled = this.currentIndex === 0;
+        this.nextBtn.disabled = this.currentIndex >= this.totalPages - 1;
+    }
+    
+    prev() {
+        if (this.currentIndex > 0) {
+            this.currentIndex--;
+            this.updateCarousel();
+        }
+    }
+    
+    next() {
+        if (this.currentIndex < this.totalPages - 1) {
+            this.currentIndex++;
+            this.updateCarousel();
+        }
+    }
+    
+    goToPage(pageIndex) {
+        if (pageIndex >= 0 && pageIndex < this.totalPages) {
+            this.currentIndex = pageIndex;
+            this.updateCarousel();
+        }
+    }
+}
+
+// ===== CARRUSEL DE CANALES - CORREGIDO PERFECTAMENTE =====
+class ChannelsCarousel {
+    constructor() {
+        this.track = document.querySelector('.channels-carousel-track');
+        this.items = document.querySelectorAll('.channel-item');
+        this.prevBtn = document.querySelector('.channels .carousel-btn.prev');
+        this.nextBtn = document.querySelector('.channels .carousel-btn.next');
+        this.indicators = document.querySelectorAll('.channels .indicator');
         
-        // Eventos de botones
-        prevBtn?.addEventListener('click', () => {
-            if (currentIndex > 0) {
-                currentIndex--;
-                moveCarousel();
-            }
+        this.currentIndex = 0;
+        this.itemsPerView = 5; // Desktop: 5 elementos
+        this.totalItems = this.items.length;
+        this.totalPages = Math.ceil(this.totalItems / this.itemsPerView);
+        
+        this.init();
+    }
+    
+    init() {
+        // Calcular elementos por vista basado en el ancho de la pantalla
+        this.updateItemsPerView();
+        
+        // Configurar eventos
+        this.prevBtn.addEventListener('click', () => this.prev());
+        this.nextBtn.addEventListener('click', () => this.next());
+        
+        this.indicators.forEach((indicator, index) => {
+            indicator.addEventListener('click', () => this.goToPage(index));
         });
         
-        nextBtn?.addEventListener('click', () => {
-            if (currentIndex < totalPages - 1) {
-                currentIndex++;
-                moveCarousel();
-            }
-        });
-        
-        // Eventos de indicadores
-        indicators.forEach((indicator, index) => {
-            indicator.addEventListener('click', () => {
-                currentIndex = index;
-                moveCarousel();
-            });
-        });
-        
-        // Actualizar en resize
+        // Evento de resize
         window.addEventListener('resize', () => {
-            const newItemsPerView = calculateChannelsPerView();
-            if (itemsPerView !== newItemsPerView) {
-                itemsPerView = newItemsPerView;
-                currentIndex = 0; // Reset al cambiar tamaño
-                moveCarousel();
-            }
+            this.updateItemsPerView();
+            this.goToPage(this.currentIndex);
         });
         
         // Inicializar
-        moveCarousel();
+        this.updateCarousel();
     }
     
-    initTouchSupport() {
-        // Soporte táctil para carruseles
-        const tracks = document.querySelectorAll('.shorts-carousel-track, .channels-carousel-track');
+    updateItemsPerView() {
+        const width = window.innerWidth;
+        if (width >= 1024) {
+            this.itemsPerView = 5; // Desktop
+        } else if (width >= 768) {
+            this.itemsPerView = 2; // Tablet
+        } else {
+            this.itemsPerView = 1; // Móvil
+        }
         
-        tracks.forEach(track => {
-            let startX = 0;
-            let scrollLeft = 0;
-            let isDown = false;
+        this.totalPages = Math.ceil(this.totalItems / this.itemsPerView);
+    }
+    
+    updateCarousel() {
+        // Calcular desplazamiento
+        const itemWidth = this.items[0].offsetWidth + 25; // Ancho + gap
+        const translateX = -(this.currentIndex * this.itemsPerView * itemWidth);
+        
+        // Aplicar transformación
+        this.track.style.transform = `translateX(${translateX}px)`;
+        
+        // Actualizar indicadores
+        this.updateIndicators();
+        
+        // Actualizar estado de botones
+        this.updateButtons();
+    }
+    
+    updateIndicators() {
+        this.indicators.forEach((indicator, index) => {
+            indicator.classList.toggle('active', index === this.currentIndex);
+        });
+    }
+    
+    updateButtons() {
+        this.prevBtn.disabled = this.currentIndex === 0;
+        this.nextBtn.disabled = this.currentIndex >= this.totalPages - 1;
+    }
+    
+    prev() {
+        if (this.currentIndex > 0) {
+            this.currentIndex--;
+            this.updateCarousel();
+        }
+    }
+    
+    next() {
+        if (this.currentIndex < this.totalPages - 1) {
+            this.currentIndex++;
+            this.updateCarousel();
+        }
+    }
+    
+    goToPage(pageIndex) {
+        if (pageIndex >= 0 && pageIndex < this.totalPages) {
+            this.currentIndex = pageIndex;
+            this.updateCarousel();
+        }
+    }
+}
+
+// ===== SOPORTE TÁCTIL PARA CARRUSELES =====
+class TouchSupport {
+    constructor() {
+        this.shortsTrack = document.querySelector('.shorts-carousel-track');
+        this.channelsTrack = document.querySelector('.channels-carousel-track');
+        
+        this.shortsCarousel = null;
+        this.channelsCarousel = null;
+        
+        this.init();
+    }
+    
+    init() {
+        // Esperar a que los carruseles se inicialicen
+        setTimeout(() => {
+            this.shortsCarousel = window.shortsCarousel;
+            this.channelsCarousel = window.channelsCarousel;
             
-            track.addEventListener('mousedown', (e) => {
-                isDown = true;
-                startX = e.pageX - track.offsetLeft;
-                scrollLeft = track.scrollLeft;
-            });
+            if (this.shortsTrack && this.shortsCarousel) {
+                this.addTouchSupport(this.shortsTrack, this.shortsCarousel);
+            }
             
-            track.addEventListener('mouseleave', () => {
-                isDown = false;
-            });
+            if (this.channelsTrack && this.channelsCarousel) {
+                this.addTouchSupport(this.channelsTrack, this.channelsCarousel);
+            }
+        }, 100);
+    }
+    
+    addTouchSupport(track, carousel) {
+        let startX = 0;
+        let currentX = 0;
+        let isDragging = false;
+        
+        track.addEventListener('touchstart', (e) => {
+            startX = e.touches[0].clientX;
+            currentX = startX;
+            isDragging = true;
+        });
+        
+        track.addEventListener('touchmove', (e) => {
+            if (!isDragging) return;
+            currentX = e.touches[0].clientX;
+        });
+        
+        track.addEventListener('touchend', () => {
+            if (!isDragging) return;
+            isDragging = false;
             
-            track.addEventListener('mouseup', () => {
-                isDown = false;
-            });
+            const diff = startX - currentX;
+            const threshold = 50;
             
-            track.addEventListener('mousemove', (e) => {
-                if (!isDown) return;
-                e.preventDefault();
-                const x = e.pageX - track.offsetLeft;
-                const walk = (x - startX) * 2;
-                track.scrollLeft = scrollLeft - walk;
-            });
-            
-            // Soporte táctil para móviles
-            track.addEventListener('touchstart', (e) => {
-                startX = e.touches[0].pageX - track.offsetLeft;
-                scrollLeft = track.scrollLeft;
-            });
-            
-            track.addEventListener('touchmove', (e) => {
-                e.preventDefault();
-                const x = e.touches[0].pageX - track.offsetLeft;
-                const walk = (x - startX) * 2;
-                track.scrollLeft = scrollLeft - walk;
-            });
+            if (Math.abs(diff) > threshold) {
+                if (diff > 0) {
+                    // Deslizamiento hacia la izquierda = siguiente
+                    carousel.next();
+                } else {
+                    // Deslizamiento hacia la derecha = anterior
+                    carousel.prev();
+                }
+            }
         });
     }
 }
@@ -556,18 +591,15 @@ class ReviewsCarousel {
     }
     
     updateControls() {
-        // Eliminar deshabilitación de botones (ahora siempre activos)
         this.prevBtn.style.opacity = '1';
         this.prevBtn.style.cursor = 'pointer';
         this.nextBtn.style.opacity = '1';
         this.nextBtn.style.cursor = 'pointer';
         
-        // Actualizar puntos indicadores
         this.dots.forEach((dot, index) => {
             dot.classList.toggle('active', index === this.currentIndex);
         });
         
-        // Actualizar tarjetas
         this.cards.forEach((card, index) => {
             const isActive = index === this.currentIndex;
             card.classList.toggle('active', isActive);
@@ -590,7 +622,6 @@ class ReviewsCarousel {
         if (!this.isTransitioning) {
             this.isTransitioning = true;
             
-            // LÓGICA INFINITA: Si estamos en el primero, vamos al último
             if (this.currentIndex === 0) {
                 this.currentIndex = this.totalCards - 1;
             } else {
@@ -609,7 +640,6 @@ class ReviewsCarousel {
         if (!this.isTransitioning) {
             this.isTransitioning = true;
             
-            // LÓGICA INFINITA: Si estamos en el último, vamos al primero
             if (this.currentIndex === this.totalCards - 1) {
                 this.currentIndex = 0;
             } else {
@@ -638,10 +668,9 @@ class ReviewsCarousel {
     
     startAutoPlay() {
         this.stopAutoPlay();
-        // TIEMPO MODIFICADO: De 5000ms a 10000ms (el doble)
         this.autoPlayInterval = setInterval(() => {
             this.next();
-        }, 10000); // 10 segundos en lugar de 5
+        }, 10000);
     }
     
     stopAutoPlay() {
@@ -663,13 +692,11 @@ class ChannelsHoverEffects {
         
         channelItems.forEach(item => {
             item.addEventListener('mouseenter', () => {
-                // Añadir efecto de brillo al avatar
                 const avatar = item.querySelector('.avatar-circle');
                 if (avatar) {
                     avatar.style.boxShadow = '0 15px 35px rgba(255, 0, 255, 0.4)';
                 }
                 
-                // Resaltar el punto online
                 const onlineDot = item.querySelector('.online-dot.active');
                 if (onlineDot) {
                     onlineDot.style.transform = 'scale(1.3)';
@@ -677,7 +704,6 @@ class ChannelsHoverEffects {
             });
             
             item.addEventListener('mouseleave', () => {
-                // Restaurar efectos
                 const avatar = item.querySelector('.avatar-circle');
                 if (avatar) {
                     avatar.style.boxShadow = '0 10px 25px rgba(0, 0, 0, 0.3)';
@@ -746,8 +772,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const techBackground = new TechBackground();
     const navigation = new Navigation();
     const scrollEffects = new ScrollEffects();
-    const carousels = new Carousels();
+    
+    // Inicializar carruseles
+    const shortsCarousel = new ShortsCarousel();
+    const channelsCarousel = new ChannelsCarousel();
     const reviewsCarousel = new ReviewsCarousel();
+    const touchSupport = new TouchSupport();
+    
+    // Hacer accesibles globalmente para el soporte táctil
+    window.shortsCarousel = shortsCarousel;
+    window.channelsCarousel = channelsCarousel;
+    
     const channelsHoverEffects = new ChannelsHoverEffects();
     const hoverEffects = new HoverEffects();
     
@@ -830,7 +865,6 @@ document.addEventListener('DOMContentLoaded', () => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('visible');
                 
-                // Efecto especial para la sección de canales
                 if (entry.target.id === 'canales') {
                     const channelItems = entry.target.querySelectorAll('.channel-item');
                     channelItems.forEach((item, index) => {
@@ -886,9 +920,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
     
-    // Rotación automática de canales online (cambia estado cada 5 segundos)
+    // Rotación automática de canales online
     const onlineDots = document.querySelectorAll('.online-dot');
-    let currentActiveDot = 0;
     
     setInterval(() => {
         onlineDots.forEach(dot => {
@@ -896,12 +929,9 @@ document.addEventListener('DOMContentLoaded', () => {
             dot.style.background = '#666';
         });
         
-        // Activar un punto aleatorio
         const randomIndex = Math.floor(Math.random() * onlineDots.length);
         onlineDots[randomIndex].classList.add('active');
         onlineDots[randomIndex].style.background = '#ff00ff';
-        
-        currentActiveDot = randomIndex;
     }, 5000);
     
     // Manejar carga de imágenes de canales
@@ -933,4 +963,10 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         };
     });
+    
+    // Forzar recálculo después de que todo cargue
+    setTimeout(() => {
+        if (shortsCarousel.updateCarousel) shortsCarousel.updateCarousel();
+        if (channelsCarousel.updateCarousel) channelsCarousel.updateCarousel();
+    }, 500);
 });
