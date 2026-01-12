@@ -1,4 +1,4 @@
-// Animación del fondo tecnológico - VERSIÓN CORREGIDA PERFECTA
+// Animación del fondo tecnológico - VERSIÓN PERFECTA
 class TechBackground {
     constructor() {
         this.canvas = document.getElementById('techBackground');
@@ -48,7 +48,7 @@ class TechBackground {
                 originalX: null,
                 originalY: null,
                 oscillation: Math.random() * Math.PI * 2,
-                trailPositions: [] // Para rastros controlados
+                trailPositions: []
             });
         }
     }
@@ -60,8 +60,7 @@ class TechBackground {
     }
     
     clearCanvas() {
-        // En lugar de pintar un rectángulo transparente que causa acumulación,
-        // usamos un gradiente radial que cubre todo pero deja el fondo oscuro visible
+        // Limpieza mejorada
         const gradient = this.ctx.createRadialGradient(
             this.canvas.width / 2, 
             this.canvas.height / 2, 
@@ -71,14 +70,13 @@ class TechBackground {
             Math.max(this.canvas.width, this.canvas.height) / 1.5
         );
         
-        gradient.addColorStop(0, 'rgba(10, 10, 26, 0.15)'); // Muy transparente
+        gradient.addColorStop(0, 'rgba(10, 10, 26, 0.15)');
         gradient.addColorStop(0.5, 'rgba(10, 10, 26, 0.25)');
         gradient.addColorStop(1, 'rgba(10, 10, 26, 0.4)');
         
         this.ctx.fillStyle = gradient;
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
         
-        // Añadimos un fondo base sólido muy sutil para evitar huecos negros
         this.ctx.fillStyle = 'rgba(10, 10, 26, 0.02)';
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
     }
@@ -105,28 +103,24 @@ class TechBackground {
             }
         }
         
-        // Dibujar partículas con un sistema de rastro controlado
+        // Dibujar partículas
         for (let particle of this.particles) {
-            // Actualizar oscilación
             particle.oscillation += 0.02;
             const oscillationX = Math.sin(particle.oscillation) * 0.3;
             const oscillationY = Math.cos(particle.oscillation * 0.7) * 0.3;
             
-            // Guardar posición actual para el rastro
             particle.trailPositions.unshift({x: particle.x, y: particle.y, time: currentTime});
             
-            // Mantener solo las últimas 3 posiciones para el rastro
             if (particle.trailPositions.length > 3) {
                 particle.trailPositions.pop();
             }
             
-            // Actualizar posición principal
             particle.x += particle.speedX + oscillationX;
             particle.y += particle.speedY + oscillationY;
             
-            // REBOTE MEJORADO: Suave pero sin quedar atrapado
+            // Rebote
             if (particle.x < 0 || particle.x > this.canvas.width) {
-                particle.speedX *= -0.95; // Rebote suave
+                particle.speedX *= -0.95;
                 particle.x = Math.max(1, Math.min(this.canvas.width - 1, particle.x));
             }
             if (particle.y < 0 || particle.y > this.canvas.height) {
@@ -149,11 +143,11 @@ class TechBackground {
                 }
             }
             
-            // DIBUJAR RASTRO (muy sutil)
+            // DIBUJAR RASTRO
             for (let i = 0; i < particle.trailPositions.length; i++) {
                 const trail = particle.trailPositions[i];
                 const age = currentTime - trail.time;
-                const fade = Math.max(0, 1 - (age / 200)); // Se desvanecen en 200ms
+                const fade = Math.max(0, 1 - (age / 200));
                 
                 if (fade > 0) {
                     const trailSize = particle.size * (0.5 - i * 0.15);
@@ -166,7 +160,7 @@ class TechBackground {
                 }
             }
             
-            // DIBUJAR PARTÍCULA PRINCIPAL (igual que antes)
+            // DIBUJAR PARTÍCULA PRINCIPAL
             const gradient = this.ctx.createRadialGradient(
                 particle.x, particle.y, 0,
                 particle.x, particle.y, particle.size * 2
@@ -184,7 +178,7 @@ class TechBackground {
             this.ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
             this.ctx.fill();
             
-            // Punto de luz pequeño (sin dejar rastro)
+            // Punto de luz
             this.ctx.beginPath();
             this.ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
             this.ctx.arc(
@@ -199,11 +193,9 @@ class TechBackground {
     }
     
     animate() {
-        // LIMPIEZA MEJORADA: No usa transparencia acumulativa
-        // Usa un método de limpieza que no crea huecos negros
         this.clearCanvas();
         
-        // Efectos de luz de fondo estáticos (una sola capa)
+        // Efectos de luz de fondo
         const light1 = this.ctx.createRadialGradient(
             this.canvas.width * 0.2, 
             this.canvas.height * 0.5, 
@@ -232,38 +224,387 @@ class TechBackground {
         this.ctx.fillStyle = light2;
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
         
-        // Dibujar partículas y conexiones
         this.drawParticles();
         
         requestAnimationFrame(() => this.animate());
     }
 }
 
-// Menú hamburguesa
-class Navigation {
+// ===== MENÚ MÓVIL MEJORADO =====
+class MobileMenu {
     constructor() {
-        this.hamburger = document.querySelector('.hamburger');
-        this.navMenu = document.querySelector('.nav-menu');
+        this.hamburger = document.querySelector('.hamburger.right-align');
+        this.closeBtn = document.querySelector('.close-menu');
+        this.navOverlay = document.querySelector('.nav-overlay');
+        this.navMenu = document.querySelector('.nav-menu-mobile');
         
+        if (!this.hamburger) return;
+        
+        this.init();
+    }
+    
+    init() {
         this.hamburger.addEventListener('click', () => this.toggleMenu());
+        this.closeBtn?.addEventListener('click', () => this.closeMenu());
+        this.navOverlay?.addEventListener('click', () => this.closeMenu());
         
-        document.querySelectorAll('.nav-link').forEach(link => {
+        // Cerrar menú al hacer clic en enlaces
+        document.querySelectorAll('.mobile-nav-list .nav-link').forEach(link => {
             link.addEventListener('click', () => this.closeMenu());
         });
     }
     
     toggleMenu() {
-        this.hamburger.classList.toggle('active');
-        this.navMenu.classList.toggle('active');
+        const isActive = this.navMenu.classList.contains('active');
+        
+        if (isActive) {
+            this.closeMenu();
+        } else {
+            this.openMenu();
+        }
+    }
+    
+    openMenu() {
+        document.body.style.overflow = 'hidden';
+        this.navMenu.classList.add('active');
+        this.navOverlay.classList.add('active');
+        this.hamburger.classList.add('active');
     }
     
     closeMenu() {
-        this.hamburger.classList.remove('active');
+        document.body.style.overflow = '';
         this.navMenu.classList.remove('active');
+        this.navOverlay.classList.remove('active');
+        this.hamburger.classList.remove('active');
     }
 }
 
-// Efectos de scroll suave
+// ===== CARRUSEL GENÉRICO PARA MÓVIL =====
+class MobileCarousel {
+    constructor(containerSelector, options = {}) {
+        this.container = document.querySelector(containerSelector);
+        if (!this.container) return;
+        
+        this.track = this.container.querySelector('.carousel-track');
+        this.slides = Array.from(this.track.children);
+        this.prevBtn = this.container.querySelector('.carousel-btn.prev');
+        this.nextBtn = this.container.querySelector('.carousel-btn.next');
+        this.dotsContainer = this.container.querySelector('.carousel-dots');
+        
+        this.currentIndex = 0;
+        this.totalSlides = this.slides.length;
+        this.isTransitioning = false;
+        this.autoPlayInterval = null;
+        
+        // Opciones
+        this.autoPlay = options.autoPlay || false;
+        this.autoPlayDelay = options.autoPlayDelay || 5000;
+        this.touchStartX = 0;
+        this.touchEndX = 0;
+        
+        this.init();
+    }
+    
+    init() {
+        if (this.slides.length === 0) return;
+        
+        this.createDots();
+        this.addEventListeners();
+        this.updateCarousel();
+        
+        if (this.autoPlay) {
+            this.startAutoPlay();
+        }
+        
+        // Solo para móvil
+        if (window.innerWidth <= 768) {
+            this.addTouchEvents();
+        }
+    }
+    
+    createDots() {
+        if (!this.dotsContainer) return;
+        
+        this.dotsContainer.innerHTML = '';
+        
+        for (let i = 0; i < this.totalSlides; i++) {
+            const dot = document.createElement('span');
+            dot.classList.add('dot');
+            dot.setAttribute('data-index', i);
+            if (i === 0) dot.classList.add('active');
+            this.dotsContainer.appendChild(dot);
+        }
+        
+        this.dots = Array.from(this.dotsContainer.children);
+    }
+    
+    addEventListeners() {
+        this.prevBtn?.addEventListener('click', () => this.prev());
+        this.nextBtn?.addEventListener('click', () => this.next());
+        
+        this.dots?.forEach(dot => {
+            dot.addEventListener('click', (e) => {
+                const index = parseInt(e.target.getAttribute('data-index'));
+                if (index !== this.currentIndex && !this.isTransitioning) {
+                    this.goToSlide(index);
+                }
+            });
+        });
+        
+        // Pausar autoplay al interactuar
+        this.container.addEventListener('mouseenter', () => this.stopAutoPlay());
+        this.container.addEventListener('mouseleave', () => {
+            if (this.autoPlay) this.startAutoPlay();
+        });
+    }
+    
+    addTouchEvents() {
+        this.track.addEventListener('touchstart', (e) => {
+            this.touchStartX = e.touches[0].clientX;
+            this.stopAutoPlay();
+        });
+        
+        this.track.addEventListener('touchmove', (e) => {
+            this.touchEndX = e.touches[0].clientX;
+        });
+        
+        this.track.addEventListener('touchend', () => {
+            this.handleSwipe();
+            if (this.autoPlay) this.startAutoPlay();
+        });
+    }
+    
+    handleSwipe() {
+        const threshold = 50;
+        const diff = this.touchStartX - this.touchEndX;
+        
+        if (Math.abs(diff) > threshold) {
+            if (diff > 0) {
+                this.next();
+            } else {
+                this.prev();
+            }
+        }
+    }
+    
+    updateCarousel() {
+        const translateX = -this.currentIndex * 100;
+        this.track.style.transform = `translateX(${translateX}%)`;
+        
+        this.updateDots();
+        this.updateButtons();
+    }
+    
+    updateDots() {
+        if (!this.dots) return;
+        
+        this.dots.forEach((dot, index) => {
+            dot.classList.toggle('active', index === this.currentIndex);
+        });
+    }
+    
+    updateButtons() {
+        // Siempre activos
+        this.prevBtn.style.opacity = '1';
+        this.prevBtn.style.cursor = 'pointer';
+        this.nextBtn.style.opacity = '1';
+        this.nextBtn.style.cursor = 'pointer';
+    }
+    
+    prev() {
+        if (this.isTransitioning) return;
+        
+        this.isTransitioning = true;
+        
+        if (this.currentIndex === 0) {
+            this.currentIndex = this.totalSlides - 1;
+        } else {
+            this.currentIndex--;
+        }
+        
+        this.updateCarousel();
+        
+        setTimeout(() => {
+            this.isTransitioning = false;
+        }, 500);
+    }
+    
+    next() {
+        if (this.isTransitioning) return;
+        
+        this.isTransitioning = true;
+        
+        if (this.currentIndex === this.totalSlides - 1) {
+            this.currentIndex = 0;
+        } else {
+            this.currentIndex++;
+        }
+        
+        this.updateCarousel();
+        
+        setTimeout(() => {
+            this.isTransitioning = false;
+        }, 500);
+    }
+    
+    goToSlide(index) {
+        if (index >= 0 && index < this.totalSlides && !this.isTransitioning) {
+            this.isTransitioning = true;
+            this.currentIndex = index;
+            this.updateCarousel();
+            
+            setTimeout(() => {
+                this.isTransitioning = false;
+            }, 500);
+        }
+    }
+    
+    startAutoPlay() {
+        this.stopAutoPlay();
+        if (this.autoPlay) {
+            this.autoPlayInterval = setInterval(() => {
+                this.next();
+            }, this.autoPlayDelay);
+        }
+    }
+    
+    stopAutoPlay() {
+        if (this.autoPlayInterval) {
+            clearInterval(this.autoPlayInterval);
+            this.autoPlayInterval = null;
+        }
+    }
+}
+
+// ===== CARRUSEL DE RESEÑAS =====
+class ReviewsCarousel {
+    constructor() {
+        this.cards = document.querySelectorAll('.review-card');
+        this.dots = document.querySelectorAll('.reviews .dot');
+        this.prevBtn = document.querySelector('.reviews .carousel-btn.prev');
+        this.nextBtn = document.querySelector('.reviews .carousel-btn.next');
+        this.currentIndex = 0;
+        this.totalCards = this.cards.length;
+        this.autoPlayInterval = null;
+        this.isTransitioning = false;
+        
+        this.init();
+    }
+    
+    init() {
+        this.prevBtn.addEventListener('click', () => this.prev());
+        this.nextBtn.addEventListener('click', () => this.next());
+        
+        this.dots.forEach(dot => {
+            dot.addEventListener('click', (e) => {
+                const index = parseInt(e.target.getAttribute('data-index'));
+                if (index !== this.currentIndex && !this.isTransitioning) {
+                    this.goToSlide(index);
+                }
+            });
+        });
+        
+        this.startAutoPlay();
+        
+        const carouselTrack = document.querySelector('.reviews-carousel-track');
+        carouselTrack.addEventListener('mouseenter', () => this.stopAutoPlay());
+        carouselTrack.addEventListener('mouseleave', () => this.startAutoPlay());
+        
+        this.updateControls();
+    }
+    
+    updateControls() {
+        this.prevBtn.style.opacity = '1';
+        this.prevBtn.style.cursor = 'pointer';
+        this.nextBtn.style.opacity = '1';
+        this.nextBtn.style.cursor = 'pointer';
+        
+        this.dots.forEach((dot, index) => {
+            dot.classList.toggle('active', index === this.currentIndex);
+        });
+        
+        this.cards.forEach((card, index) => {
+            const isActive = index === this.currentIndex;
+            card.classList.toggle('active', isActive);
+            
+            if (isActive) {
+                card.style.zIndex = '2';
+                card.style.opacity = '1';
+                card.style.transform = 'translateX(0) scale(1)';
+                card.style.visibility = 'visible';
+            } else {
+                card.style.zIndex = '1';
+                card.style.opacity = '0';
+                card.style.transform = 'translateX(50px) scale(0.95)';
+                card.style.visibility = 'hidden';
+            }
+        });
+    }
+    
+    prev() {
+        if (!this.isTransitioning) {
+            this.isTransitioning = true;
+            
+            if (this.currentIndex === 0) {
+                this.currentIndex = this.totalCards - 1;
+            } else {
+                this.currentIndex--;
+            }
+            
+            this.updateControls();
+            
+            setTimeout(() => {
+                this.isTransitioning = false;
+            }, 500);
+        }
+    }
+    
+    next() {
+        if (!this.isTransitioning) {
+            this.isTransitioning = true;
+            
+            if (this.currentIndex === this.totalCards - 1) {
+                this.currentIndex = 0;
+            } else {
+                this.currentIndex++;
+            }
+            
+            this.updateControls();
+            
+            setTimeout(() => {
+                this.isTransitioning = false;
+            }, 500);
+        }
+    }
+    
+    goToSlide(index) {
+        if (index >= 0 && index < this.totalCards && !this.isTransitioning) {
+            this.isTransitioning = true;
+            this.currentIndex = index;
+            this.updateControls();
+            
+            setTimeout(() => {
+                this.isTransitioning = false;
+            }, 500);
+        }
+    }
+    
+    startAutoPlay() {
+        this.stopAutoPlay();
+        this.autoPlayInterval = setInterval(() => {
+            this.next();
+        }, 10000);
+    }
+    
+    stopAutoPlay() {
+        if (this.autoPlayInterval) {
+            clearInterval(this.autoPlayInterval);
+            this.autoPlayInterval = null;
+        }
+    }
+}
+
+// ===== EFECTOS DE SCROLL =====
 class ScrollEffects {
     constructor() {
         this.navbar = document.querySelector('.navbar');
@@ -305,185 +646,12 @@ class ScrollEffects {
     }
 }
 
-// Carrusel de reseñas - INFINITO CON TIEMPO DOBLE
-class ReviewsCarousel {
-    constructor() {
-        this.cards = document.querySelectorAll('.review-card');
-        this.dots = document.querySelectorAll('.reviews .dot');
-        this.prevBtn = document.querySelector('.reviews .carousel-btn.prev');
-        this.nextBtn = document.querySelector('.reviews .carousel-btn.next');
-        this.currentIndex = 0;
-        this.totalCards = this.cards.length;
-        this.autoPlayInterval = null;
-        this.isTransitioning = false;
-        
-        this.init();
-    }
-    
-    init() {
-        this.prevBtn.addEventListener('click', () => this.prev());
-        this.nextBtn.addEventListener('click', () => this.next());
-        
-        this.dots.forEach(dot => {
-            dot.addEventListener('click', (e) => {
-                const index = parseInt(e.target.getAttribute('data-index'));
-                if (index !== this.currentIndex && !this.isTransitioning) {
-                    this.goToSlide(index);
-                }
-            });
-        });
-        
-        this.startAutoPlay();
-        
-        const carouselTrack = document.querySelector('.reviews-carousel-track');
-        carouselTrack.addEventListener('mouseenter', () => this.stopAutoPlay());
-        carouselTrack.addEventListener('mouseleave', () => this.startAutoPlay());
-        
-        this.updateControls();
-    }
-    
-    updateControls() {
-        // Eliminar deshabilitación de botones (ahora siempre activos)
-        this.prevBtn.style.opacity = '1';
-        this.prevBtn.style.cursor = 'pointer';
-        this.nextBtn.style.opacity = '1';
-        this.nextBtn.style.cursor = 'pointer';
-        
-        // Actualizar puntos indicadores
-        this.dots.forEach((dot, index) => {
-            dot.classList.toggle('active', index === this.currentIndex);
-        });
-        
-        // Actualizar tarjetas
-        this.cards.forEach((card, index) => {
-            const isActive = index === this.currentIndex;
-            card.classList.toggle('active', isActive);
-            
-            if (isActive) {
-                card.style.zIndex = '2';
-                card.style.opacity = '1';
-                card.style.transform = 'translateX(0) scale(1)';
-                card.style.visibility = 'visible';
-            } else {
-                card.style.zIndex = '1';
-                card.style.opacity = '0';
-                card.style.transform = 'translateX(50px) scale(0.95)';
-                card.style.visibility = 'hidden';
-            }
-        });
-    }
-    
-    prev() {
-        if (!this.isTransitioning) {
-            this.isTransitioning = true;
-            
-            // LÓGICA INFINITA: Si estamos en el primero, vamos al último
-            if (this.currentIndex === 0) {
-                this.currentIndex = this.totalCards - 1;
-            } else {
-                this.currentIndex--;
-            }
-            
-            this.updateControls();
-            
-            setTimeout(() => {
-                this.isTransitioning = false;
-            }, 500);
-        }
-    }
-    
-    next() {
-        if (!this.isTransitioning) {
-            this.isTransitioning = true;
-            
-            // LÓGICA INFINITA: Si estamos en el último, vamos al primero
-            if (this.currentIndex === this.totalCards - 1) {
-                this.currentIndex = 0;
-            } else {
-                this.currentIndex++;
-            }
-            
-            this.updateControls();
-            
-            setTimeout(() => {
-                this.isTransitioning = false;
-            }, 500);
-        }
-    }
-    
-    goToSlide(index) {
-        if (index >= 0 && index < this.totalCards && !this.isTransitioning) {
-            this.isTransitioning = true;
-            this.currentIndex = index;
-            this.updateControls();
-            
-            setTimeout(() => {
-                this.isTransitioning = false;
-            }, 500);
-        }
-    }
-    
-    startAutoPlay() {
-        this.stopAutoPlay();
-        // TIEMPO MODIFICADO: De 5000ms a 10000ms (el doble)
-        this.autoPlayInterval = setInterval(() => {
-            this.next();
-        }, 10000); // 10 segundos en lugar de 5
-    }
-    
-    stopAutoPlay() {
-        if (this.autoPlayInterval) {
-            clearInterval(this.autoPlayInterval);
-            this.autoPlayInterval = null;
-        }
-    }
-}
-
-// Efectos de hover para canales
-class ChannelsHoverEffects {
-    constructor() {
-        this.initChannelsHover();
-    }
-    
-    initChannelsHover() {
-        const channelItems = document.querySelectorAll('.channel-item');
-        
-        channelItems.forEach(item => {
-            item.addEventListener('mouseenter', () => {
-                // Añadir efecto de brillo al avatar
-                const avatar = item.querySelector('.avatar-circle');
-                if (avatar) {
-                    avatar.style.boxShadow = '0 15px 35px rgba(255, 0, 255, 0.4)';
-                }
-                
-                // Resaltar el punto online
-                const onlineDot = item.querySelector('.online-dot.active');
-                if (onlineDot) {
-                    onlineDot.style.transform = 'scale(1.3)';
-                }
-            });
-            
-            item.addEventListener('mouseleave', () => {
-                // Restaurar efectos
-                const avatar = item.querySelector('.avatar-circle');
-                if (avatar) {
-                    avatar.style.boxShadow = '0 10px 25px rgba(0, 0, 0, 0.3)';
-                }
-                
-                const onlineDot = item.querySelector('.online-dot.active');
-                if (onlineDot) {
-                    onlineDot.style.transform = 'scale(1)';
-                }
-            });
-        });
-    }
-}
-
-// Efectos de hover generales
+// ===== EFECTOS DE HOVER =====
 class HoverEffects {
     constructor() {
         this.initCardHovers();
         this.initVideoHovers();
+        this.initChannelsHover();
     }
     
     initCardHovers() {
@@ -526,17 +694,87 @@ class HoverEffects {
             });
         });
     }
+    
+    initChannelsHover() {
+        const channelItems = document.querySelectorAll('.channel-item');
+        
+        channelItems.forEach(item => {
+            item.addEventListener('mouseenter', () => {
+                const avatar = item.querySelector('.avatar-circle');
+                if (avatar) {
+                    avatar.style.boxShadow = '0 15px 35px rgba(255, 0, 255, 0.4)';
+                }
+                
+                const onlineDot = item.querySelector('.online-dot.active');
+                if (onlineDot) {
+                    onlineDot.style.transform = 'scale(1.3)';
+                }
+            });
+            
+            item.addEventListener('mouseleave', () => {
+                const avatar = item.querySelector('.avatar-circle');
+                if (avatar) {
+                    avatar.style.boxShadow = '0 10px 25px rgba(0, 0, 0, 0.3)';
+                }
+                
+                const onlineDot = item.querySelector('.online-dot.active');
+                if (onlineDot) {
+                    onlineDot.style.transform = 'scale(1)';
+                }
+            });
+        });
+    }
 }
 
-// Inicialización cuando el DOM esté cargado
+// ===== INICIALIZACIÓN COMPLETA =====
 document.addEventListener('DOMContentLoaded', () => {
+    // 1. Fondo animado
     const techBackground = new TechBackground();
-    const navigation = new Navigation();
+    
+    // 2. Menú móvil
+    const mobileMenu = new MobileMenu();
+    
+    // 3. Efectos de scroll
     const scrollEffects = new ScrollEffects();
-    const reviewsCarousel = new ReviewsCarousel();
-    const channelsHoverEffects = new ChannelsHoverEffects();
+    
+    // 4. Efectos de hover
     const hoverEffects = new HoverEffects();
     
+    // 5. Carrusel de reseñas
+    const reviewsCarousel = new ReviewsCarousel();
+    
+    // 6. Inicializar carruseles móviles
+    let mobileCarousels = [];
+    
+    if (window.innerWidth <= 768) {
+        // Carrusel de características
+        const featuresCarousel = new MobileCarousel('.features-carousel-container', {
+            autoPlay: true,
+            autoPlayDelay: 6000
+        });
+        if (featuresCarousel.container) mobileCarousels.push(featuresCarousel);
+        
+        // Carrusel de portafolio
+        const portfolioCarousel = new MobileCarousel('.portfolio-carousel-container', {
+            autoPlay: false
+        });
+        if (portfolioCarousel.container) mobileCarousels.push(portfolioCarousel);
+        
+        // Carrusel de shorts
+        const shortsCarousel = new MobileCarousel('.shorts-carousel-container', {
+            autoPlay: true,
+            autoPlayDelay: 7000
+        });
+        if (shortsCarousel.container) mobileCarousels.push(shortsCarousel);
+        
+        // Carrusel de canales
+        const channelsCarousel = new MobileCarousel('.channels-carousel-container', {
+            autoPlay: false
+        });
+        if (channelsCarousel.container) mobileCarousels.push(channelsCarousel);
+    }
+    
+    // 7. Efectos de animación del hero
     const heroTitle = document.querySelector('.hero-title');
     if (heroTitle) {
         heroTitle.classList.add('animate-title');
@@ -556,19 +794,19 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
     
-    document.body.style.opacity = '0';
-    document.body.style.transition = 'opacity 0.8s ease';
-    
+    // 8. Fade in inicial
     setTimeout(() => {
         document.body.style.opacity = '1';
     }, 100);
     
+    // 9. Actualizar copyright
     const copyright = document.querySelector('.copyright');
     if (copyright) {
         const currentYear = new Date().getFullYear();
         copyright.textContent = copyright.textContent.replace('2023', currentYear);
     }
     
+    // 10. Lazy loading para iframes
     const iframes = document.querySelectorAll('iframe');
     iframes.forEach(iframe => {
         iframe.setAttribute('loading', 'lazy');
@@ -580,7 +818,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
     
-    // Añadir efecto de carga para iframes
+    // 11. Indicadores de carga para videos
     const allVideos = document.querySelectorAll('.video-wrapper');
     allVideos.forEach(video => {
         video.style.position = 'relative';
@@ -604,7 +842,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
     
-    // Efecto de scroll para secciones
+    // 12. Observer para animaciones al hacer scroll
     const sections = document.querySelectorAll('section');
     const observerOptions = {
         threshold: 0.1,
@@ -616,7 +854,6 @@ document.addEventListener('DOMContentLoaded', () => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('visible');
                 
-                // Efecto especial para la sección de canales
                 if (entry.target.id === 'canales') {
                     const channelItems = entry.target.querySelectorAll('.channel-item');
                     channelItems.forEach((item, index) => {
@@ -640,24 +877,7 @@ document.addEventListener('DOMContentLoaded', () => {
         observer.observe(section);
     });
     
-    // Smooth scroll para enlaces del menú
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function(e) {
-            const href = this.getAttribute('href');
-            if (href === '#' || href === '#!') return;
-            
-            e.preventDefault();
-            const target = document.querySelector(href);
-            if (target) {
-                window.scrollTo({
-                    top: target.offsetTop - 80,
-                    behavior: 'smooth'
-                });
-            }
-        });
-    });
-    
-    // Actualizar enlaces de canales en reseñas para que coincidan con los canales
+    // 13. Enlaces de canales en reseñas
     const reviewLinks = [
         'https://www.youtube.com/@GROSSO_MODO/videos',
         'https://www.youtube.com/@PixelHeroRBX/videos',
@@ -672,29 +892,27 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
     
-    // Rotación automática de canales online (cambia estado cada 5 segundos)
+    // 14. Rotación de estado online en canales
     const onlineDots = document.querySelectorAll('.online-dot');
-    let currentActiveDot = 0;
+    if (onlineDots.length > 0) {
+        setInterval(() => {
+            onlineDots.forEach(dot => {
+                dot.classList.remove('active');
+                dot.style.background = '#666';
+            });
+            
+            const randomIndex = Math.floor(Math.random() * onlineDots.length);
+            onlineDots[randomIndex].classList.add('active');
+            onlineDots[randomIndex].style.background = '#ff00ff';
+        }, 5000);
+    }
     
-    setInterval(() => {
-        onlineDots.forEach(dot => {
-            dot.classList.remove('active');
-            dot.style.background = '#666';
-        });
-        
-        // Activar un punto aleatorio
-        const randomIndex = Math.floor(Math.random() * onlineDots.length);
-        onlineDots[randomIndex].classList.add('active');
-        onlineDots[randomIndex].style.background = '#ff00ff';
-        
-        currentActiveDot = randomIndex;
-    }, 5000);
-    
-    // Manejar carga de imágenes de canales
-    const channelImages = document.querySelectorAll('.channel-image');
+    // 15. Fallback para imágenes
+    const channelImages = document.querySelectorAll('.channel-image, .review-image');
     channelImages.forEach(img => {
         img.onerror = function() {
-            const fallback = this.parentElement.querySelector('.channel-fallback');
+            const parent = this.parentElement;
+            const fallback = parent.querySelector('.channel-fallback, .review-fallback');
             if (fallback) {
                 fallback.style.display = 'flex';
                 fallback.style.alignItems = 'center';
@@ -705,18 +923,41 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     });
     
-    // Manejar carga de imágenes de reseñas
-    const reviewImages = document.querySelectorAll('.review-image');
-    reviewImages.forEach(img => {
-        img.onerror = function() {
-            const fallback = this.parentElement.querySelector('.review-fallback');
-            if (fallback) {
-                fallback.style.display = 'flex';
-                fallback.style.alignItems = 'center';
-                fallback.style.justifyContent = 'center';
-                fallback.style.width = '100%';
-                fallback.style.height = '100%';
+    // 16. Manejo de redimensionamiento
+    let resizeTimeout;
+    window.addEventListener('resize', () => {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => {
+            if (window.innerWidth <= 768 && mobileCarousels.length === 0) {
+                // Recargar si cambia a móvil y no hay carruseles
+                location.reload();
             }
-        };
+        }, 250);
     });
+    
+    // 17. Smooth scroll mejorado
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            const href = this.getAttribute('href');
+            if (href === '#' || href === '#!') return;
+            
+            e.preventDefault();
+            const target = document.querySelector(href);
+            if (target) {
+                // Cerrar menú móvil si está abierto
+                if (window.innerWidth <= 768 && mobileMenu.navMenu.classList.contains('active')) {
+                    mobileMenu.closeMenu();
+                }
+                
+                window.scrollTo({
+                    top: target.offsetTop - 80,
+                    behavior: 'smooth'
+                });
+            }
+        });
+    });
+    
+    console.log('✅ Portfolio de Leonardo Torres cargado exitosamente');
+    console.log(`📱 Modo: ${window.innerWidth <= 768 ? 'Móvil' : 'Escritorio'}`);
+    console.log(`🎬 Carruseles móviles inicializados: ${mobileCarousels.length}`);
 });
