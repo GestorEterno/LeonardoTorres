@@ -305,6 +305,219 @@ class ScrollEffects {
     }
 }
 
+// Carruseles para Shorts y Canales
+class Carousels {
+    constructor() {
+        this.initShortsCarousel();
+        this.initChannelsCarousel();
+        this.initTouchSupport();
+    }
+    
+    initShortsCarousel() {
+        const shortsTrack = document.querySelector('.shorts-carousel-track');
+        const shortsItems = document.querySelectorAll('.short-item');
+        const prevBtn = document.querySelector('.shorts .carousel-btn.prev');
+        const nextBtn = document.querySelector('.shorts .carousel-btn.next');
+        const indicators = document.querySelectorAll('.shorts .indicator');
+        
+        if (!shortsTrack) return;
+        
+        let currentIndex = 0;
+        let itemsPerView = this.calculateItemsPerView();
+        const totalItems = shortsItems.length;
+        const totalPages = Math.ceil(totalItems / itemsPerView);
+        
+        // Calcular elementos por vista según tamaño de pantalla
+        const calculateItemsPerView = () => {
+            if (window.innerWidth < 768) return 1;
+            if (window.innerWidth < 1024) return 2;
+            return 4;
+        };
+        
+        this.calculateItemsPerView = calculateItemsPerView;
+        
+        // Actualizar indicadores
+        const updateIndicators = () => {
+            indicators.forEach((indicator, index) => {
+                indicator.classList.toggle('active', index === currentIndex);
+            });
+        };
+        
+        // Mover carrusel
+        const moveCarousel = () => {
+            const itemWidth = shortsItems[0].offsetWidth + 25; // width + gap
+            const translateX = -(currentIndex * itemsPerView * itemWidth);
+            shortsTrack.style.transform = `translateX(${translateX}px)`;
+            updateIndicators();
+            
+            // Actualizar estado de botones
+            prevBtn.disabled = currentIndex === 0;
+            nextBtn.disabled = currentIndex >= totalPages - 1;
+        };
+        
+        // Eventos de botones
+        prevBtn?.addEventListener('click', () => {
+            if (currentIndex > 0) {
+                currentIndex--;
+                moveCarousel();
+            }
+        });
+        
+        nextBtn?.addEventListener('click', () => {
+            if (currentIndex < totalPages - 1) {
+                currentIndex++;
+                moveCarousel();
+            }
+        });
+        
+        // Eventos de indicadores
+        indicators.forEach((indicator, index) => {
+            indicator.addEventListener('click', () => {
+                currentIndex = index;
+                moveCarousel();
+            });
+        });
+        
+        // Actualizar en resize
+        window.addEventListener('resize', () => {
+            const newItemsPerView = calculateItemsPerView();
+            if (itemsPerView !== newItemsPerView) {
+                itemsPerView = newItemsPerView;
+                currentIndex = 0; // Reset al cambiar tamaño
+                moveCarousel();
+            }
+        });
+        
+        // Inicializar
+        moveCarousel();
+    }
+    
+    initChannelsCarousel() {
+        const channelsTrack = document.querySelector('.channels-carousel-track');
+        const channelItems = document.querySelectorAll('.channel-item');
+        const prevBtn = document.querySelector('.channels .carousel-btn.prev');
+        const nextBtn = document.querySelector('.channels .carousel-btn.next');
+        const indicators = document.querySelectorAll('.channels .indicator');
+        
+        if (!channelsTrack) return;
+        
+        let currentIndex = 0;
+        let itemsPerView = this.calculateChannelsPerView();
+        const totalItems = channelItems.length;
+        const totalPages = Math.ceil(totalItems / itemsPerView);
+        
+        // Calcular elementos por vista según tamaño de pantalla
+        const calculateChannelsPerView = () => {
+            if (window.innerWidth < 768) return 1;
+            if (window.innerWidth < 1024) return 2;
+            return 5;
+        };
+        
+        this.calculateChannelsPerView = calculateChannelsPerView;
+        
+        // Actualizar indicadores
+        const updateIndicators = () => {
+            indicators.forEach((indicator, index) => {
+                indicator.classList.toggle('active', index === currentIndex);
+            });
+        };
+        
+        // Mover carrusel
+        const moveCarousel = () => {
+            const itemWidth = channelItems[0].offsetWidth + 25; // width + gap
+            const translateX = -(currentIndex * itemsPerView * itemWidth);
+            channelsTrack.style.transform = `translateX(${translateX}px)`;
+            updateIndicators();
+            
+            // Actualizar estado de botones
+            prevBtn.disabled = currentIndex === 0;
+            nextBtn.disabled = currentIndex >= totalPages - 1;
+        };
+        
+        // Eventos de botones
+        prevBtn?.addEventListener('click', () => {
+            if (currentIndex > 0) {
+                currentIndex--;
+                moveCarousel();
+            }
+        });
+        
+        nextBtn?.addEventListener('click', () => {
+            if (currentIndex < totalPages - 1) {
+                currentIndex++;
+                moveCarousel();
+            }
+        });
+        
+        // Eventos de indicadores
+        indicators.forEach((indicator, index) => {
+            indicator.addEventListener('click', () => {
+                currentIndex = index;
+                moveCarousel();
+            });
+        });
+        
+        // Actualizar en resize
+        window.addEventListener('resize', () => {
+            const newItemsPerView = calculateChannelsPerView();
+            if (itemsPerView !== newItemsPerView) {
+                itemsPerView = newItemsPerView;
+                currentIndex = 0; // Reset al cambiar tamaño
+                moveCarousel();
+            }
+        });
+        
+        // Inicializar
+        moveCarousel();
+    }
+    
+    initTouchSupport() {
+        // Soporte táctil para carruseles
+        const tracks = document.querySelectorAll('.shorts-carousel-track, .channels-carousel-track');
+        
+        tracks.forEach(track => {
+            let startX = 0;
+            let scrollLeft = 0;
+            let isDown = false;
+            
+            track.addEventListener('mousedown', (e) => {
+                isDown = true;
+                startX = e.pageX - track.offsetLeft;
+                scrollLeft = track.scrollLeft;
+            });
+            
+            track.addEventListener('mouseleave', () => {
+                isDown = false;
+            });
+            
+            track.addEventListener('mouseup', () => {
+                isDown = false;
+            });
+            
+            track.addEventListener('mousemove', (e) => {
+                if (!isDown) return;
+                e.preventDefault();
+                const x = e.pageX - track.offsetLeft;
+                const walk = (x - startX) * 2;
+                track.scrollLeft = scrollLeft - walk;
+            });
+            
+            // Soporte táctil para móviles
+            track.addEventListener('touchstart', (e) => {
+                startX = e.touches[0].pageX - track.offsetLeft;
+                scrollLeft = track.scrollLeft;
+            });
+            
+            track.addEventListener('touchmove', (e) => {
+                e.preventDefault();
+                const x = e.touches[0].pageX - track.offsetLeft;
+                const walk = (x - startX) * 2;
+                track.scrollLeft = scrollLeft - walk;
+            });
+        });
+    }
+}
+
 // Carrusel de reseñas - INFINITO CON TIEMPO DOBLE
 class ReviewsCarousel {
     constructor() {
@@ -533,6 +746,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const techBackground = new TechBackground();
     const navigation = new Navigation();
     const scrollEffects = new ScrollEffects();
+    const carousels = new Carousels();
     const reviewsCarousel = new ReviewsCarousel();
     const channelsHoverEffects = new ChannelsHoverEffects();
     const hoverEffects = new HoverEffects();
