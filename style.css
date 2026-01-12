@@ -24,6 +24,8 @@
     --glow-color: rgba(255, 0, 255, 0.6);
     --font-main: 'Montserrat', sans-serif;
     --font-tech: 'Orbitron', monospace;
+    --ease-smooth: cubic-bezier(0.2, 0.8, 0.2, 1);
+    --ease-bounce: cubic-bezier(0.34, 1.2, 0.64, 1);
 }
 
 html {
@@ -424,19 +426,19 @@ body {
     font-weight: 600;
 }
 
+/* CORRECCIÓN CRÍTICA: ZOOM CENTRADO Y FLUIDO */
 .video-wrapper {
     position: relative;
     padding-bottom: 56.25%; /* 16:9 aspect ratio */
     height: 0;
     overflow: hidden;
-    transition: filter 0.4s ease;
-    will-change: filter;
+    /* Remover transiciones del contenedor - el iframe maneja todo */
+    /* Mejorar rendimiento */
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
 }
 
-.video-wrapper:hover {
-    filter: brightness(1.1) contrast(1.05);
-}
-
+/* CORRECCIÓN: Zoom centrado y ultra fluido para iframes */
 .video-wrapper iframe {
     position: absolute;
     top: 0;
@@ -444,12 +446,18 @@ body {
     width: 100%;
     height: 100%;
     border: none;
-    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: transform 0.4s var(--ease-smooth);
+    transform-origin: center center; /* CRÍTICO: zoom perfectamente centrado */
     will-change: transform;
+    /* Optimizaciones de rendimiento */
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    transform: translateZ(0) scale(1);
+    -webkit-transform: translateZ(0) scale(1);
 }
 
 .video-wrapper:hover iframe {
-    transform: scale(1.02);
+    transform: translateZ(0) scale(1.03); /* Zoom suave y centrado */
 }
 
 /* Hero video específico - sin overlay */
@@ -495,7 +503,7 @@ body {
     padding: 30px;
     text-align: center;
     border: 1px solid var(--card-border);
-    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: transform 0.4s var(--ease-bounce), box-shadow 0.4s var(--ease-bounce);
     position: relative;
     overflow: hidden;
     will-change: transform, box-shadow;
@@ -544,7 +552,7 @@ body {
     border-radius: 15px;
     overflow: hidden;
     border: 1px solid var(--card-border);
-    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: transform 0.4s var(--ease-bounce), box-shadow 0.4s var(--ease-bounce);
     position: relative;
     will-change: transform, box-shadow;
 }
@@ -582,7 +590,7 @@ body {
 .shorts-carousel-track {
     display: flex;
     gap: 25px;
-    transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: transform 0.5s var(--ease-bounce);
     will-change: transform;
     padding: 20px 0;
 }
@@ -593,7 +601,7 @@ body {
     border-radius: 12px;
     overflow: hidden;
     border: 1px solid var(--card-border);
-    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: transform 0.4s var(--ease-bounce), box-shadow 0.4s var(--ease-bounce);
     position: relative;
     aspect-ratio: 9/16;
     flex: 0 0 calc(25% - 18.75px); /* 4 elementos por vista (25% - gap ajustado) */
@@ -604,10 +612,13 @@ body {
     flex-direction: column;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
     will-change: transform, box-shadow;
+    /* Optimización de rendimiento */
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
 }
 
 .short-item:hover {
-    transform: translateY(-10px);
+    transform: translateY(-10px) translateZ(0);
     box-shadow: 0 25px 50px rgba(255, 0, 255, 0.25);
 }
 
@@ -637,6 +648,7 @@ body {
     overflow: hidden;
 }
 
+/* CORRECCIÓN: Zoom centrado y ultra fluido para shorts */
 .short-item iframe {
     position: absolute;
     top: 0;
@@ -644,12 +656,18 @@ body {
     width: 100%;
     height: 100%;
     border: none;
-    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: transform 0.4s var(--ease-smooth);
+    transform-origin: center center; /* CRÍTICO: zoom perfectamente centrado */
     will-change: transform;
+    /* Optimizaciones de rendimiento */
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    transform: translateZ(0) scale(1);
+    -webkit-transform: translateZ(0) scale(1);
 }
 
 .short-item:hover iframe {
-    transform: scale(1.03);
+    transform: translateZ(0) scale(1.04); /* Zoom suave y centrado */
 }
 
 /* Placeholder para shorts */
@@ -723,7 +741,7 @@ body {
 .channels-carousel-track {
     display: flex;
     gap: 25px;
-    transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: transform 0.5s var(--ease-bounce);
     will-change: transform;
     padding: 20px 0;
 }
@@ -739,7 +757,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: all 0.4s var(--ease-bounce);
     position: relative;
     overflow: hidden;
     will-change: transform, box-shadow;
@@ -865,7 +883,7 @@ body {
     color: white;
     opacity: 0;
     transform: translateY(10px);
-    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: all 0.4s var(--ease-bounce);
     border-radius: 15px;
     text-align: center;
     padding: 20px;
@@ -932,7 +950,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: all 0.4s var(--ease-bounce);
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 }
 
@@ -1034,7 +1052,7 @@ body {
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
     opacity: 0;
     transform: translateX(50px) scale(0.95);
-    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: all 0.5s var(--ease-bounce);
     visibility: hidden;
     z-index: 1;
     height: 220px;
@@ -1123,7 +1141,7 @@ body {
     justify-content: center;
     align-items: center;
     cursor: pointer;
-    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: all 0.4s var(--ease-bounce);
     font-size: 1.1rem;
     position: relative;
     z-index: 10;
@@ -1153,7 +1171,7 @@ body {
     border-radius: 50%;
     background: var(--text-muted);
     cursor: pointer;
-    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: all 0.4s var(--ease-bounce);
     position: relative;
     will-change: transform, background;
 }
@@ -1253,7 +1271,7 @@ body {
     color: var(--text-color);
     font-size: 0.9rem;
     text-decoration: none;
-    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: all 0.4s var(--ease-bounce);
     will-change: transform, background, box-shadow;
 }
 
