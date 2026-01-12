@@ -554,7 +554,7 @@ body {
     box-shadow: 0 20px 35px rgba(255, 0, 255, 0.25);
 }
 
-/* ===== NUEVA SECCIÓN: SHORTS ===== */
+/* ===== CARRUSEL DE SHORTS ===== */
 .shorts {
     padding: 100px 0;
     position: relative;
@@ -571,27 +571,61 @@ body {
     z-index: -1;
 }
 
-.shorts-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 25px;
+.shorts-carousel-container {
+    position: relative;
     max-width: 1200px;
-    margin: 0 auto;
-    padding: 30px 0;
+    margin: 40px auto;
+    padding: 0 50px;
 }
 
-@media (max-width: 1024px) {
-    .shorts-grid {
-        grid-template-columns: repeat(2, 1fr);
-        max-width: 700px;
-    }
+.shorts-carousel-track {
+    display: flex;
+    gap: 25px;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+    padding: 20px 10px;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE/Edge */
+    transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-@media (max-width: 768px) {
-    .shorts-grid {
-        grid-template-columns: 1fr;
-        max-width: 350px;
-    }
+.shorts-carousel-track::-webkit-scrollbar {
+    display: none; /* Chrome/Safari */
+}
+
+.shorts-carousel-container .carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 50px;
+    height: 50px;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 50%;
+    color: var(--text-color);
+    font-size: 1.2rem;
+    cursor: pointer;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.shorts-carousel-container .carousel-btn:hover {
+    background: var(--accent-gradient);
+    transform: translateY(-50%) scale(1.1);
+    border-color: var(--accent-color);
+    box-shadow: 0 8px 25px rgba(255, 0, 255, 0.4);
+}
+
+.shorts-carousel-container .carousel-btn.prev {
+    left: 0;
+}
+
+.shorts-carousel-container .carousel-btn.next {
+    right: 0;
 }
 
 .short-item {
@@ -602,12 +636,14 @@ body {
     transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
     position: relative;
     aspect-ratio: 9/16;
+    min-width: 280px;
     height: auto;
     max-height: 650px;
     display: flex;
     flex-direction: column;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
     will-change: transform, box-shadow;
+    flex-shrink: 0;
 }
 
 .short-item:hover {
@@ -656,7 +692,41 @@ body {
     transform: scale(1.03);
 }
 
-/* ===== SECCIÓN: GRID DE 5 CANALES VISIBLES ===== */
+/* Placeholder para shorts */
+.short-item .placeholder {
+    background: linear-gradient(135deg, rgba(42, 14, 53, 0.8), rgba(26, 10, 31, 0.9));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.short-placeholder {
+    text-align: center;
+    color: var(--text-muted);
+    padding: 20px;
+}
+
+.short-placeholder i {
+    font-size: 3rem;
+    color: var(--accent-color);
+    margin-bottom: 15px;
+    opacity: 0.7;
+}
+
+.short-placeholder span {
+    display: block;
+    font-weight: 600;
+    font-size: 1.1rem;
+    margin-bottom: 5px;
+    color: var(--text-color);
+}
+
+.short-placeholder p {
+    font-size: 0.9rem;
+    opacity: 0.8;
+}
+
+/* ===== CARRUSEL DE CANALES ===== */
 .channels {
     padding: 100px 0;
     background: rgba(26, 10, 31, 0.7);
@@ -676,12 +746,61 @@ body {
     z-index: -1;
 }
 
-.channels-grid {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 25px;
+.channels-carousel-container {
+    position: relative;
     max-width: 1200px;
-    margin: 0 auto;
+    margin: 40px auto;
+    padding: 0 50px;
+}
+
+.channels-carousel-track {
+    display: flex;
+    gap: 25px;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+    padding: 20px 10px;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.channels-carousel-track::-webkit-scrollbar {
+    display: none;
+}
+
+.channels-carousel-container .carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 50px;
+    height: 50px;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 50%;
+    color: var(--text-color);
+    font-size: 1.2rem;
+    cursor: pointer;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.channels-carousel-container .carousel-btn:hover {
+    background: var(--accent-gradient);
+    transform: translateY(-50%) scale(1.1);
+    border-color: var(--accent-color);
+    box-shadow: 0 8px 25px rgba(255, 0, 255, 0.4);
+}
+
+.channels-carousel-container .carousel-btn.prev {
+    left: 0;
+}
+
+.channels-carousel-container .carousel-btn.next {
+    right: 0;
 }
 
 .channel-item {
@@ -698,6 +817,8 @@ body {
     position: relative;
     overflow: hidden;
     will-change: transform, box-shadow;
+    min-width: 200px;
+    flex-shrink: 0;
 }
 
 .channel-item:hover {
@@ -839,6 +960,60 @@ body {
     font-weight: 600;
     font-size: 0.9rem;
     letter-spacing: 0.5px;
+}
+
+/* Placeholder para canales */
+.channel-item.placeholder {
+    cursor: default;
+}
+
+.channel-item.placeholder:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(255, 0, 255, 0.25);
+    border-color: rgba(255, 0, 255, 0.4);
+}
+
+.channel-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 0, 255, 0.1);
+}
+
+.channel-placeholder i {
+    font-size: 2rem;
+    color: var(--accent-color);
+    opacity: 0.7;
+}
+
+/* Indicadores del carrusel */
+.carousel-indicators {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.indicator {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.indicator.active {
+    background: var(--accent-color);
+    transform: scale(1.3);
+    box-shadow: 0 0 10px rgba(255, 0, 255, 0.7);
+}
+
+.indicator:hover:not(.active) {
+    background: rgba(255, 0, 255, 0.5);
+    transform: scale(1.1);
 }
 
 /* ===== CARRUSEL DE RESEÑAS COMPACTADO ===== */
@@ -1137,11 +1312,6 @@ body {
     .features-grid {
         grid-template-columns: repeat(2, 1fr);
     }
-    
-    .channels-grid {
-        grid-template-columns: repeat(3, 1fr);
-        max-width: 900px;
-    }
 }
 
 @media (max-width: 1024px) {
@@ -1169,9 +1339,17 @@ body {
         padding: 0 30px;
     }
     
-    .channels-grid {
-        grid-template-columns: repeat(2, 1fr);
-        max-width: 600px;
+    .shorts-carousel-container,
+    .channels-carousel-container {
+        padding: 0 40px;
+    }
+    
+    .short-item {
+        min-width: 300px;
+    }
+    
+    .channel-item {
+        min-width: 220px;
     }
 }
 
@@ -1277,18 +1455,24 @@ body {
         height: 260px;
     }
     
-    .channels-grid {
-        grid-template-columns: 1fr;
-        max-width: 300px;
+    .shorts-carousel-container,
+    .channels-carousel-container {
+        padding: 0 35px;
+    }
+    
+    .shorts-carousel-container .carousel-btn,
+    .channels-carousel-container .carousel-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+    }
+    
+    .short-item {
+        min-width: 250px;
     }
     
     .channel-item {
-        padding: 25px 20px;
-    }
-    
-    .avatar-circle {
-        width: 80px;
-        height: 80px;
+        min-width: 180px;
     }
 }
 
@@ -1350,6 +1534,32 @@ body {
     
     .carousel-dots {
         order: -1;
+    }
+    
+    .shorts-carousel-container,
+    .channels-carousel-container {
+        padding: 0 30px;
+    }
+    
+    .shorts-carousel-container .carousel-btn,
+    .channels-carousel-container .carousel-btn {
+        width: 35px;
+        height: 35px;
+        font-size: 0.9rem;
+    }
+    
+    .short-item {
+        min-width: 220px;
+    }
+    
+    .channel-item {
+        min-width: 160px;
+        padding: 20px 15px;
+    }
+    
+    .avatar-circle {
+        width: 70px;
+        height: 70px;
     }
     
     .footer-top {
