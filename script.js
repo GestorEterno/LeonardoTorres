@@ -13,7 +13,6 @@ class TechBackground {
         this.init();
         this.animate();
         
-        // Eventos
         window.addEventListener('resize', () => this.resize());
         this.canvas.addEventListener('mousemove', (e) => this.handleMouseMove(e));
         this.canvas.addEventListener('mouseleave', () => {
@@ -83,7 +82,6 @@ class TechBackground {
     drawParticles() {
         const currentTime = Date.now();
         
-        // Dibujar conexiones primero
         for (let i = 0; i < this.particles.length; i++) {
             for (let j = i + 1; j < this.particles.length; j++) {
                 const dx = this.particles[i].x - this.particles[j].x;
@@ -102,7 +100,6 @@ class TechBackground {
             }
         }
         
-        // Dibujar partículas con un sistema de rastro controlado
         for (let particle of this.particles) {
             particle.oscillation += 0.02;
             const oscillationX = Math.sin(particle.oscillation) * 0.3;
@@ -247,11 +244,14 @@ class Navigation {
     }
 }
 
-// Efectos de scroll suave
+// NAVBAR QUE DESAPARECE AL BAJAR Y APARECE AL SUBIR - MODIFICADO CRÍTICO
 class ScrollEffects {
     constructor() {
         this.navbar = document.querySelector('.navbar');
         this.lastScrollTop = 0;
+        this.scrollThreshold = 100;
+        this.hideThreshold = 10;
+        this.isHidden = false;
         
         window.addEventListener('scroll', () => this.handleScroll());
         this.initSmoothScroll();
@@ -259,11 +259,22 @@ class ScrollEffects {
     
     handleScroll() {
         const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        const scrollDirection = scrollTop > this.lastScrollTop;
         
-        if (scrollTop > this.lastScrollTop && scrollTop > 80) {
-            this.navbar.style.transform = 'translateY(-100%)';
-        } else {
+        if (scrollTop > this.scrollThreshold) {
+            if (scrollDirection && scrollTop - this.lastScrollTop > this.hideThreshold && !this.isHidden) {
+                this.navbar.style.transform = 'translateY(-100%)';
+                this.navbar.style.opacity = '0';
+                this.isHidden = true;
+            } else if (!scrollDirection && this.isHidden) {
+                this.navbar.style.transform = 'translateY(0)';
+                this.navbar.style.opacity = '1';
+                this.isHidden = false;
+            }
+        } else if (this.isHidden) {
             this.navbar.style.transform = 'translateY(0)';
+            this.navbar.style.opacity = '1';
+            this.isHidden = false;
         }
         
         this.lastScrollTop = scrollTop;
@@ -289,7 +300,7 @@ class ScrollEffects {
     }
 }
 
-// ===== CARRUSEL DE SHORTS - 4 VISIBLES, DESPLAZAMIENTO DE 1 =====
+// Carrusel de Shorts
 class ShortsCarousel {
     constructor() {
         this.track = document.querySelector('.shorts-carousel-track');
@@ -353,7 +364,7 @@ class ShortsCarousel {
     }
     
     updateIndicators() {
-        this.indicators.forEach((indicator, index) => {
+        this.indicators.forEach((indicator, index) {
             indicator.classList.toggle('active', index === this.currentPosition);
         });
     }
@@ -413,7 +424,7 @@ class ShortsCarousel {
     }
 }
 
-// ===== CARRUSEL DE CANALES - 5 VISIBLES, DESPLAZAMIENTO DE 1 =====
+// Carrusel de Canales
 class ChannelsCarousel {
     constructor() {
         this.track = document.querySelector('.channels-carousel-track');
@@ -477,7 +488,7 @@ class ChannelsCarousel {
     }
     
     updateIndicators() {
-        this.indicators.forEach((indicator, index) => {
+        this.indicators.forEach((indicator, index) {
             indicator.classList.toggle('active', index === this.currentPosition);
         });
     }
@@ -537,7 +548,7 @@ class ChannelsCarousel {
     }
 }
 
-// Carrusel de reseñas
+// Carrusel de Reseñas
 class ReviewsCarousel {
     constructor() {
         this.cards = document.querySelectorAll('.review-card');
@@ -757,7 +768,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const navigation = new Navigation();
     const scrollEffects = new ScrollEffects();
     
-    // Inicializar carruseles
     const shortsCarousel = new ShortsCarousel();
     const channelsCarousel = new ChannelsCarousel();
     const reviewsCarousel = new ReviewsCarousel();
@@ -765,7 +775,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const channelsHoverEffects = new ChannelsHoverEffects();
     const hoverEffects = new HoverEffects();
     
-    // Manejar logo del menú
     const logoImage = document.querySelector('.logo-image');
     const logoPlaceholder = document.querySelector('.logo-placeholder');
     
