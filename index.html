@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Santino Gimenez | Editor Profesional</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Nunito:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Fondo animado -->
+    <canvas id="techBackground"></canvas>
+    
+    <!-- Menú de navegación -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo">
+                <img src="Imagenes/logo.jpeg" alt="Logo Leonardo Torres" class="logo-image" 
+                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="logo-placeholder">
+                    <i class="fas fa-video"></i>
+                </div>
+                <div class="logo-text-container">
+                    <span class="logo-text">Santino Gimenez</span>
+                    <span class="logo-subtitle">Manager Profecional</span>
+                </div>
+            </a>
+            
+            <ul class="nav-menu">
+                <li><a href="#inicio" class="nav-link">INICIO</a></li>
+                <li><a href="#servicios" class="nav-link">SERVICIOS</a></li>
+                <li><a href="#portafolio" class="nav-link">PORTAFOLIO</a></li>
+                <li><a href="#shorts" class="nav-link">SHORTS</a></li>
+                <li><a href="#canales" class="nav-link">CANALES</a></li>
+                <li><a href="#reseñas" class="nav-link">RESEÑAS</a></li>
+                <li><a href="#contacto" class="nav-link">CONTACTO</a></li>
+            </ul>
+            
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Sección Hero -->
+    <section class="hero" id="inicio">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1 class="hero-title">
+                        <span class="gradient-text">EXCELENCIA VISUAL</span><br>
+                        <span style="font-size: 0.9em;">EN CADA <span class="gradient-text">FOTOGRAMA</span></span>
+                    </h1>
+                    <p class="hero-description">
+                        Manajer profecional hace mas de 10 años, 
+                    </p>
+                    <div class="hero-buttons">
+                        <a href="#contacto" class="cta-button">
+                            <span>CONTÁCTAME</span>
+                            <i class="fas fa-chevron-right"></i>
+                        </a>
+                        <a href="#portafolio" class="cta-button portfolio-btn">
+                            <span>VER PORTAFOLIO</span>
+                            <i class="fas fa-video"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="hero-video">
+                    <div class="video-container">
+                        <div class="video-label">
+                            <span class="video-badge">VIDEO DESTACADO</span>
+                            <h3 class="video-title">Santino Gimenez</h3>
+                        </div>
+                        <div class="video-wrapper">
+                            <iframe 
+                                src="https://www.youtube.com/watch?v=ZWh2CUG8Q4I&list=RDSqDjQPoJxiw&index=27" 
+                                allow="autoplay; encrypted-media; fullscreen"
+                                title="Video destacado"
+                                class="hero-iframe">
+                            </iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Sección de características -->
+    <section class="features" id="servicios">
+        <div class="container">
+            <h2 class="section-title">CALIDAD PROFESIONAL EN <span class="gradient-text">CADA PROYECTO</span></h2>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-crown"></i>
+                    </div>
+                    <h3>EDICIÓN PREMIUM</h3>
+                    <p>Cada video es tratado con el máximo cuidado y atención a los detalles para garantizar resultados excepcionales.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h3>ENTREGA RÁPIDA</h3>
+                    <p>Optimizo mi flujo de trabajo para ofrecer resultados de alta calidad en plazos ajustados sin comprometer la excelencia.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-video"></i>
+                    </div>
+                    <h3>EFECTOS VISUALES</h3>
+                    <p>Incorporo efectos y transiciones innovadoras que mejoran la narrativa visual de cada proyecto.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-headphones"></i>
+                    </div>
+                    <h3>AUDIO PROFESIONAL</h3>
+                    <p>Diseño y optimizo pistas de audio para crear una experiencia inmersiva y de alta fidelidad.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Sección de portafolio - 6 VIDEOS EN 3 FILAS DE 2 -->
+    <section class="portfolio" id="portafolio">
+        <div class="container">
+            <h2 class="section-title">PORTAFOLIO <span class="gradient-text">DE TRABAJOS</span></h2>
+            <p class="section-subtitle">Una selección de mis proyectos más recientes y destacados</p>
+            
+            <div class="portfolio-grid">
+                
+                <div class="portfolio-item">
+                    <div class="video-label">
+                        <span class="video-badge">ROBLOX</span>
+                        <h3 class="video-title">Video 1</h3>
+                    </div>
+                    <div class="video-wrapper">
+                        <iframe 
+                            src="https://www.youtube.com/embed/ZWh2CUG8Q4I" 
+                            allow="autoplay; encrypted-media; fullscreen"
+                            title="Video 1">
+                        </iframe>
+                    </div>
+                </div>
+                
+                <div class="portfolio-item">
+                    <div class="video-label">
+                        <span class="video-badge">GUÍA</span>
+                        <h3 class="video-title">Video 2</h3>
+                    </div>
+                    <div class="video-wrapper">
+                        <iframe 
+                            src="https://www.youtube.com/embed/ZWh2CUG8Q4I" 
+                            allow="autoplay; encrypted-media; fullscreen"
+                            title="Video 2">
+                        </iframe>
+                    </div>
+                </div>
+                
+                <div class="portfolio-item">
+                    <div class="video-label">
+                        <span class="video-badge">GAMEPLAY</span>
+                        <h3 class="video-title">Video 3</h3>
+                    </div>
+                    <div class="video-wrapper">
+                        <iframe 
+                            src="https://www.youtube.com/embed/ZWh2CUG8Q4I" 
+                            allow="autoplay; encrypted-media; fullscreen"
+                            title="Video 3">
+                        </iframe>
+                    </div>
+                </div>
+                
+                <div class="portfolio-item">
+                    <div class="video-label">
+                        <span class="video-badge">MINECRAFT</span>
+                        <h3 class="video-title">Video 4</h3>
+                    </div>
+                    <div class="video-wrapper">
+                        <iframe 
+                            src="https://www.youtube.com/embed/ZWh2CUG8Q4I" 
+                            allow="autoplay; encrypted-media; fullscreen"
+                            title="Video 4">
+                        </iframe>
+                    </div>
+                </div>
+                
+                <div class="portfolio-item">
+                    <div class="video-label">
+                        <span class="video-badge">DOCUMENTAL</span>
+                        <h3 class="video-title">Video 5</h3>
+                    </div>
+                    <div class="video-wrapper">
+                        <iframe 
+                            src="https://www.youtube.com/embed/ZWh2CUG8Q4I" 
+                            allow="autoplay; encrypted-media; fullscreen"
+                            title="Video 5">
+                        </iframe>
+                    </div>
+                </div>
+                
+                <div class="portfolio-item">
+                    <div class="video-label">
+                        <span class="video-badge">OTRO</span>
+                        <h3 class="video-title">Video 6</h3>
+                    </div>
+                    <div class="video-wrapper">
+                        <iframe 
+                            src="https://www.youtube.com/embed/ZWh2CUG8Q4I" 
+                            allow="autoplay; encrypted-media; fullscreen"
+                            title="Video 6">
+                        </iframe>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </section>
+    
+    <!-- Sección de Shorts - CARRUSEL HORIZONTAL -->
+    <section class="shorts" id="shorts">
+        <div class="container">
+            <h2 class="section-title">SHORTS <span class="gradient-text">VERTICALES</span></h2>
+            <p class="section-subtitle">Contenido optimizado para TikTok/Reels/Shorts en formato 9:16</p>
+            
+            <!-- Contenedor del carrusel -->
+            <div class="shorts-carousel-container">
+                <button class="carousel-btn prev" aria-label="Shorts anteriores">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                
+                <!-- Pista del carrusel con 6 elementos -->
+                <div class="shorts-carousel-track">
+                    
+                    <div class="short-item">
+                        <div class="short-item-content">
+                            <div class="short-badge">YouTube Shorts</div>
+                            <div class="video-wrapper short-video">
+                                <iframe 
+                                    src="https://www.youtube.com/embed/53hsFyX4Hh8" 
+                                    allow="autoplay; encrypted-media; fullscreen"
+                                    title="Short 1">
+                                </iframe>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="short-item">
+                        <div class="short-item-content">
+                            <div class="short-badge">YouTube Shorts</div>
+                            <div class="video-wrapper short-video">
+                                <iframe 
+                                    src="https://www.youtube.com/embed/53hsFyX4Hh8" 
+                                    allow="autoplay; encrypted-media; fullscreen"
+                                    title="Short 2">
+                                </iframe>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="short-item">
+                        <div class="short-item-content">
+                            <div class="short-badge">YouTube Shorts</div>
+                            <div class="video-wrapper short-video">
+                                <iframe 
+                                    src="https://www.youtube.com/embed/53hsFyX4Hh8" 
+                                    allow="autoplay; encrypted-media; fullscreen"
+                                    title="Short 3">
+                                </iframe>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="short-item">
+                        <div class="short-item-content">
+                            <div class="short-badge">YouTube Shorts</div>
+                            <div class="video-wrapper short-video">
+                                <iframe 
+                                    src="https://www.youtube.com/embed/53hsFyX4Hh8" 
+                                    allow="autoplay; encrypted-media; fullscreen"
+                                    title="Short 4">
+                                </iframe>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="short-item">
+                        <div class="short-item-content">
+                            <div class="short-badge">YouTube Shorts</div>
+                            <div class="video-wrapper short-video">
+                                <iframe 
+                                    src="https://www.youtube.com/embed/53hsFyX4Hh8" 
+                                    allow="autoplay; encrypted-media; fullscreen"
+                                    title="Short 5">
+                                </iframe>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="short-item">
+                        <div class="short-item-content">
+                            <div class="short-badge">YouTube Shorts</div>
+                            <div class="video-wrapper short-video">
+                                <iframe 
+                                    src="https://www.youtube.com/embed/53hsFyX4Hh8" 
+                                    allow="autoplay; encrypted-media; fullscreen"
+                                    title="Short 6">
+                                </iframe>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+                
+                <button class="carousel-btn next" aria-label="Siguientes shorts">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+            
+            <!-- Indicadores del carrusel -->
+            <div class="carousel-indicators shorts-indicators">
+                <span class="indicator active" data-index="0"></span>
+                <span class="indicator" data-index="1"></span>
+                <span class="indicator" data-index="2"></span>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Sección de Canales - CARRUSEL HORIZONTAL -->
+    <section class="channels" id="canales">
+        <div class="container">
+            <h2 class="section-title">CANALES <span class="gradient-text">CON LOS QUE COLABORO</span></h2>
+            <p class="section-subtitle">Trabajo directo con estos increíbles creadores de contenido</p>
+            
+            <!-- Contenedor del carrusel -->
+            <div class="channels-carousel-container">
+                <button class="carousel-btn prev" aria-label="Canales anteriores">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                
+                <!-- Pista del carrusel con 7 elementos -->
+                <div class="channels-carousel-track">
+                    
+                    <a href="https://www.youtube.com/channel/UCn51E6eKnnLklWOcdFT3w5A" target="_blank" class="channel-item">
+                        <div class="channel-avatar">
+                            <div class="avatar-circle">
+                                <img src="Imagenes/canales/canal_1.jpg" alt="Mon Laferte" class="channel-image">
+                                <span class="channel-fallback">Mo</span>
+                            </div>
+                            <div class="online-dot active"></div>
+                        </div>
+                        <div class="channel-info">
+                            <h3 class="channel-name">Mon Laferte</h3>
+                            <div class="channel-subs">
+                                <i class="fas fa-users"></i>
+                                <span>7.24</span>
+                            </div>
+                        </div>
+                        <div class="channel-hover">
+                            <i class="fas fa-external-link-alt"></i>
+                            <span>Ver canal</span>
+                        </div>
+                    </a>
+                    
+                    <a href="https://www.youtube.com/channel/UCn51E6eKnnLklWOcdFT3w5A" target="_blank" class="channel-item">
+                        <div class="channel-avatar">
+                            <div class="avatar-circle">
+                                <img src="Imagenes/canales/canal_2.jpg" alt="fdfdfdfd" class="channel-image">
+                                <span class="channel-fallback">fd</span>
+                            </div>
+                            <div class="online-dot "></div>
+                        </div>
+                        <div class="channel-info">
+                            <h3 class="channel-name">fdfdfdfd</h3>
+                            <div class="channel-subs">
+                                <i class="fas fa-users"></i>
+                                <span>42343</span>
+                            </div>
+                        </div>
+                        <div class="channel-hover">
+                            <i class="fas fa-external-link-alt"></i>
+                            <span>Ver canal</span>
+                        </div>
+                    </a>
+                    
+                    <a href="https://www.youtube.com/channel/UCn51E6eKnnLklWOcdFT3w5A" target="_blank" class="channel-item">
+                        <div class="channel-avatar">
+                            <div class="avatar-circle">
+                                <img src="Imagenes/canales/canal_3.jpg" alt="afgagagag" class="channel-image">
+                                <span class="channel-fallback">af</span>
+                            </div>
+                            <div class="online-dot "></div>
+                        </div>
+                        <div class="channel-info">
+                            <h3 class="channel-name">afgagagag</h3>
+                            <div class="channel-subs">
+                                <i class="fas fa-users"></i>
+                                <span>768686</span>
+                            </div>
+                        </div>
+                        <div class="channel-hover">
+                            <i class="fas fa-external-link-alt"></i>
+                            <span>Ver canal</span>
+                        </div>
+                    </a>
+                    
+                    <a href="https://www.youtube.com/channel/UCn51E6eKnnLklWOcdFT3w5A" target="_blank" class="channel-item">
+                        <div class="channel-avatar">
+                            <div class="avatar-circle">
+                                <img src="Imagenes/canales/canal_4.jpg" alt="utkukutk" class="channel-image">
+                                <span class="channel-fallback">ut</span>
+                            </div>
+                            <div class="online-dot active"></div>
+                        </div>
+                        <div class="channel-info">
+                            <h3 class="channel-name">utkukutk</h3>
+                            <div class="channel-subs">
+                                <i class="fas fa-users"></i>
+                                <span>4545757</span>
+                            </div>
+                        </div>
+                        <div class="channel-hover">
+                            <i class="fas fa-external-link-alt"></i>
+                            <span>Ver canal</span>
+                        </div>
+                    </a>
+                    
+                    <a href="rtr" target="_blank" class="channel-item">
+                        <div class="channel-avatar">
+                            <div class="avatar-circle">
+                                
+                                <span class="channel-fallback">re</span>
+                            </div>
+                            <div class="online-dot "></div>
+                        </div>
+                        <div class="channel-info">
+                            <h3 class="channel-name">rertyrtr</h3>
+                            <div class="channel-subs">
+                                <i class="fas fa-users"></i>
+                                <span>54545</span>
+                            </div>
+                        </div>
+                        <div class="channel-hover">
+                            <i class="fas fa-external-link-alt"></i>
+                            <span>Ver canal</span>
+                        </div>
+                    </a>
+                    
+                    <div class="channel-item placeholder">
+                        <div class="channel-avatar">
+                            <div class="avatar-circle">
+                                <div class="channel-placeholder">
+                                    <i class="fas fa-user-plus"></i>
+                                </div>
+                                <span class="channel-fallback">ge</span>
+                            </div>
+                            <div class="online-dot"></div>
+                        </div>
+                        <div class="channel-info">
+                            <h3 class="channel-name">gergegrre</h3>
+                            <div class="channel-subs">
+                                <i class="fas fa-users"></i>
+                                <span>67567</span>
+                            </div>
+                        </div>
+                        <div class="channel-hover">
+                            <i class="fas fa-clock"></i>
+                            <span>Disponible pronto</span>
+                        </div>
+                    </div>
+                    
+                </div>
+                
+                <button class="carousel-btn next" aria-label="Siguientes canales">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+            
+            <!-- Indicadores del carrusel -->
+            <div class="carousel-indicators">
+                <span class="indicator active" data-index="0"></span>
+                <span class="indicator" data-index="1"></span>
+                <span class="indicator" data-index="2"></span>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Sección de Reseñas -->
+    <section class="reviews" id="reseñas">
+        <div class="container">
+            <h2 class="section-title">RESEÑAS <span class="gradient-text">DE CLIENTES</span></h2>
+            <p class="section-subtitle">Lo que dicen los creadores con los que he trabajado</p>
+            
+            <!-- Contenedor del carrusel -->
+            <div class="reviews-carousel-container">
+                <div class="reviews-carousel-track">
+                    
+                <div class="review-card active">
+                    <div class="review-header">
+                        <div class="review-avatar">
+                            <span class="review-fallback">me</span>
+                        </div>
+                        <div class="review-channel-info">
+                            <h3 class="review-channel-name">me la re como</h3>
+                            <a href="" target="_blank" class="review-channel-link">
+                                <i class="fas fa-external-link-alt"></i> 
+                            </a>
+                        </div>
+                    </div>
+                    <p class="review-text">
+                        "me encanto"
+                    </p>
+                </div>
+                
+                <div class="review-card ">
+                    <div class="review-header">
+                        <div class="review-avatar">
+                            <span class="review-fallback">so</span>
+                        </div>
+                        <div class="review-channel-info">
+                            <h3 class="review-channel-name">soy gay</h3>
+                            <a href="" target="_blank" class="review-channel-link">
+                                <i class="fas fa-external-link-alt"></i> 
+                            </a>
+                        </div>
+                    </div>
+                    <p class="review-text">
+                        "buenisimo"
+                    </p>
+                </div>
+                
+                <div class="review-card ">
+                    <div class="review-header">
+                        <div class="review-avatar">
+                            <span class="review-fallback">yo</span>
+                        </div>
+                        <div class="review-channel-info">
+                            <h3 class="review-channel-name">yo</h3>
+                            <a href="" target="_blank" class="review-channel-link">
+                                <i class="fas fa-external-link-alt"></i> 
+                            </a>
+                        </div>
+                    </div>
+                    <p class="review-text">
+                        "gay
+"
+                    </p>
+                </div>
+                
+                <div class="review-card ">
+                    <div class="review-header">
+                        <div class="review-avatar">
+                            <span class="review-fallback">re</span>
+                        </div>
+                        <div class="review-channel-info">
+                            <h3 class="review-channel-name">re gato</h3>
+                            <a href="" target="_blank" class="review-channel-link">
+                                <i class="fas fa-external-link-alt"></i> 
+                            </a>
+                        </div>
+                    </div>
+                    <p class="review-text">
+                        "sdsds"
+                    </p>
+                </div>
+                
+                <div class="review-card ">
+                    <div class="review-header">
+                        <div class="review-avatar">
+                            <span class="review-fallback">su</span>
+                        </div>
+                        <div class="review-channel-info">
+                            <h3 class="review-channel-name">super gil</h3>
+                            <a href="" target="_blank" class="review-channel-link">
+                                <i class="fas fa-external-link-alt"></i> 
+                            </a>
+                        </div>
+                    </div>
+                    <p class="review-text">
+                        "sdfsfsdfsdf"
+                    </p>
+                </div>
+                
+                </div>
+                
+                <!-- Controles del carrusel -->
+                <div class="carousel-controls">
+                    <button class="carousel-btn prev" aria-label="Reseña anterior">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    
+                    <div class="carousel-dots">
+                        <span class="dot active" data-index="0"></span>
+                        <span class="dot" data-index="1"></span>
+                        <span class="dot" data-index="2"></span>
+                        <span class="dot" data-index="3"></span>
+                        <span class="dot" data-index="4"></span>
+                    </div>
+                    
+                    <button class="carousel-btn next" aria-label="Siguiente reseña">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Sección de contacto -->
+    <section class="contact" id="contacto">
+        <div class="container">
+            <div class="contact-content">
+                <h2 class="section-title">¿LISTO PARA ELEVAR <span class="gradient-text">TU CONTENIDO?</span></h2>
+                <p class="contact-description">
+                    Trabajemos juntos para crear videos que cautiven a tu audiencia y destaquen tu creatividad.
+                </p>
+                <a href="https://www.youtube.com/@ArronRebustes" 
+                   target="_blank" 
+                   class="cta-button large twitter-btn">
+                    <span>ESCRÍBEME EN X</span>
+                    <i class="fab fa-twitter"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Pie de página -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-top">
+                <div class="footer-name">
+                    <h3>Santino Gimenez</h3>
+                    <p>Manager Profecional</p>
+                </div>
+                
+                <div class="social-links">
+                    
+                <a href="https://www.youtube.com/@ArronRebustes" target="_blank" class="social-circle" title="Youtube">
+                    <i class="fab fa-youtube"></i>
+                </a>
+                
+                <a href="https://www.youtube.com/@ArronRebustes" target="_blank" class="social-circle" title="Twitter">
+                    <i class="fab fa-twitter"></i>
+                </a>
+                
+                <a href="https://www.youtube.com/@ArronRebustes" target="_blank" class="social-circle" title="Facebook">
+                    <i class="fab fa-facebook-f"></i>
+                </a>
+                
+                <a href="https://www.youtube.com/@ArronRebustes" target="_blank" class="social-circle" title="Instagram">
+                    <i class="fab fa-instagram"></i>
+                </a>
+                
+                </div>
+            </div>
+            
+            <div class="footer-divider"></div>
+            
+            <div class="footer-bottom">
+                <p class="copyright">© 2026 AVALON CREATOS. TODOS LOS DERECHOS RESERVADOS.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <script src="script.js"></script>
+</body>
+</html>
