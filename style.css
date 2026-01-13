@@ -8,11 +8,11 @@
 :root {
     --primary-color: #0a0a1a;
     --secondary-color: #1a0a1f;
-    --accent-color: #ff00ff;          /* MAGENTA - Color principal */
-    --accent-secondary: #e91e63;      /* ROSA */
-    --accent-tertiary: #9c27b0;       /* MORADO */
-    --accent-blue: #00a2ff;           /* AZUL para botón portfolio */
-    --accent-twitter: #1DA1F2;        /* AZUL Twitter */
+    --accent-color: #ff00ff;
+    --accent-secondary: #e91e63;
+    --accent-tertiary: #9c27b0;
+    --accent-blue: #00a2ff;
+    --accent-twitter: #1DA1F2;
     --accent-gradient: linear-gradient(90deg, var(--accent-color) 0%, var(--accent-secondary) 100%);
     --accent-gradient-full: linear-gradient(90deg, var(--accent-color) 0%, var(--accent-secondary) 50%, var(--accent-tertiary) 100%);
     --gradient-blue: linear-gradient(90deg, var(--accent-blue) 0%, #00d4ff 100%);
@@ -22,10 +22,10 @@
     --card-bg: rgba(42, 14, 53, 0.7);
     --card-border: rgba(255, 0, 255, 0.2);
     --glow-color: rgba(255, 0, 255, 0.6);
-    --font-main: 'Poppins', sans-serif;    /* MODIFICADO: Más redondeada */
-    --font-tech: 'Nunito', sans-serif;     /* MODIFICADO: Más redondeada */
-    --ease-smooth: cubic-bezier(0.215, 0.610, 0.355, 1.000); /* easeOutCubic */
-    --ease-bounce: cubic-bezier(0.175, 0.885, 0.320, 1.275); /* easeOutBack suave */
+    --font-main: 'Poppins', sans-serif;
+    --font-tech: 'Nunito', sans-serif;
+    --ease-smooth: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+    --ease-bounce: cubic-bezier(0.175, 0.885, 0.320, 1.275);
 }
 
 html {
@@ -38,7 +38,7 @@ body {
     color: var(--text-color);
     overflow-x: hidden;
     position: relative;
-    line-height: 1.6; /* MEJORA: Mejor legibilidad */
+    line-height: 1.6;
 }
 
 #techBackground {
@@ -66,7 +66,6 @@ body {
         );
 }
 
-/* Estilos del contenedor */
 .container {
     max-width: 1200px;
     margin: 0 auto;
@@ -75,7 +74,7 @@ body {
     z-index: 1;
 }
 
-/* Estilos del menú de navegación - LOGO REDONDO */
+/* NAVBAR CON LOGO 20% MÁS PEQUEÑO Y TRANSPARENCIA */
 .navbar {
     position: fixed;
     top: 0;
@@ -86,7 +85,8 @@ body {
     padding: 8px 0;
     z-index: 1000;
     border-bottom: 1px solid rgba(255, 0, 255, 0.1);
-    transition: transform 0.3s ease;
+    transition: transform 0.4s var(--ease-smooth), opacity 0.3s var(--ease-smooth);
+    will-change: transform, opacity;
 }
 
 .nav-container {
@@ -98,7 +98,7 @@ body {
     padding: 0 20px;
 }
 
-/* MODIFICACIÓN CRÍTICA: Logo completo con hover simultáneo */
+/* LOGO REDUCIDO 20% */
 .logo {
     display: flex;
     align-items: center;
@@ -107,32 +107,31 @@ body {
     line-height: 1;
     gap: 15px;
     position: relative;
-    transition: transform 0.4s var(--ease-smooth); /* AGREGADO: Transición para todo el logo */
+    transition: transform 0.4s var(--ease-smooth);
     will-change: transform;
 }
 
-/* MODIFICACIÓN CRÍTICA: Logo perfectamente redondo */
 .logo-image {
-    width: 60px; /* Tamaño aumentado para mejor visibilidad */
-    height: 60px;
-    border-radius: 50%; /* CAMBIO CRÍTICO: 50% para perfectamente redondo */
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
     object-fit: cover;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     transition: all 0.4s var(--ease-smooth);
     flex-shrink: 0;
-    border: 2px solid rgba(255, 0, 255, 0.15); /* Borde sutil */
+    border: 2px solid rgba(255, 0, 255, 0.15);
 }
 
 .logo-placeholder {
     display: none;
-    width: 60px;
-    height: 60px;
+    width: 48px;
+    height: 48px;
     background: var(--accent-gradient);
-    border-radius: 50%; /* CAMBIO CRÍTICO: 50% para coincidir con logo */
+    border-radius: 50%;
     align-items: center;
     justify-content: center;
     color: white;
-    font-size: 1.6rem;
+    font-size: 1.28rem;
     flex-shrink: 0;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     border: 2px solid rgba(255, 0, 255, 0.15);
@@ -145,30 +144,29 @@ body {
 
 .logo-text {
     font-family: var(--font-tech);
-    font-size: 1.4rem;
+    font-size: 1.12rem;
     font-weight: 700;
     color: var(--text-color);
     letter-spacing: 0.8px;
     line-height: 1;
-    transition: all 0.4s var(--ease-smooth); /* AGREGADO: Transición para texto */
+    transition: all 0.4s var(--ease-smooth);
 }
 
 .logo-subtitle {
-    font-size: 0.65rem;
+    font-size: 0.52rem;
     color: var(--accent-color);
     letter-spacing: 1.2px;
     line-height: 1;
     margin-top: 2px;
-    transition: all 0.4s var(--ease-smooth); /* AGREGADO: Transición para subtítulo */
+    transition: all 0.4s var(--ease-smooth);
 }
 
-/* MODIFICACIÓN CRÍTICA: Hover simultáneo en TODO el logo */
 .logo:hover {
-    transform: translateY(-3px); /* Eleva todo el conjunto */
+    transform: translateY(-3px);
 }
 
 .logo:hover .logo-image {
-    transform: scale(1.05) rotate(3deg); /* Rotación sutil para dinamismo */
+    transform: scale(1.05) rotate(3deg);
     box-shadow: 0 8px 20px rgba(255, 0, 255, 0.4);
     border-color: rgba(255, 0, 255, 0.4);
 }
@@ -241,94 +239,7 @@ body {
     transition: all 0.3s ease;
 }
 
-/* Estilos para imágenes de canales */
-.avatar-circle {
-    position: relative;
-    width: 90px;
-    height: 90px;
-    border-radius: 50%;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-    transition: transform 0.4s var(--ease-smooth);
-    background: var(--accent-gradient);
-}
-
-.channel-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 2;
-}
-
-/* Fallback para cuando no hay imagen */
-.channel-fallback {
-    display: none;
-    font-family: var(--font-tech);
-    font-weight: bold;
-    color: white;
-    font-size: 1.5rem;
-    z-index: 1;
-}
-
-/* Mostrar fallback si la imagen no se carga */
-.avatar-circle:has(.channel-image[src=""]) .channel-fallback,
-.avatar-circle:not(:has(.channel-image)) .channel-fallback {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 100%;
-}
-
-/* Estilos para imágenes en reseñas */
-.review-avatar {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    overflow: hidden;
-    margin-right: 15px;
-    flex-shrink: 0;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-    position: relative;
-    background: var(--accent-gradient);
-}
-
-.review-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 2;
-}
-
-.review-fallback {
-    display: none;
-    font-family: var(--font-tech);
-    font-weight: bold;
-    color: white;
-    font-size: 1rem;
-    z-index: 1;
-}
-
-/* Mostrar fallback si la imagen no se carga */
-.review-avatar:has(.review-image[src=""]) .review-fallback,
-.review-avatar:not(:has(.review-image)) .review-fallback {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 100%;
-}
-
-/* Estilos del hero section */
+/* HERO SECTION - VIDEO CON ANIMACIÓN IDÉNTICA */
 .hero {
     padding: 100px 0 70px;
     position: relative;
@@ -349,12 +260,7 @@ body {
     opacity: 0;
     transform: translateY(20px);
     animation: fadeInUp 1s ease 0.5s forwards;
-    letter-spacing: 0.5px; /* MEJORA: Mejor espaciado */
-}
-
-.hero-title .gradient-text {
-    animation: gradientPulse 3s ease-in-out infinite;
-    background-size: 200% 200%;
+    letter-spacing: 0.5px;
 }
 
 @keyframes fadeInUp {
@@ -383,17 +289,16 @@ body {
 
 .hero-description {
     font-size: 1.1rem;
-    line-height: 1.7; /* MEJORA: Mejor legibilidad */
+    line-height: 1.7;
     color: var(--text-muted);
     margin-bottom: 30px;
     max-width: 90%;
     opacity: 0;
     transform: translateY(20px);
     animation: fadeInUp 1s ease 0.8s forwards;
-    font-weight: 400; /* MEJORA: Peso más suave */
+    font-weight: 400;
 }
 
-/* Contenedor para botones del hero */
 .hero-buttons {
     display: flex;
     gap: 20px;
@@ -418,7 +323,7 @@ body {
     border: none;
     cursor: pointer;
     font-family: var(--font-main);
-    letter-spacing: 0.3px; /* MEJORA: Mejor espaciado */
+    letter-spacing: 0.3px;
 }
 
 .cta-button:hover {
@@ -440,7 +345,6 @@ body {
     font-size: 1.1rem;
 }
 
-/* Botón de portfolio (AZUL) */
 .portfolio-btn {
     background: var(--gradient-blue);
     box-shadow: 0 5px 15px rgba(0, 162, 255, 0.3);
@@ -451,7 +355,6 @@ body {
     box-shadow: 0 8px 25px rgba(0, 162, 255, 0.5);
 }
 
-/* Botón de Twitter (AZUL TWITTER) */
 .twitter-btn {
     background: var(--gradient-twitter);
     box-shadow: 0 5px 15px rgba(29, 161, 242, 0.3);
@@ -469,6 +372,7 @@ body {
     animation: fadeInUp 1s ease 0.7s forwards;
 }
 
+/* VIDEO DEL HERO CON ANIMACIÓN IDÉNTICA A FEATURE CARDS */
 .video-container {
     background: var(--card-bg);
     border-radius: 15px;
@@ -476,6 +380,16 @@ body {
     border: 1px solid var(--card-border);
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
     backdrop-filter: blur(5px);
+    transition: all 0.5s var(--ease-smooth);
+    will-change: transform, box-shadow;
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+}
+
+/* ANIMACIÓN IDÉNTICA A FEATURE CARDS */
+.video-container:hover {
+    transform: translateY(-8px) translateZ(0);
+    box-shadow: 0 15px 30px rgba(255, 0, 255, 0.2);
 }
 
 .video-label {
@@ -498,12 +412,12 @@ body {
 .video-title {
     font-size: 1.1rem;
     font-weight: 600;
-    font-family: var(--font-tech); /* MEJORA: Consistencia tipográfica */
+    font-family: var(--font-tech);
 }
 
 .video-wrapper {
     position: relative;
-    padding-bottom: 56.25%; /* 16:9 aspect ratio */
+    padding-bottom: 56.25%;
     height: 0;
     overflow: hidden;
     transform: translateZ(0);
@@ -529,16 +443,7 @@ body {
     filter: brightness(1.05) contrast(1.02);
 }
 
-/* Hero video específico */
-.hero-video .video-overlay {
-    display: none;
-}
-
-.hero-video .play-button {
-    display: none;
-}
-
-/* Estilos de características */
+/* FEATURE CARDS - ANIMACIÓN BASE DE REFERENCIA */
 .features {
     padding: 70px 0;
 }
@@ -548,7 +453,7 @@ body {
     font-size: 2.3rem;
     text-align: center;
     margin-bottom: 15px;
-    letter-spacing: 0.5px; /* MEJORA: Mejor espaciado */
+    letter-spacing: 0.5px;
 }
 
 .section-subtitle {
@@ -559,7 +464,7 @@ body {
     max-width: 700px;
     margin-left: auto;
     margin-right: auto;
-    line-height: 1.7; /* MEJORA: Mejor legibilidad */
+    line-height: 1.7;
 }
 
 .features-grid {
@@ -568,7 +473,6 @@ body {
     gap: 25px;
 }
 
-/* ANIMACIÓN BASE PERFECTA QUE DEBE SER COPIADA EN TODOS LOS ELEMENTOS */
 .feature-card {
     background: var(--card-bg);
     border-radius: 15px;
@@ -583,6 +487,7 @@ body {
     -webkit-transform: translateZ(0);
 }
 
+/* ANIMACIÓN BASE QUE DEBE SER IDÉNTICA PARA TODOS */
 .feature-card:hover {
     transform: translateY(-8px) translateZ(0);
     box-shadow: 0 15px 30px rgba(255, 0, 255, 0.2);
@@ -603,17 +508,17 @@ body {
 .feature-card h3 {
     font-size: 1.2rem;
     margin-bottom: 12px;
-    font-family: var(--font-tech); /* MEJORA: Consistencia tipográfica */
+    font-family: var(--font-tech);
 }
 
 .feature-card p {
     color: var(--text-muted);
-    line-height: 1.7; /* MEJORA: Mejor legibilidad */
+    line-height: 1.7;
     font-size: 0.9rem;
-    font-weight: 400; /* MEJORA: Peso más suave */
+    font-weight: 400;
 }
 
-/* Estilos del portafolio */
+/* PORTAFOLIO - ANIMACIÓN IDÉNTICA */
 .portfolio {
     padding: 70px 0;
 }
@@ -624,7 +529,6 @@ body {
     gap: 30px;
 }
 
-/* CORRECCIÓN CRÍTICA: ANIMACIÓN IDÉNTICA A FEATURE CARDS */
 .portfolio-item {
     background: var(--card-bg);
     border-radius: 15px;
@@ -637,12 +541,13 @@ body {
     -webkit-transform: translateZ(0);
 }
 
+/* ANIMACIÓN EXACTAMENTE IDÉNTICA */
 .portfolio-item:hover {
     transform: translateY(-8px) translateZ(0);
     box-shadow: 0 15px 30px rgba(255, 0, 255, 0.2);
 }
 
-/* ===== CARRUSEL DE SHORTS ===== */
+/* SHORTS - ANIMACIÓN IDÉNTICA */
 .shorts {
     padding: 70px 0 50px;
     position: relative;
@@ -675,7 +580,6 @@ body {
     padding: 15px 0;
 }
 
-/* Elementos del carrusel de shorts */
 .short-item {
     background: transparent;
     border-radius: 12px;
@@ -693,7 +597,6 @@ body {
     -webkit-transform: translateZ(0);
 }
 
-/* Contenedor interno para el contenido del short */
 .short-item-content {
     width: 100%;
     height: 100%;
@@ -709,7 +612,7 @@ body {
     -webkit-transform: translateZ(0);
 }
 
-/* CORRECCIÓN CRÍTICA: ANIMACIÓN IDÉNTICA A FEATURE CARDS */
+/* ANIMACIÓN EXACTAMENTE IDÉNTICA A FEATURE CARDS */
 .short-item:hover .short-item-content {
     transform: translateY(-8px) translateZ(0);
     box-shadow: 0 15px 30px rgba(255, 0, 255, 0.2);
@@ -732,7 +635,6 @@ body {
     box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
 }
 
-/* Contenedor del video */
 .short-item .short-video {
     flex: 1;
     position: relative;
@@ -762,7 +664,6 @@ body {
     filter: brightness(1.05) contrast(1.02);
 }
 
-/* Placeholder para shorts */
 .short-item .placeholder {
     background: linear-gradient(135deg, rgba(42, 14, 53, 0.8), rgba(26, 10, 31, 0.9));
     display: flex;
@@ -802,7 +703,7 @@ body {
     opacity: 0.8;
 }
 
-/* ===== CARRUSEL DE CANALES ===== */
+/* CANALES */
 .channels {
     padding: 70px 0;
     background: rgba(26, 10, 31, 0.7);
@@ -838,7 +739,6 @@ body {
     padding: 15px 0;
 }
 
-/* Elementos del carrusel de canales */
 .channel-item {
     background: var(--card-bg);
     border-radius: 15px;
@@ -865,22 +765,6 @@ body {
     border-color: rgba(255, 0, 255, 0.4);
 }
 
-.channel-item::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(135deg, rgba(255, 0, 255, 0.05), transparent);
-    opacity: 0;
-    transition: opacity 0.5s var(--ease-smooth);
-}
-
-.channel-item:hover::before {
-    opacity: 1;
-}
-
 .channel-avatar {
     position: relative;
     margin-bottom: 18px;
@@ -890,15 +774,37 @@ body {
     transform: scale(1.08);
 }
 
-.avatar-circle::after {
-    content: '';
+.avatar-circle {
+    position: relative;
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    transition: transform 0.4s var(--ease-smooth);
+    background: var(--accent-gradient);
+}
+
+.channel-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
     position: absolute;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(135deg, rgba(255,255,255,0.1), transparent);
-    z-index: 3;
+    z-index: 2;
+}
+
+.channel-fallback {
+    display: none;
+    font-family: var(--font-tech);
+    font-weight: bold;
+    color: white;
+    font-size: 1.5rem;
+    z-index: 1;
 }
 
 .online-dot {
@@ -958,11 +864,6 @@ body {
     font-weight: 500;
 }
 
-.channel-subs i {
-    color: var(--accent-color);
-    font-size: 0.85rem;
-}
-
 .channel-hover {
     position: absolute;
     top: 0;
@@ -1000,7 +901,6 @@ body {
     letter-spacing: 0.5px;
 }
 
-/* Placeholder para canales */
 .channel-item.placeholder {
     cursor: default;
 }
@@ -1026,7 +926,7 @@ body {
     opacity: 0.7;
 }
 
-/* Botones de navegación del carrusel */
+/* BOTONES DE CARRUSEL */
 .shorts-carousel-container .carousel-btn,
 .channels-carousel-container .carousel-btn {
     position: absolute;
@@ -1073,7 +973,6 @@ body {
     right: 0;
 }
 
-/* Indicadores del carrusel */
 .carousel-indicators {
     display: flex;
     justify-content: center;
@@ -1121,7 +1020,7 @@ body {
     transform: scale(1.1);
 }
 
-/* ===== CARRUSEL DE RESEÑAS ===== */
+/* RESEÑAS */
 .reviews {
     padding: 70px 0;
     background: rgba(26, 10, 31, 0.6);
@@ -1183,13 +1082,43 @@ body {
     box-shadow: 0 15px 40px rgba(255, 0, 255, 0.25);
 }
 
-/* Cabecera de la reseña */
 .review-header {
     display: flex;
     align-items: center;
     margin-bottom: 12px;
     padding-bottom: 10px;
     border-bottom: 1px solid rgba(255, 0, 255, 0.2);
+}
+
+.review-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-right: 15px;
+    flex-shrink: 0;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    position: relative;
+    background: var(--accent-gradient);
+}
+
+.review-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+}
+
+.review-fallback {
+    display: none;
+    font-family: var(--font-tech);
+    font-weight: bold;
+    color: white;
+    font-size: 1rem;
+    z-index: 1;
 }
 
 .review-channel-info {
@@ -1217,16 +1146,10 @@ body {
     color: var(--accent-color);
 }
 
-.review-channel-link i {
-    margin-right: 5px;
-    font-size: 0.65rem;
-}
-
-/* Texto de la opinión */
 .review-text {
     flex: 1;
     font-size: 0.85rem;
-    line-height: 1.6; /* MEJORA: Mejor legibilidad */
+    line-height: 1.6;
     color: var(--text-color);
     font-style: italic;
     overflow: hidden;
@@ -1234,10 +1157,9 @@ body {
     -webkit-line-clamp: 5;
     -webkit-box-orient: vertical;
     padding: 5px 0;
-    font-weight: 400; /* MEJORA: Peso más suave */
+    font-weight: 400;
 }
 
-/* Controles del carrusel */
 .carousel-controls {
     display: flex;
     justify-content: space-between;
@@ -1302,7 +1224,7 @@ body {
     transform: scale(1.1);
 }
 
-/* Estilos de la sección de contacto */
+/* CONTACTO */
 .contact {
     padding: 70px 0;
     text-align: center;
@@ -1327,11 +1249,11 @@ body {
     color: var(--text-muted);
     max-width: 700px;
     margin: 0 auto 40px;
-    line-height: 1.7; /* MEJORA: Mejor legibilidad */
-    font-weight: 400; /* MEJORA: Peso más suave */
+    line-height: 1.7;
+    font-weight: 400;
 }
 
-/* Estilos del pie de página */
+/* FOOTER */
 .footer {
     padding: 20px 0 15px;
     background: rgba(10, 10, 26, 0.95);
@@ -1475,24 +1397,24 @@ body {
         max-width: calc(50% - 10px);
     }
     
-    /* LOGO - Tablet: Ajustar tamaño proporcional */
+    /* LOGO - Tablet: Ajuste proporcional 20% más pequeño */
     .logo-image {
-        width: 52px;
-        height: 52px;
+        width: 42px;
+        height: 42px;
     }
     
     .logo-placeholder {
-        width: 52px;
-        height: 52px;
-        font-size: 1.4rem;
+        width: 42px;
+        height: 42px;
+        font-size: 1.12rem;
     }
     
     .logo-text {
-        font-size: 1.2rem;
+        font-size: 1rem;
     }
     
     .logo-subtitle {
-        font-size: 0.6rem;
+        font-size: 0.46rem;
     }
 }
 
@@ -1641,24 +1563,24 @@ body {
         height: 7px;
     }
     
-    /* LOGO - Móvil: Ajustar tamaño proporcional */
+    /* LOGO - Móvil: Ajuste proporcional 20% más pequeño */
     .logo-image {
-        width: 46px;
-        height: 46px;
+        width: 38px;
+        height: 38px;
     }
     
     .logo-placeholder {
-        width: 46px;
-        height: 46px;
-        font-size: 1.3rem;
+        width: 38px;
+        height: 38px;
+        font-size: 1.02rem;
     }
     
     .logo-text {
-        font-size: 1.1rem;
+        font-size: 0.9rem;
     }
     
     .logo-subtitle {
-        font-size: 0.55rem;
+        font-size: 0.42rem;
     }
 }
 
@@ -1669,11 +1591,11 @@ body {
     }
     
     .logo-text {
-        font-size: 1rem;
+        font-size: 0.85rem;
     }
     
     .logo-subtitle {
-        font-size: 0.5rem;
+        font-size: 0.38rem;
         letter-spacing: 1px;
     }
     
@@ -1751,15 +1673,15 @@ body {
         text-align: center;
     }
     
-    /* LOGO - Móvil pequeño: Ajustar tamaño proporcional */
+    /* LOGO - Móvil pequeño: Ajuste proporcional 20% más pequeño */
     .logo-image {
-        width: 42px;
-        height: 42px;
+        width: 34px;
+        height: 34px;
     }
     
     .logo-placeholder {
-        width: 42px;
-        height: 42px;
-        font-size: 1.2rem;
+        width: 34px;
+        height: 34px;
+        font-size: 0.9rem;
     }
 }
