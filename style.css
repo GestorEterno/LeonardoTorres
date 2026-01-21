@@ -603,6 +603,27 @@ body {
     border-color: rgba(255, 0, 255, 0.4);
 }
 
+/* CORRECIÓN CRÍTICA: LOS SHORTS NO DEBEN TENER TÍTULO */
+.short-item .short-badge {
+    display: none !important;
+}
+
+.short-badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: var(--accent-gradient);
+    color: white;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.65rem;
+    font-weight: 700;
+    z-index: 10;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+}
+
 .short-item .short-video {
     flex: 1;
     position: relative;
@@ -1114,10 +1135,9 @@ body {
 
 .carousel-controls {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
-    gap: 20px;
-    margin-top: 20px;
+    margin-top: 15px;
 }
 
 .carousel-btn {
@@ -1135,7 +1155,6 @@ body {
     font-size: 1rem;
     position: relative;
     z-index: 10;
-    flex-shrink: 0;
 }
 
 .carousel-btn:hover:not(:disabled) {
@@ -1153,7 +1172,6 @@ body {
 .carousel-dots {
     display: flex;
     gap: 10px;
-    margin: 0 10px;
 }
 
 .dot {
@@ -1479,8 +1497,18 @@ body {
         font-size: 0.9rem;
     }
     
-    .carousel-controls {
+    /* CORRECIÓN CRÍTICA: BOTONES DE RESEÑAS EN MÓVIL - MISMA FILA */
+    .reviews .carousel-controls {
+        flex-direction: row !important;
+        justify-content: space-between;
+        align-items: center;
+        gap: 15px;
         margin-top: 20px;
+    }
+    
+    .reviews .carousel-dots {
+        order: 0 !important;
+        margin: 0 10px;
     }
     
     .reviews-carousel-track {
@@ -1525,29 +1553,6 @@ body {
     .indicator {
         width: 7px;
         height: 7px;
-    }
-    
-    /* CORRECIÓN CRÍTICA: CARRUSEL DE RESEÑAS EN MÓVIL */
-    .reviews .carousel-controls {
-        flex-direction: row;
-        justify-content: center;
-        align-items: center;
-        gap: 15px;
-        margin-top: 25px;
-    }
-    
-    .reviews .carousel-dots {
-        order: 0;
-        margin: 0 10px;
-    }
-    
-    .reviews .carousel-btn {
-        position: relative;
-        top: auto;
-        left: auto;
-        right: auto;
-        transform: none;
-        margin: 0;
     }
 }
 
@@ -1610,27 +1615,24 @@ body {
         padding: 0 20px;
     }
     
-    /* CORRECIÓN PERFECTA PARA BOTONES EN MÓVIL */
+    .carousel-btn {
+        width: 30px;
+        height: 30px;
+        font-size: 0.8rem;
+    }
+    
+    /* CORRECIÓN CRÍTICA: BOTONES DE RESEÑAS EN MÓVIL PEQUEÑO - MISMA FILA */
     .reviews .carousel-controls {
-        flex-direction: row;
-        justify-content: center;
+        flex-direction: row !important;
+        justify-content: space-between;
         align-items: center;
-        gap: 15px;
-        margin-top: 25px;
+        gap: 10px;
+        margin-top: 20px;
     }
     
     .reviews .carousel-dots {
-        order: 0;
-        margin: 0 10px;
-    }
-    
-    .reviews .carousel-btn {
-        position: relative;
-        width: 38px;
-        height: 38px;
-        flex-shrink: 0;
-        transform: none;
-        margin: 0;
+        order: 0 !important;
+        margin: 0 8px;
     }
     
     .shorts-carousel-container,
@@ -1659,25 +1661,5 @@ body {
         flex-direction: column;
         gap: 12px;
         text-align: center;
-    }
-}
-
-/* CORRECCIÓN ADICIONAL PARA ASEGURAR ALINEACIÓN PERFECTA EN TODOS LOS DISPOSITIVOS */
-@media (max-width: 768px) {
-    .reviews .carousel-controls {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: row !important;
-    }
-    
-    .reviews .carousel-btn.prev,
-    .reviews .carousel-btn.next {
-        position: relative;
-        top: auto;
-        left: auto;
-        right: auto;
-        transform: none;
-        margin: 0;
     }
 }
