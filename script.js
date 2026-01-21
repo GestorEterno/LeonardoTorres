@@ -230,7 +230,7 @@ class ScrollEffects {
     }
 }
 
-// CARRUSEL DE SHORTS - CORREGIDO Y FUNCIONAL
+// CARRUSEL DE SHORTS - CORREGIDO Y FUNCIONAL (AHORA CON 2 ELEMENTOS)
 class ShortsCarousel {
     constructor() {
         this.track = document.querySelector('.shorts-carousel-track');
@@ -241,7 +241,7 @@ class ShortsCarousel {
         
         this.currentPosition = 0;
         this.itemsPerView = this.calculateItemsPerView();
-        this.totalItems = this.items.length;
+        this.totalItems = this.items.length; // AHORA 2 ELEMENTOS
         this.maxPosition = this.totalItems - this.itemsPerView;
         this.gap = 20;
         
@@ -283,7 +283,13 @@ class ShortsCarousel {
     
     updateItemsPerView() {
         this.itemsPerView = this.calculateItemsPerView();
+        // CORRECCIÓN PARA SOLO 2 SHORTS: asegurar que maxPosition sea 0 o 1
         this.maxPosition = Math.max(0, this.totalItems - this.itemsPerView);
+        
+        // Si hay 2 o menos elementos y se muestran 4, no hay desplazamiento
+        if (this.totalItems <= this.itemsPerView) {
+            this.maxPosition = 0;
+        }
         
         if (this.currentPosition > this.maxPosition) {
             this.currentPosition = this.maxPosition;
@@ -375,7 +381,7 @@ class ShortsCarousel {
     }
 }
 
-// CARRUSEL DE CANALES - CORREGIDO Y FUNCIONAL
+// CARRUSEL DE CANALES - CORREGIDO Y FUNCIONAL (AHORA CON 5 ELEMENTOS)
 class ChannelsCarousel {
     constructor() {
         this.track = document.querySelector('.channels-carousel-track');
@@ -386,7 +392,7 @@ class ChannelsCarousel {
         
         this.currentPosition = 0;
         this.itemsPerView = this.calculateItemsPerView();
-        this.totalItems = this.items.length;
+        this.totalItems = this.items.length; // AHORA 5 ELEMENTOS
         this.maxPosition = this.totalItems - this.itemsPerView;
         this.gap = 20;
         
@@ -429,6 +435,11 @@ class ChannelsCarousel {
     updateItemsPerView() {
         this.itemsPerView = this.calculateItemsPerView();
         this.maxPosition = Math.max(0, this.totalItems - this.itemsPerView);
+        
+        // Si hay 5 o menos elementos y se muestran 5, no hay desplazamiento
+        if (this.totalItems <= this.itemsPerView) {
+            this.maxPosition = 0;
+        }
         
         if (this.currentPosition > this.maxPosition) {
             this.currentPosition = this.maxPosition;
